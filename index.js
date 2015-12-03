@@ -113,14 +113,14 @@ function processIssues (projectsWithIssues, exit_code) {
 }
 
 function getAge (created_date) {
-  //Set the two dates
+  // Set the two dates
   created_date = new Date(created_date)
   var today = new Date()
 
-  //Get 1 day in milliseconds
+  // Get 1 day in milliseconds
   var one_day = (1000 * 60 * 60 * 24)
 
-  //Calculate difference btw the two dates, and convert to days
+  // Calculate difference btw the two dates, and convert to days
   var ageDays = Math.ceil((today.getTime() - created_date.getTime()) / (one_day))
   return ageDays
 }
