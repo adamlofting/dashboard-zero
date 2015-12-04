@@ -1,31 +1,40 @@
-var https = require('https')
+var github = require('./src/github.js')
 
-// Rate limits
-// What as rate per hour?
-var ratePerHour = 120
-// In milliseconds
-var howOftenPerPage = 45000
+var api_timer_id
 
-var pageTimerId
+// Holds the total number of repos
+var total_repos = 0
+// Holds the current repo counter
+var repo_counter = 0
 
-// // Results stats
-// var totalResults
-// var resultsPerPage
-// var totalPages
-// var estimatedHours
-// var estimatedDays
+// List of repos for org
+var org_repos
 
-var apiUrlGhOrgPath = '/orgs/mozilla/repos'
+var api_url_path = '/orgs/mozilla/repos'
 
-fetchFromGithub(apiUrlGhOrgPath, function cb_fetchOrgs (err, res) {
+github.fetchFromGithub(api_url_path, function cb_fetchOrgs (err, res) {
   if (err) {
     // Exit with error
-    console.log('ERROR: ' + err)
-    process.exit(1)
+    end(1)
   }
 
-  processOrgResults(res, process.exit)
+  processOrgResults(res, end)
 })
+
+// *****************************
+// Ends with relevent exit code
+// ******************************
+function end (exit_code) {
+  if (exit_code !== 0) {
+    // There was an error
+    console.log('Total API Calls: ' + github.total_api_calls)
+    process.exit(exit_code)
+  }
+
+  // Everything went well
+  console.log('Total API Calls: ' + github.total_api_calls)
+  process.exit()
+}
 
 // ******************
 // Process the list of projects to find ones with open issues
@@ -34,82 +43,93 @@ fetchFromGithub(apiUrlGhOrgPath, function cb_fetchOrgs (err, res) {
 // ********************************************
 function processOrgResults (results, exit_code) {
   // list of projects with open issues
-  var projectsWithIssues = []
 
   // This holds all the data for the Mozilla org on GitHub
-  var orgData = results
-  var repoTotalCount = results.length
+  org_repos = results
+  total_repos = results.length
 
-  console.log('Mozilla has ' + repoTotalCount + ' repos on GitHub with the following stats:')
-
-  console.log('name,stars,forks,open_issues')
-  for (var repoCounter = 0; repoCounter < repoTotalCount; repoCounter++) {
-    var currentRepo = orgData[repoCounter]
-
-    // Todo: export as csv
-    console.log(currentRepo.name + ',' +
-      currentRepo.stargazers_count + ',' +
-      currentRepo.forks_count + ',' +
-      currentRepo.open_issues_count)
-
-    // Check if repo has open issues
-    if (currentRepo.open_issues_count > 0) {
-      projectsWithIssues.push(currentRepo)
-    }
-
-    if (projectsWithIssues.length > 0) {
-      projectsWithIssues.reverse()
-      processIssues(projectsWithIssues, process.exit)
-    } else {
-      // Nothing more to do, exit with success
-      exit_code(0)
-    }
+  if (total_repos === undefined) {
+    // There was an error
+    console.log('Error: ' + results.message)
+    end(1)
   }
+
+  console.log('Mozilla has ' + total_repos + ' repos on GitHub with the following stats:')
+
+  api_timer_id = setInterval(processRepos, github.call_interval, repo_counter)
 }
 
-function processIssues (projectsWithIssues, exit_code) {
-  if (projectsWithIssues.length === 0) {
+// **********************************************************
+// Called by a timer to avoid hitting the GitHub rate limits
+//
+// Processes each repo for open issues and adds to projectsWithIssues
+// **********************************************************
+function processRepos (exit_code) {
+  clearInterval(api_timer_id)
+  // First off, end loop if we have reached the end
+  if (repo_counter === total_repos) {
     exit_code(0)
   }
 
-  for (var projectCounter = 0; projectCounter < projectsWithIssues.length;
-     projectCounter++) {
-    var currentProject = projectsWithIssues[projectCounter]
-    var projectIssueUrl = '/repos/mozilla/' + currentProject.name + '/issues'
-    fetchFromGithub(projectIssueUrl, function cb_fetchOrgs (err, res) {
-      if (err) {
-        // Exit with error
-        console.log('ERROR: ' + err)
-        process.exit(1)
-      }
+  var this_repo = org_repos[repo_counter]
 
-      var issuesList = res
-      var issueTotalCount = res.length
+  // Todo: export as csv
+  console.log('name,stars,forks,open_issues')
+  console.log(this_repo.name + ',' +
+    this_repo.stargazers_count + ',' +
+    this_repo.forks_count + ',' +
+    this_repo.open_issues_count)
 
-      console.log('number,title,age,is_pull')
-      for (var issueCounter = 0; issueCounter < issueTotalCount; issueCounter++) {
-        var currentIssue = issuesList[issueCounter]
-
-        // Todo: export as csv
-        var csvIssueLine = currentIssue.number + ','
-
-        csvIssueLine = csvIssueLine + currentIssue.title + ','
-
-        csvIssueLine = csvIssueLine + getAge(currentIssue.created_at) + ','
-
-        if (currentIssue.pull_request) {
-          csvIssueLine = csvIssueLine + 'true'
-        } else {
-          csvIssueLine = csvIssueLine + 'false'
-        }
-
-        console.log(csvIssueLine)
-      }
-
-      // TODO: figure out best way to callback this
-      exit_code(0)
-    })
+  // Check if repo has open issues
+  if (this_repo.open_issues_count > 0) {
+    // Start loop for this repo
+    // TODO: Not sure we need the delay here
+    api_timer_id = setInterval(processIssues, github.call_interval, this_repo.name, processRepos)
   }
+}
+
+// **********************************************************
+// Called by a timer to avoid hitting the GitHub rate limits
+//
+// Processes each issue to get details regarding age and if is pull request
+// **********************************************************
+function processIssues (repo_name, callback) {
+  clearInterval(api_timer_id)
+
+  var project_issues_path = '/repos/mozilla/' + repo_name + '/issues'
+  github.fetchFromGithub(project_issues_path, function cb_fetchOrgs (err, res) {
+    if (err) {
+      // Exit with error
+      end(1)
+    }
+
+    var issuesList = res
+    var issueTotalCount = res.length
+
+    console.log('number,title,age,is_pull')
+    for (var issueCounter = 0; issueCounter < issueTotalCount; issueCounter++) {
+      var currentIssue = issuesList[issueCounter]
+
+      // Todo: export as csv
+      var csvIssueLine = currentIssue.number + ','
+
+      csvIssueLine = csvIssueLine + currentIssue.title + ','
+
+      csvIssueLine = csvIssueLine + getAge(currentIssue.created_at) + ','
+
+      if (currentIssue.pull_request) {
+        csvIssueLine = csvIssueLine + 'true'
+      } else {
+        csvIssueLine = csvIssueLine + 'false'
+      }
+
+      console.log(csvIssueLine)
+    }
+
+    // Increment the issue counter
+    repo_counter++
+    callback()
+  })
 }
 
 function getAge (created_date) {
@@ -123,32 +143,4 @@ function getAge (created_date) {
   // Calculate difference btw the two dates, and convert to days
   var ageDays = Math.ceil((today.getTime() - created_date.getTime()) / (one_day))
   return ageDays
-}
-
-// ***************************
-// fetched from GitHub using API
-// Returns: JSON
-// ****************************
-function fetchFromGithub (path, callback) {
-  var options = {
-    host: 'api.github.com',
-    path: path,
-    headers: {
-      'User-Agent': 'drazisil'
-    }
-  }
-  var body = ''
-  https.get(options, function (res) {
-    // console.log('statusCode: ', res.statusCode)
-    // console.log('headers: ', res.headers)
-
-    res.on('data', function (d) {
-      body = body + d
-    })
-    res.on('end', function () {
-      callback(null, JSON.parse(body))
-    })
-  }).on('error', function (e) {
-    callback(e)
-  })
 }
