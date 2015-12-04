@@ -1,13 +1,13 @@
 var https = require('https')
 
-// // Rate limits
-// // What as rate per hour?
-// var ratePerHour = 120
-// // In milliseconds
-// var howOftenPerPage = 45000
-//
-// var pageTimerId
-//
+// Rate limits
+// What as rate per hour?
+var ratePerHour = 120
+// In milliseconds
+var howOftenPerPage = 45000
+
+var pageTimerId
+
 // // Results stats
 // var totalResults
 // var resultsPerPage
