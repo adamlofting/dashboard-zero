@@ -73,7 +73,7 @@ function processRepos (exit_code) {
   }
 
   var this_repo = org_repos[repo_counter]
-  
+
   // Todo: export as csv
   var repo_header = 'name,stars,forks,open_issues'
   var repo_line =
