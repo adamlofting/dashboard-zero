@@ -9,7 +9,7 @@ var coveralls = require('gulp-coveralls')
 var output_path = process.cwd()
 
 gulp.task('isCircle', function() {
-  if (process.env.CIRCLECI === true) {
+  if (process.env.CI === true) {
     console.log('Running on CircleCi, adjusting output path...')
     output_path = process.env.CIRCLE_TEST_REPORTS
   }
