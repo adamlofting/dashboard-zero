@@ -9,6 +9,17 @@ var call_interval = 45000
 // How many API calls did we use?
 var total_api_calls = 0
 
+// ****************************
+// type: [org]
+// ****************************
+function fetchRepoList (type, entity, callback) {
+  if (type === 'org') {
+    fetchFromGithub ('/orgs/' + entity + '/repos', callback)
+  } else {
+    callback('ERROR: Unsupported type')
+  }
+}
+
 // ***************************
 // fetched from GitHub using API
 // Returns: JSON
@@ -41,6 +52,6 @@ function fetchFromGithub (path, callback) {
   })
 }
 
-exports.fetchFromGithub = fetchFromGithub
+exports.fetchRepoList = fetchRepoList
 exports.totalApiCalls = total_api_calls
 exports.call_interval = call_interval
