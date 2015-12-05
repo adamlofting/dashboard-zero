@@ -6,11 +6,11 @@ var mocha = require('gulp-mocha')
 var istanbul = require('gulp-istanbul')
 var coveralls = require('gulp-coveralls')
 
-var output_path = '.'
-
 gulp.task('isCircle', function() {
-  if (process.env.CIRCLE) {
-    output_path = process.env.CIRCLE_TEST_REPORTS
+  if (process.env.CIRCLE === true) {
+    process.env.OUTPUT_PATH = process.env.CIRCLE_TEST_REPORTS
+  } else {
+    process.env.OUTPUT_PATH = '.'
   }
 });
 
@@ -37,11 +37,11 @@ gulp.task('test', ['pre-test'], function (cb) {
   .pipe(mocha({
     reporter: 'mocha-junit-reporter',
     reporterOptions: {
-        mochaFile: output_path + '/junit/results.xml'
+        mochaFile: process.env.OUTPUT_PATH + '/junit/results.xml'
     }
 }))
   .pipe(istanbul.writeReports({
-    dir: output_path + '/coverage'
+    dir: process.env.OUTPUT_PATH + '/coverage'
   })) // stores reports in "coverage" directory
 })
 
