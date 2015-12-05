@@ -6,14 +6,14 @@ var mocha = require('gulp-mocha')
 var istanbul = require('gulp-istanbul')
 var coveralls = require('gulp-coveralls')
 
+var output_path = process.cwd()
+
 gulp.task('isCircle', function() {
   if (process.env.CIRCLECI === true) {
     console.log('Running on CircleCi, adjusting output path...')
-    process.env.OUTPUT_PATH = process.env.CIRCLE_TEST_REPORTS
-  } else {
-    process.env.OUTPUT_PATH = process.cwd()
-    console.log('test output will be saved to : ' + process.env.OUTPUT_PATH)
+    output_path = process.env.CIRCLE_TEST_REPORTS
   }
+  console.log('test output will be saved to : ' + output_path)
 });
 
 gulp.task('standard', function () {
@@ -39,11 +39,11 @@ gulp.task('test', ['pre-test'], function (cb) {
   .pipe(mocha({
     reporter: 'mocha-junit-reporter',
     reporterOptions: {
-        mochaFile: process.env.OUTPUT_PATH + '/junit/results.xml'
+        mochaFile: output_path + '/junit/results.xml'
     }
 }))
   .pipe(istanbul.writeReports({
-    dir: process.env.OUTPUT_PATH + '/coverage'
+    dir: output_path + '/coverage'
   })) // stores reports in "coverage" directory
 })
 
