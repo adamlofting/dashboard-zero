@@ -12,7 +12,7 @@ gulp.task('isCircle', function() {
   console.log('Running on CircleCi, adjusting output path...$CIRCLECI' + process.env.CIRCLECI)
   console.log('Running on CircleCi, adjusting output path...$CI' + process.env.CI)
   console.log('Running on CircleCi, adjusting output path...$CIRCLE_USERNAME' + process.env.CIRCLE_USERNAME)
-  if (process.env.CI === true) {
+  if (process.env.CIRCLECI === 'true') {
     console.log('Running on CircleCi, adjusting output path...')
     output_path = process.env.CIRCLE_TEST_REPORTS
   }
