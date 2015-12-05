@@ -10,9 +10,10 @@ var repo_counter = 0
 // List of repos for org
 var org_repos
 
-var api_url_path = '/orgs/mozilla/repos'
+// The GitHub org name we are scanning
+var ORG_NAME = 'mozilla'
 
-github.fetchFromGithub(api_url_path, function cb_fetchOrgs (err, res) {
+github.fetchRepoList('org', ORG_NAME, function cb_fetchOrgs (err, res) {
   if (err) {
     // Exit with error
     end(1)
@@ -74,11 +75,15 @@ function processRepos (exit_code) {
   var this_repo = org_repos[repo_counter]
 
   // Todo: export as csv
-  console.log('name,stars,forks,open_issues')
-  console.log(this_repo.name + ',' +
+  var repo_header = 'name,stars,forks,open_issues'
+  var repo_line = 
+    this_repo.name + ',' +
     this_repo.stargazers_count + ',' +
     this_repo.forks_count + ',' +
-    this_repo.open_issues_count)
+    this_repo.open_issues_count
+    
+  console.log(repo_header)
+  console.log(repo_line)
 
   // Check if repo has open issues
   if (this_repo.open_issues_count > 0) {
@@ -106,24 +111,25 @@ function processIssues (repo_name, callback) {
     var issuesList = res
     var issueTotalCount = res.length
 
-    console.log('number,title,age,is_pull')
+    var issue_header = 'number,title,age,is_pull'
+    
     for (var issueCounter = 0; issueCounter < issueTotalCount; issueCounter++) {
       var currentIssue = issuesList[issueCounter]
 
-      // Todo: export as csv
-      var csvIssueLine = currentIssue.number + ','
-
-      csvIssueLine = csvIssueLine + currentIssue.title + ','
-
-      csvIssueLine = csvIssueLine + getAge(currentIssue.created_at) + ','
+      var issue_line = 
+        currentIssue.number + ',' +
+        currentIssue.title + ',' +
+        getAge(currentIssue.created_at) + ','
 
       if (currentIssue.pull_request) {
-        csvIssueLine = csvIssueLine + 'true'
+        issue_line += 'true'
       } else {
-        csvIssueLine = csvIssueLine + 'false'
+        issue_line += 'false'
       }
 
-      console.log(csvIssueLine)
+      // TODO: export as csv
+      console.log(issue_header)
+      console.log(issue_line)
     }
 
     // Increment the issue counter
@@ -132,6 +138,9 @@ function processIssues (repo_name, callback) {
   })
 }
 
+// *******************************
+// Return time difference in hours
+// *******************************
 function getAge (created_date) {
   // Set the two dates
   created_date = new Date(created_date)
