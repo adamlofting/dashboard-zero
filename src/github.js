@@ -26,7 +26,7 @@ function getRepoCount (type, entity, callback) {
 // ****************************
 function fetchRepoList (type, entity, callback) {
   if (type === 'org') {
-    fetchHeadersFromGithub('/orgs/' + entity + '/repos', callback)
+    fetchHeadersFromGithub('/orgs/' + entity + '/repos?type=sources', callback)
   } else {
     callback('ERROR: Unsupported type')
   }
