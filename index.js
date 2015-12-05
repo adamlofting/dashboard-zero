@@ -13,14 +13,24 @@ var org_repos
 // The GitHub org name we are scanning
 var ORG_NAME = 'mozilla'
 
-github.fetchRepoList('org', ORG_NAME, function cb_fetchOrgs (err, res) {
+github.getRepoCount('org', ORG_NAME, function cb_fetchOrgs (err, headers) {
   if (err) {
     // Exit with error
     end(1)
   }
 
-  processOrgResults(res, end)
+  console.log(headers.link)
+  end(0)
 })
+
+// github.fetchRepoList('org', ORG_NAME, function cb_fetchOrgs (err, res) {
+//   if (err) {
+//     // Exit with error
+//     end(1)
+//   }
+//
+//   processOrgResults(res, end)
+// })
 
 // *****************************
 // Ends with relevent exit code

@@ -12,12 +12,49 @@ var total_api_calls = 0
 // ****************************
 // type: [org]
 // ****************************
-function fetchRepoList (type, entity, callback) {
+function getRepoCount (type, entity, callback) {
   if (type === 'org') {
-    fetchFromGithub ('/orgs/' + entity + '/repos', callback)
+    fetchHeadersFromGithub('/orgs/' + entity + '/repos', callback)
   } else {
     callback('ERROR: Unsupported type')
   }
+  // body...
+}
+
+// ****************************
+// type: [org]
+// ****************************
+function fetchRepoList (type, entity, callback) {
+  if (type === 'org') {
+    fetchHeadersFromGithub('/orgs/' + entity + '/repos', callback)
+  } else {
+    callback('ERROR: Unsupported type')
+  }
+}
+
+// ***************************
+// fetched from GitHub using API
+// Returns: JSON
+// ****************************
+function fetchHeadersFromGithub (path, callback) {
+  var options = {
+    method: 'HEAD',
+    host: 'api.github.com',
+    path: path,
+    headers: {
+      'User-Agent': 'drazisil'
+    }
+  }
+
+  // Increase the API call counter
+  module.exports.total_api_calls++
+
+  https.request(options, function (res) {
+    callback(null, res.headers)
+  }).on('error', function (e) {
+    callback(e)
+  })
+  .end()
 }
 
 // ***************************
@@ -34,7 +71,7 @@ function fetchFromGithub (path, callback) {
   }
 
   // Increase the API call counter
-  total_api_calls++
+  module.exports.total_api_calls++
 
   var body = ''
   https.get(options, function (res) {
@@ -52,6 +89,7 @@ function fetchFromGithub (path, callback) {
   })
 }
 
+exports.getRepoCount = getRepoCount
 exports.fetchRepoList = fetchRepoList
-exports.totalApiCalls = total_api_calls
+exports.total_api_calls = total_api_calls
 exports.call_interval = call_interval
