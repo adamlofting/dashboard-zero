@@ -73,15 +73,15 @@ function processRepos (exit_code) {
   }
 
   var this_repo = org_repos[repo_counter]
-
+  
   // Todo: export as csv
   var repo_header = 'name,stars,forks,open_issues'
-  var repo_line = 
+  var repo_line =
     this_repo.name + ',' +
     this_repo.stargazers_count + ',' +
     this_repo.forks_count + ',' +
     this_repo.open_issues_count
-    
+
   console.log(repo_header)
   console.log(repo_line)
 
@@ -112,11 +112,11 @@ function processIssues (repo_name, callback) {
     var issueTotalCount = res.length
 
     var issue_header = 'number,title,age,is_pull'
-    
+
     for (var issueCounter = 0; issueCounter < issueTotalCount; issueCounter++) {
       var currentIssue = issuesList[issueCounter]
 
-      var issue_line = 
+      var issue_line =
         currentIssue.number + ',' +
         currentIssue.title + ',' +
         getAge(currentIssue.created_at) + ','
