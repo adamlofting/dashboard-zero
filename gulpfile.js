@@ -33,6 +33,7 @@ gulp.task('pre-test', function () {
 })
 
 gulp.task('test', ['pre-test'], function (cb) {
+  console.log('test output will be saved to : ' + output_path)
   return gulp.src([
     './test/**/*.js'
   ])
@@ -48,7 +49,7 @@ gulp.task('test', ['pre-test'], function (cb) {
 })
 
 gulp.task('coveralls', function (cb) {
-  return gulp.src('./coverage/lcov.info')
+  return gulp.src(output_path + '/coverage/lcov.info')
   .pipe(coveralls())
 })
 
