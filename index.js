@@ -19,7 +19,11 @@ github.getRepoCount('org', ORG_NAME, function cb_fetchOrgs (err, headers) {
     end(1)
   }
 
-  console.log(headers.link)
+  if (headers.link) {
+    var page_count = headers.link.split(',')[1].split('=')[1].split('>')[0]
+  }
+
+  console.log(page_count)
   end(0)
 })
 
