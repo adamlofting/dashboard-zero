@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "gulp dev"
   },
     "repository": {
     "type": "git",
-    "url": "https://github.com/adamlofting/dashboard-zero.git"
+    "url": "git+https://github.com/adamlofting/dashboard-zero.git"
   },
   "author": "",
   "license": "MPL",
