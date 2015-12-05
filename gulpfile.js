@@ -7,10 +7,7 @@ var istanbul = require('gulp-istanbul')
 var coveralls = require('gulp-coveralls')
 
 gulp.task('isCircle', function() {
-  console.log('Running on CircleCi $CIRCLE: ' + process.env.CIRCLE)
-  console.log('Running on CircleCi $CI: ' + process.env.CI)
-  console.log('Running on CircleCi $CIRCLE_USERNAME: ' + process.env.CIRCLE_USERNAME)
-  if (process.env.CIRCLE === true) {
+  if (process.env.CIRCLECI === true) {
     process.env.OUTPUT_PATH = process.env.CIRCLE_TEST_REPORTS
   } else {
     process.env.OUTPUT_PATH = '.'
