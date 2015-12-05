@@ -8,9 +8,11 @@ var coveralls = require('gulp-coveralls')
 
 gulp.task('isCircle', function() {
   if (process.env.CIRCLECI === true) {
+    console.log('Running on CircleCi, adjusting output path...')
     process.env.OUTPUT_PATH = process.env.CIRCLE_TEST_REPORTS
   } else {
-    process.env.OUTPUT_PATH = '.'
+    process.env.OUTPUT_PATH = process.cwd()
+    console.log('test output will be saved to : ' + process.env.OUTPUT_PATH)
   }
 });
 
