@@ -1,10 +1,11 @@
 var https = require('https')
 
 // Rate limits
+// https://developer.github.com/v3/#rate-limiting
 // What as rate per hour?
-// var ratePerHour = 120
+// var ratePerHour = 60
 // In milliseconds
-var call_interval = 45000
+var call_interval = 60000
 
 // How many API calls did we use?
 var total_api_calls = 0
@@ -14,7 +15,7 @@ var total_api_calls = 0
 // ****************************
 function getRepoCount (type, entity, callback) {
   if (type === 'org') {
-    fetchHeadersFromGithub('/orgs/' + entity + '/repos', callback)
+    fetchHeadersFromGithub('/orgs/' + entity + '/repos?type=sources', callback)
   } else {
     callback('ERROR: Unsupported type')
   }
@@ -23,10 +24,11 @@ function getRepoCount (type, entity, callback) {
 
 // ****************************
 // type: [org]
+// https://developer.github.com/v3/repos/#list-organization-repositories
 // ****************************
-function fetchRepoList (type, entity, callback) {
+function fetchRepoList (type, entity, page_counter, callback) {
   if (type === 'org') {
-    fetchHeadersFromGithub('/orgs/' + entity + '/repos?type=sources', callback)
+    fetchFromGithub('/orgs/' + entity + '/repos?type=sources&page=' + page_counter, callback)
   } else {
     callback('ERROR: Unsupported type')
   }
