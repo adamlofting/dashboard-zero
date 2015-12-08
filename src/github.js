@@ -7,8 +7,6 @@ var https = require('https')
 // In milliseconds
 var call_interval = 60000
 
-
-
 // How many API calls did we use?
 var total_api_calls = 0
 

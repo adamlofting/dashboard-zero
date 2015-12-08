@@ -37,6 +37,9 @@ github.getRepoCount('org', ORG_NAME, function cb_fetchOrgs (err, headers) {
   }
 
   console.info('There are ' + total_pages + ' pages of results.')
+  if (total_pages < 60) {
+    github.call_interval = 25000
+  }
   api_timer_id = setInterval(fetchPage, github.call_interval, ORG_NAME)
 })
 
@@ -119,8 +122,9 @@ function processRepos () {
   clearInterval(api_timer_id)
   // First off, end loop if we have reached the end
   if (repo_counter === total_repos) {
+    console.info(total_repos + ' total repos fetched.')
     console.info('All Repos processed')
-    var repo_header = 'name,stars,forks,open_issues'
+    var repo_header = 'name,stars,forks,open_issues, language'
     updateFile(repo_header, csv_repos, 'data/repos.csv', function cb_update_file (err, res) {
       if (err) {
         console.error('Error updating file: ' + err)
@@ -140,7 +144,8 @@ function processRepos () {
       this_repo.name + ',' +
       this_repo.stargazers_count + ',' +
       this_repo.forks_count + ',' +
-      this_repo.open_issues_count +
+      this_repo.open_issues_count + ',' +
+      this_repo.language +
       '\n'
 
     // Add to list to be saved to csv
