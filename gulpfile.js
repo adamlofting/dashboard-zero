@@ -8,13 +8,13 @@ var coveralls = require('gulp-coveralls')
 
 var output_path = process.cwd()
 
-gulp.task('isCircle', function() {
+gulp.task('isCircle', function () {
   if (process.env.CIRCLECI === 'true') {
     console.log('Running on CircleCi, adjusting output path...')
     output_path = process.env.CIRCLE_TEST_REPORTS
   }
   console.log('test output will be saved to : ' + output_path)
-});
+})
 
 gulp.task('standard', function () {
   return gulp.src(['./index.js'])
@@ -25,7 +25,7 @@ gulp.task('standard', function () {
 })
 
 gulp.task('pre-test', function () {
-  return gulp.src(['./src/**/*.js'])
+  return gulp.src(['src/**/*.js'])
     // Covering files
     .pipe(istanbul())
     // Force `require` to return covered files
@@ -35,14 +35,14 @@ gulp.task('pre-test', function () {
 gulp.task('test', ['pre-test'], function (cb) {
   console.log('test output will be saved to : ' + output_path)
   return gulp.src([
-    './test/**/*.js'
+    'test/**/*.js'
   ])
   .pipe(mocha({
     reporter: 'mocha-junit-reporter',
     reporterOptions: {
-        mochaFile: output_path + '/junit/results.xml'
+      mochaFile: output_path + '/junit/results.xml'
     }
-}))
+  }))
   .pipe(istanbul.writeReports({
     dir: output_path + '/coverage'
   })) // stores reports in "coverage" directory
@@ -53,6 +53,7 @@ gulp.task('coveralls', function (cb) {
   .pipe(coveralls())
 })
 
-gulp.task('dev', ['isCircle', 'standard', 'test', 'coveralls'])
+// gulp.task('dev', ['isCircle', 'standard', 'test', 'coveralls'])
+gulp.task('dev', ['isCircle', 'standard', 'test'])
 
 gulp.task('default', ['main'])

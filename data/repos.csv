@@ -5,7 +5,7 @@ kitsune,321,317,4,Python
 mozregression,62,54,1,Python
 bleach,931,98,39,Python
 zamboni-lib,15,9,2,Python
-popcorn-js,1919,554,137,JavaScript
+popcorn-js,1920,554,137,JavaScript
 django-product-details,18,18,9,Python
 input-lib,7,5,1,Python
 mozmill,86,74,0,JavaScript
@@ -47,7 +47,7 @@ narcissus,641,90,9,JavaScript
 secret-squirrel-lib,0,1,0,Python
 home-snippets-server,8,5,0,Python
 home-snippets-server-lib,2,2,0,Python
-task.js,1385,61,23,JavaScript
+task.js,1385,62,23,JavaScript
 sigma,1,1,0,JavaScript
 prospector,142,33,187,JavaScript
 devtools,21,5,0,JavaScript
@@ -115,7 +115,7 @@ django-session-csrf,74,26,11,Python
 django-jobvite,11,7,0,Python
 domesday,5,3,0,Python
 server-core,3,2,0,Python
-pdf.js,13101,3061,582,JavaScript
+pdf.js,13103,3061,582,JavaScript
 sumo-tests,34,50,7,Python
 spark-eol,0,2,1,JavaScript
 server-share,6,2,0,Python
@@ -169,7 +169,7 @@ caseconductor-qa,4,3,0,Python
 checklinks,1,0,0,Python
 rescuefox,35,10,1,JavaScript
 socorro,253,134,11,Python
-rr,1140,102,153,C++
+rr,1141,102,153,C++
 phpbb3-static,0,1,0,PHP
 icongrid,25,4,0,JavaScript
 affiliates-lib,1,1,0,Python
@@ -310,7 +310,7 @@ integration-mozilla-inbound,4,2,0,C++
 loady,7,1,2,JavaScript
 zamboni-dashboard,6,7,1,Python
 solitude,26,37,15,Python
-releases-comm-central,20,10,3,JavaScript
+releases-comm-central,20,11,3,JavaScript
 airmozilla,74,73,1,JavaScript
 datazilla_client,6,7,6,Python
 napkin,32,2,0,JavaScript
@@ -414,7 +414,7 @@ identity-ops,23,11,54,Python
 picl-tabs,1,1,4,JavaScript
 picl-server,18,6,13,JavaScript
 picl-contacts,6,0,0,JavaScript
-calculator,7,23,14,JavaScript
+calculator,8,23,14,JavaScript
 firefoxos-quick-start,59,19,3,JavaScript
 mofactor-template,0,0,0,null
 blushproof,5,2,9,JavaScript
@@ -566,7 +566,7 @@ libadb.js,8,8,5,C++
 openbadges-badges,1,8,10,CSS
 galaxy,10,14,54,JavaScript
 allizom_org,1,3,1,CSS
-gecko-dev,509,682,3,null
+gecko-dev,509,683,3,null
 gecko-projects,20,18,0,null
 badges.mozillafestival.org,1,1,2,CSS
 openbadges-badgekit,91,60,63,JavaScript
@@ -697,7 +697,7 @@ pkix-compatibility-testing,1,2,0,JavaScript
 fxa-dev,7,13,6,Lua
 pulseguardian,3,6,2,Python
 webmaker-user-client,1,3,1,JavaScript
-metrics-graphics,5459,282,61,JavaScript
+metrics-graphics,5461,282,61,JavaScript
 webmaker-code-of-conduct,1,2,8,null
 qa-mozmill-tests,5,8,0,JavaScript
 betachannel,3,3,17,JavaScript
@@ -835,7 +835,7 @@ fxa-relier-client,2,5,4,JavaScript
 fxa-local-dev,21,10,0,JavaScript
 marketplace-core-modules,6,11,0,JavaScript
 scanjs-core,0,0,0,null
-audit-go,11,5,1,Go
+audit-go,12,5,1,Go
 loop-client-l10n,4,5,3,null
 air.mozilla.org,3,0,1,null
 marketplace-frontend-docs,0,2,0,Makefile
@@ -881,7 +881,7 @@ node-firefox-start-simulator,4,5,3,JavaScript
 build.webmaker.org,5,14,32,CSS
 node-firefox-find-app,1,4,0,JavaScript
 srihash.org,9,5,8,JavaScript
-mofo-metrics,0,0,14,null
+mofo-metrics,1,0,14,null
 build-ansible,1,1,0,Python
 node-firefox-install-app,1,4,4,JavaScript
 webmaker-firehose,0,3,5,JavaScript
@@ -1019,7 +1019,7 @@ stereophoto,1,2,0,Objective-C
 telemetry-next-node,1,0,0,JavaScript
 remote-newtab,10,3,35,JavaScript
 node-basket,0,0,0,JavaScript
-sops,220,5,5,Python
+sops,221,5,5,Python
 service-map,0,1,0,Go
 mozorg-js-external,2,2,1,JavaScript
 idea-town-meta,3,0,6,null
@@ -1045,7 +1045,7 @@ fxa-retention-metrics,0,0,3,Python
 activity-accessible-gaming,2,1,0,CSS
 system-addons,1,1,1,null
 mozfest-schedule-app,0,12,27,JavaScript
-serviceworker-cookbook,190,17,33,JavaScript
+serviceworker-cookbook,190,17,30,JavaScript
 bakery,1,0,0,JavaScript
 amo-dashboard,0,0,2,JavaScript
 html-presentation-templates,1,2,1,CSS
@@ -1054,7 +1054,7 @@ moz-slides-template,2,1,0,JavaScript
 hashitalk2015,10,0,0,null
 mozilla-club-guides,0,2,0,HTML
 fxa-checkbox,0,0,1,JavaScript
-platatus,67,11,26,JavaScript
+platatus,67,11,28,JavaScript
 mwos-letsencrypt-2015,4,1,0,C
 mwos-frauddetection-2015,1,0,0,Python
 addons-nginx,0,0,0,null
