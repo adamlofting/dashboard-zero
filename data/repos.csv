@@ -1,4 +1,4 @@
-name,stars,forks,open_issues, language
+name,stars,forks,open_issues,language
 zamboni,471,255,13,Python
 tuxedo,11,9,5,PHP
 kitsune,321,317,4,Python
@@ -115,7 +115,7 @@ django-session-csrf,74,26,11,Python
 django-jobvite,11,7,0,Python
 domesday,5,3,0,Python
 server-core,3,2,0,Python
-pdf.js,13100,3061,582,JavaScript
+pdf.js,13101,3061,582,JavaScript
 sumo-tests,34,50,7,Python
 spark-eol,0,2,1,JavaScript
 server-share,6,2,0,Python
@@ -338,7 +338,7 @@ html5-lint,106,18,4,Python
 mozilla-presentation-templates,138,100,6,HTML
 npm-lockdown,120,14,16,JavaScript
 nunjucks,2407,199,75,JavaScript
-app-validator,28,28,0,Python
+app-validator,29,28,0,Python
 versioncheck,0,0,0,JavaScript
 smokejumper,4,0,0,JavaScript
 gombot-chrome,4,0,4,JavaScript
@@ -390,7 +390,7 @@ persona-presentation-assets,8,2,0,null
 hackablegames,4,5,1,JavaScript
 oneanddone,24,40,6,JavaScript
 signing-clients,0,3,3,Python
-security,3,0,6,Python
+security,4,0,6,Python
 mortar-list-detail,21,9,4,JavaScript
 mortar-app-stub,32,29,1,CSS
 zamboni-psds,0,0,0,null
@@ -559,7 +559,7 @@ openbadger-client,1,1,2,JavaScript
 openbadges-cem,2,4,7,JavaScript
 aestimia-client,1,0,2,JavaScript
 webmaker-ui,1,2,0,JavaScript
-Fira,2095,154,29,HTML
+Fira,2096,154,29,HTML
 zippy,9,25,0,JavaScript
 mozmoderator,7,8,18,CSS
 libadb.js,8,8,5,C++
@@ -1039,7 +1039,7 @@ oghliner,50,10,31,JavaScript
 addons-validator,17,7,63,JavaScript
 mofo-deprecation,1,1,6,HTML
 webqabot,0,3,6,CoffeeScript
-version-control-tools,1,4,1,Python
+version-control-tools,1,4,2,Python
 grunt-l10n-lint,0,0,0,JavaScript
 fxa-retention-metrics,0,0,3,Python
 activity-accessible-gaming,2,1,0,CSS

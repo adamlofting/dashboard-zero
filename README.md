@@ -14,3 +14,9 @@ The vision is to create a tool that the engineers can look at and very quickly s
 ### Want to get involved?
 
 This will be a collaborative open source project and we'd love your input. [Get in touch here](https://wiki.mozilla.org/Foundation/Metrics/Contribute).
+
+### Running the report
+
+````
+GH_TOKEN=<token> node index.js
+````

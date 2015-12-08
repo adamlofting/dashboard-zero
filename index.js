@@ -26,6 +26,7 @@ var ORG_NAME = 'mozilla'
 // *******************************
 // Start of code
 // ****************************
+github.setToken()
 github.getRepoCount('org', ORG_NAME, function cb_fetchOrgs (err, headers) {
   if (err) {
     console.error('Error getting repo count: ' + err)
@@ -37,9 +38,6 @@ github.getRepoCount('org', ORG_NAME, function cb_fetchOrgs (err, headers) {
   }
 
   console.info('There are ' + total_pages + ' pages of results.')
-  if (total_pages < 60) {
-    github.call_interval = 25000
-  }
   api_timer_id = setInterval(fetchPage, github.call_interval, ORG_NAME)
 })
 
@@ -124,7 +122,7 @@ function processRepos () {
   if (repo_counter === total_repos) {
     console.info(total_repos + ' total repos fetched.')
     console.info('All Repos processed')
-    var repo_header = 'name,stars,forks,open_issues, language'
+    var repo_header = 'name,stars,forks,open_issues,language'
     updateFile(repo_header, csv_repos, 'data/repos.csv', function cb_update_file (err, res) {
       if (err) {
         console.error('Error updating file: ' + err)
