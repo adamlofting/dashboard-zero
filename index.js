@@ -81,7 +81,8 @@ function fetchPage (org_name) {
     if (page_counter > total_pages) {
       console.info('Total repos: ' + total_repos)
       repo_counter = 0
-      api_timer_id = setInterval(processRepos, github.call_interval)
+      // api_timer_id = setInterval(processRepos, github.call_interval)
+      processRepos()
     } else {
       api_timer_id = setInterval(fetchPage, github.call_interval, ORG_NAME)
     }
@@ -150,7 +151,8 @@ function processRepos () {
 
     // Have we reached the end?
     if (repo_counter <= total_repos) {
-      api_timer_id = setInterval(processRepos, github.call_interval)
+      // api_timer_id = setInterval(processRepos, github.call_interval)
+      processRepos()
     }
 
     // // Check if repo has open issues
