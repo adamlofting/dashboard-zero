@@ -136,7 +136,8 @@ function processRepoIssueResults (res) {
     } else {
       issue_line += 'false' + ','
     }
-    issue_line += element.html_url +
+    issue_line += element.html_url + ',' +
+      element.url +
       '\n'
 
     // Add to list to be saved to csv
@@ -241,7 +242,7 @@ function processIssueCommentResults (res) {
 
 function saveFileIssues () {
   console.info('All Repos processed')
-  var repo_header = 'id,title,created_date,updated_date,comments_count,is_pullrequest,html_url'
+  var repo_header = 'id,title,created_date,updated_date,comments_count,is_pullrequest,html_url,url'
   updateFile(repo_header, csv_issues, 'data/issues.csv', function cb_update_file (err, res) {
     if (err) {
       console.error('Error updating file: ' + err)
@@ -260,7 +261,7 @@ function saveFileIssues () {
 
 function saveFileComments () {
   console.info('All Comments processed')
-  var repo_header = 'id,creator,updated_date,html_url,isissue_url'
+  var repo_header = 'id,creator,updated_date,html_url,issue_url'
   updateFile(repo_header, csv_comments, 'data/comments.csv', function cb_update_file (err, res) {
     if (err) {
       console.error('Error updating file: ' + err)
