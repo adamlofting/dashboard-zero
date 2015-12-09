@@ -3,11 +3,19 @@ var dashboard_zero = require('./src/dashboard-zero/index.js')
 // The GitHub org name we are scanning
 var ORG_NAME = 'mozilla'
 
+
+
+var REPO_LIST = ['login.webmaker.org', 'webmaker-login-ux', 'webmaker-core']
+
 // *******************************
 // Start of code
 // ****************************
-dashboard_zero.init(ORG_NAME)
-dashboard_zero.setToken()
+dashboard_zero.init(ORG_NAME, REPO_LIST)
+dashboard_zero.setToken(cb_setToken)
+
+function cb_setToken (status) {
+  dashboard_zero.getIssuesFromRepo(dashboard_zero.fetchIssues)
+}
 
 // // // **********************************************************
 // // // Called by a timer to avoid hitting the GitHub rate limits
