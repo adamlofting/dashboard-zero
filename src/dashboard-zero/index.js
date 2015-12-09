@@ -124,8 +124,13 @@ function processRepoIssueResults (res) {
       element.title.replace(/"/g, '&quot;') + '",' +
       element.created_at + ',' +
       element.updated_at + ',' +
-      element.comments + ',' +
-      element.html_url +
+      element.comments + ','
+    if (element.pull_request) {
+      issue_line += 'true' + ','
+    } else {
+      issue_line += 'false' + ','
+    }
+    issue_line += element.html_url +
       '\n'
 
     // Add to list to be saved to csv
@@ -138,7 +143,7 @@ function processRepoIssueResults (res) {
 
 function saveFileIssues () {
   console.info('All Repos processed')
-  var repo_header = 'id,title,created_date,updated_date,comments_count,html_url'
+  var repo_header = 'id,title,created_date,updated_date,comments_count,is_pullrequest,html_url'
   updateFile(repo_header, csv_issues, 'data/issues.csv', cb_update_file)
 }
 
