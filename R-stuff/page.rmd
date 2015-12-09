@@ -1,0 +1,117 @@
+---
+title: "dashboard-zero"
+author: "gsilvapt"
+date: "December 2015"
+output: 
+  html_document: 
+    keep_md: yes
+runtime: shiny
+---
+
+This page will provide all related information with MoFo metrics.
+In this particular page, you will find all information related to [dashboard-zero project](https://github.com/adamlofting/dashboard-zero).
+
+# Inputs
+
+All data has been being retrieved running a few scripts, with the help of @drazisil.
+
+<font color = "red">
+Last update: --<br>
+Next update: --</font>
+
+```{r, echo=FALSE}
+setwd("C:\\Users\\gusta_000\\Documents\\GitHub\\dashboard-zero\\data")
+repos_data <- read.csv("repos.csv", header = T, sep ="," )
+issues_data <- read.csv("issues.csv", header = T, sep = ",", stringsAsFactors = FALSE)
+```
+
+## Requests
+
+The following list came from the developers team feedback.
+
+1. Number of unanswered volunteer input in Github issues
+2. Number of Pull Requests that have had no response at all
+3. Number of Pull Requests that have had no activity for more than X days
+4. Number of open bugs (total)
+5. Number of bugs by triage status
+6. Number of bugs assigned to expired Milestones
+
+### 1 - Unanswered volunteer inputs
+
+```{r, echo = FALSE}
+sum(issues_data$comments_count == "0")
+``` 
+
+### 2 - Number of pull requests without response
+
+Ordered by priority
+
+```{r, echo=FALSE}
+library(knitr)
+showURL <- subset(issues_data, issues_data$comments_count > 0, select = c(title, comments_count, html_url))
+kable(head(order_showURL <- showURL[, 2:3][order(showURL$comments_count, decreasing = FALSE), ], n = 151), format ="markdown")
+
+#head(order_showURL, n = 151)
+``` 
+
+### 3 - Number of pull requests that have had no activity for more than X days 
+
+*To be updated*
+
+### 4 - Total number of open bugs
+
+```{r, echo=FALSE}
+sum(repos_data$open_issues)
+```
+
+### 5 - Triage status - top 20 projects with less updates
+This bit of code consideres that is_pullRequest = TRUE
+
+```{r, echo=FALSE}
+library(knitr)
+issues_data_isPull <- subset(issues_data, is_pullrequest == "true")
+kable(head(ordered_by_lastUpdate <- issues_data_isPull[, 2:5 & 7][order(issues_data_isPull$updated_date, decreasing = FALSE), ], n=50), format = "markdown")
+
+#head(ordered_by_lastUpdate, n = 20)
+```
+
+## Extra
+
+A bit more information about all datasets we have including:
+1. Top 10 projects with most bugs
+2. Most used programming language
+
+### 1 - Top 10 projects with most bugs
+```{r, echo=FALSE}
+repos_data_clean <- subset(repos_data, open_issues != "0")
+
+head(ordered_by_issues <- repos_data_clean[order(repos_data_clean$open_issues, decreasing = TRUE), ], n=10)
+#head(ordered_by_issues, n = 10)
+```
+
+### 2 - Most used programming language
+```{r, echo=FALSE}
+print("JavaScript")
+sum(repos_data$language == "JavaScript")
+print("Java")
+sum(repos_data$language == "Java")
+print("TypeScript")
+sum(repos_data$language == "TypeScript")
+print("Python")
+sum(repos_data$language == "Python")
+print("C")
+sum(repos_data$language == "C")
+print("C++")
+sum(repos_data$language == "C++")
+print("CSS")
+sum(repos_data$language == "CSS")
+print("HTML")
+sum(repos_data$language == "HTML")
+```
+
+
+```{r, echo=FALSE}
+#(Page layout and design)
+```
+
+rmarkdown::render("page.rmd")
