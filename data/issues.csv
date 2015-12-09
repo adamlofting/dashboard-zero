@@ -1,4 +1,4 @@
-id,title,created_date,updated_date,comments_count,is_pullrequest,html_url,isissue_url
+id,title,created_date,updated_date,comments_count,is_pullrequest,html_url
 108018424,"bcrypt is breaking login.wmo on windows",2015-09-23T22:16:20Z,2015-09-23T22:19:08Z,1,false,https://github.com/mozilla/login.webmaker.org/issues/370
 107759668,"removing messina",2015-09-22T17:16:42Z,2015-09-22T17:16:55Z,0,true,https://github.com/mozilla/login.webmaker.org/pull/369
 107756345,"fix all the warnings + errors for login on node 0.12",2015-09-22T16:58:04Z,2015-09-22T18:13:15Z,1,false,https://github.com/mozilla/login.webmaker.org/issues/368
