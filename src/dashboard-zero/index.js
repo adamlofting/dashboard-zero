@@ -120,8 +120,8 @@ function processRepoIssueResults (res) {
   // console.log('processRepoIssueResults: ' + REPO_LIST[repo_index] + ' ' + res.length)
   res.forEach(function fe_repo (element, index, array) {
     var issue_line =
-      element.id + ',' +
-      element.title + ',' +
+      element.id + ',"' +
+      element.title + '",' +
       element.created_at + ',' +
       element.updated_at + ',' +
       element.comments + ',' +
