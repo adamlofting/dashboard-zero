@@ -1,1 +1,483 @@
-id,title,created_date,updated_date,comments_count, html_url
+id,title,created_date,updated_date,comments_count,html_url
+108018424,bcrypt is breaking login.wmo on windows,2015-09-23T22:16:20Z,2015-09-23T22:19:08Z,1,https://github.com/mozilla/login.webmaker.org/issues/370
+107759668,removing messina,2015-09-22T17:16:42Z,2015-09-22T17:16:55Z,0,https://github.com/mozilla/login.webmaker.org/pull/369
+107756345,fix all the warnings + errors for login on node 0.12,2015-09-22T16:58:04Z,2015-09-22T18:13:15Z,1,https://github.com/mozilla/login.webmaker.org/issues/368
+107589113,bumpin sqlite up,2015-09-21T20:10:52Z,2015-09-22T13:47:15Z,2,https://github.com/mozilla/login.webmaker.org/pull/367
+106163037,improve README,2015-09-12T14:27:34Z,2015-09-12T14:27:34Z,0,https://github.com/mozilla/login.webmaker.org/pull/366
+97784283,Send out transactional emails to users 3 days after Webmaker install,2015-07-28T19:33:29Z,2015-07-30T20:12:43Z,2,https://github.com/mozilla/login.webmaker.org/issues/365
+96911493,Verifying user passwords takes a significant amount of time because we use bcrypt,2015-07-23T21:42:04Z,2015-07-23T21:51:06Z,1,https://github.com/mozilla/login.webmaker.org/issues/364
+96861641,update to express 4.x,2015-07-23T17:19:47Z,2015-07-23T17:19:47Z,0,https://github.com/mozilla/login.webmaker.org/issues/361
+93368107,need to update sequelize, security vulnerability,2015-07-06T20:19:31Z,2015-09-18T19:30:58Z,0,https://github.com/mozilla/login.webmaker.org/issues/358
+88849338,Username on "Uh-oh, there's no password for that account yet" page shouldn't be editable.,2015-06-16T21:52:59Z,2015-07-06T19:58:19Z,1,https://github.com/mozilla/login.webmaker.org/issues/350
+88848410,Overly aggressive field validation on Sign Up page,2015-06-16T21:48:13Z,2015-06-16T21:48:13Z,0,https://github.com/mozilla/login.webmaker.org/issues/349
+81999113,New account email sent to non-email,2015-05-28T15:55:56Z,2015-07-06T19:59:44Z,6,https://github.com/mozilla/login.webmaker.org/issues/346
+72182701,Document how to manipulate user properties,2015-04-30T14:39:16Z,2015-07-06T20:17:55Z,2,https://github.com/mozilla/login.webmaker.org/issues/343
+71399553,Login keys are sometimes unusable,2015-04-27T20:56:58Z,2015-07-06T20:00:46Z,0,https://github.com/mozilla/login.webmaker.org/issues/342
+63763352,People aren't getting their login keys,2015-03-23T16:16:04Z,2015-03-23T16:16:04Z,0,https://github.com/mozilla/login.webmaker.org/issues/327
+63759606,Delete Account Pop-Up Appears Below Screen,2015-03-23T15:59:42Z,2015-03-23T16:03:17Z,2,https://github.com/mozilla/login.webmaker.org/issues/326
+63274762,Close issues down on this repo and add a link to id.webmaker.org,2015-03-20T17:59:03Z,2015-03-20T17:59:03Z,0,https://github.com/mozilla/login.webmaker.org/issues/325
+59739298,Implement Automated Testing,2015-03-04T02:01:57Z,2015-03-04T02:01:57Z,0,https://github.com/mozilla/login.webmaker.org/issues/322
+57992448,Sign in and keep me signed in should be the promoted default,2015-02-17T22:27:22Z,2015-02-17T22:27:22Z,0,https://github.com/mozilla/login.webmaker.org/issues/318
+56333430,alphanumeric characters in username,2015-02-03T04:46:15Z,2015-02-03T04:46:15Z,0,https://github.com/mozilla/login.webmaker.org/issues/316
+56333186,"Want your own Webmaker profile?" No thanks. Already have one.,2015-02-03T04:41:36Z,2015-02-03T04:41:36Z,0,https://github.com/mozilla/login.webmaker.org/issues/315
+55516415,Reports of the key not working ,2015-01-26T18:09:25Z,2015-03-23T16:17:35Z,15,https://github.com/mozilla/login.webmaker.org/issues/313
+55385455,Suggestions for string changes,2015-01-24T21:29:40Z,2015-01-24T23:21:58Z,1,https://github.com/mozilla/login.webmaker.org/issues/312
+48552121,Edits to explanatory text on profile settings,2014-11-12T19:32:35Z,2014-11-12T19:32:35Z,0,https://github.com/mozilla/login.webmaker.org/pull/311
+47990381,Fix account delete callback,2014-11-06T17:32:12Z,2015-07-06T20:50:26Z,2,https://github.com/mozilla/login.webmaker.org/pull/307
+47874609,Fixing Bug 1024087,2014-11-05T19:05:52Z,2014-11-05T19:05:52Z,0,https://github.com/mozilla/login.webmaker.org/pull/306
+45776732,Fix bug 1082700 - Rename prefLocale column correctly,2014-10-14T17:23:58Z,2014-10-14T17:23:58Z,0,https://github.com/mozilla/login.webmaker.org/pull/301
+44516667,Prevent breaking change,2014-10-01T00:43:29Z,2014-10-01T00:43:29Z,0,https://github.com/mozilla/login.webmaker.org/pull/299
+44516169,Add travis heroku deploy,2014-10-01T00:33:41Z,2014-10-01T00:33:41Z,0,https://github.com/mozilla/login.webmaker.org/pull/298
+44469919,Fix bug 1074264 - Add cors headers for verify/authenticate/username etc.,2014-09-30T16:42:39Z,2014-09-30T22:16:56Z,0,https://github.com/mozilla/login.webmaker.org/pull/297
+38252162,Fixed issue #287 of login.webmaker.org at Github,2014-07-20T06:40:16Z,2014-07-21T03:02:32Z,0,https://github.com/mozilla/login.webmaker.org/pull/288
+35529358,Bug 1011176 - Add mentor, super mentor to user model,2014-06-11T21:30:42Z,2014-06-12T18:19:54Z,0,https://github.com/mozilla/login.webmaker.org/pull/278
+32475587,1003371: Add getUserByUsername and getUserByEmail to API,2014-04-29T19:11:01Z,2014-07-13T05:46:05Z,0,https://github.com/mozilla/login.webmaker.org/pull/263
+32168289,Bug 1000677 - Fix event creation email preference toggling,2014-04-24T17:23:02Z,2014-07-19T01:41:28Z,0,https://github.com/mozilla/login.webmaker.org/pull/262
+28811024,Requesting a pull to mozilla:master from k88hudson:t979637,2014-03-05T18:00:33Z,2014-06-27T21:00:53Z,0,https://github.com/mozilla/login.webmaker.org/pull/243
+27566983,Requesting a pull to mozilla:master from k88hudson:t972626,2014-02-14T01:11:39Z,2014-07-03T08:56:55Z,0,https://github.com/mozilla/login.webmaker.org/pull/236
+111427674,fix change password modal bug, when clicking submit nothing happens,2015-10-14T15:48:41Z,2015-12-07T09:38:07Z,0,https://github.com/mozilla/webmaker-login-ux/pull/171
+111170478,changing  password in reset password modal ..doesn't work,2015-10-13T12:33:48Z,2015-10-13T14:49:40Z,0,https://github.com/mozilla/webmaker-login-ux/issues/170
+70130065,[IE10]: SCRIPT5022: InvalidStateError webmakerLogin.min.js, line 2 character 334,2015-04-22T13:44:24Z,2015-04-23T18:34:12Z,4,https://github.com/mozilla/webmaker-login-ux/issues/169
+59503227,Reduce the size of webmakerLogin in dist/,2015-03-02T16:18:21Z,2015-03-02T16:58:25Z,1,https://github.com/mozilla/webmaker-login-ux/issues/167
+57654092,Replace reference to goggles.webmaker.org,2015-02-13T21:06:49Z,2015-02-13T21:06:49Z,0,https://github.com/mozilla/webmaker-login-ux/issues/165
+55675054,Style conflict for login modal on goggles,2015-01-27T21:11:53Z,2015-01-27T21:12:41Z,0,https://github.com/mozilla/webmaker-login-ux/issues/162
+55674906,Not picking up locale setting on goggles,2015-01-27T21:10:45Z,2015-01-27T21:10:45Z,0,https://github.com/mozilla/webmaker-login-ux/issues/161
+55634151,Login email: content and formatting issues,2015-01-27T15:45:49Z,2015-02-03T14:58:25Z,1,https://github.com/mozilla/webmaker-login-ux/issues/160
+55518161,Suggestions for string changes,2015-01-26T18:23:58Z,2015-01-26T18:23:58Z,0,https://github.com/mozilla/webmaker-login-ux/issues/157
+55197975,Checkboxes are [hilariously] sideways in Safari,2015-01-22T19:34:09Z,2015-01-22T19:41:23Z,4,https://github.com/mozilla/webmaker-login-ux/issues/154
+54811764,Warn user if they try to use a weak password,2015-01-19T21:01:04Z,2015-01-19T21:01:04Z,0,https://github.com/mozilla/webmaker-login-ux/issues/153
+54811544,Documentation for implementing login 3,2015-01-19T20:58:49Z,2015-01-19T20:58:49Z,0,https://github.com/mozilla/webmaker-login-ux/issues/152
+54811452,Email entry in Join flow has broken validation,2015-01-19T20:57:54Z,2015-01-19T20:57:54Z,0,https://github.com/mozilla/webmaker-login-ux/issues/151
+54336877,Error when building via browserify,2015-01-14T15:45:17Z,2015-05-12T20:23:20Z,10,https://github.com/mozilla/webmaker-login-ux/issues/146
+54088465,Join Webmaker Checkbox UI cannot be toggled with spacebar ,2015-01-12T18:25:39Z,2015-01-13T20:32:48Z,1,https://github.com/mozilla/webmaker-login-ux/issues/144
+54075990,Webmaker Login Problem ,2015-01-12T16:41:54Z,2015-01-12T17:32:14Z,1,https://github.com/mozilla/webmaker-login-ux/issues/142
+53573416,Expiring tokens show UI roughness,2015-01-06T22:44:17Z,2015-01-06T23:04:32Z,3,https://github.com/mozilla/webmaker-login-ux/issues/135
+53572804,Email with token has escaped html,2015-01-06T22:37:56Z,2015-01-07T15:55:40Z,2,https://github.com/mozilla/webmaker-login-ux/issues/134
+53463605,switching to "password" or "webmaker login" uses a javascript `.prompt()` ,2015-01-05T23:53:58Z,2015-01-15T23:29:04Z,1,https://github.com/mozilla/webmaker-login-ux/issues/131
+53463499,the "forgot your password?" link uses an I-bar cursor instead of the pointer,2015-01-05T23:52:31Z,2015-01-19T21:59:29Z,4,https://github.com/mozilla/webmaker-login-ux/issues/130
+52782926,Token remains in URL post login,2014-12-23T23:17:44Z,2015-01-06T23:25:32Z,0,https://github.com/mozilla/webmaker-login-ux/issues/123
+52701048,User menu incomplete on goggles,2014-12-22T23:47:46Z,2014-12-22T23:49:36Z,0,https://github.com/mozilla/webmaker-login-ux/issues/122
+52700829,Tiny text on Join in Goggles,2014-12-22T23:43:55Z,2014-12-22T23:49:09Z,0,https://github.com/mozilla/webmaker-login-ux/issues/120
+52699427,Logout link cursor on hover ,2014-12-22T23:22:38Z,2015-01-16T17:37:47Z,2,https://github.com/mozilla/webmaker-login-ux/issues/118
+52699014,Login email text,2014-12-22T23:16:47Z,2014-12-22T23:43:33Z,0,https://github.com/mozilla/webmaker-login-ux/issues/117
+52696658,Used "reset password" links are not helpful,2014-12-22T22:45:05Z,2015-01-22T19:37:02Z,5,https://github.com/mozilla/webmaker-login-ux/issues/114
+52695640,"try X-Ray Goggles" upon sign-up success doesn't always show up,2014-12-22T22:32:17Z,2014-12-23T23:37:48Z,4,https://github.com/mozilla/webmaker-login-ux/issues/112
+52694384,Clicking on "Terms" and "Privacy Policy" navigates user away from page,2014-12-22T22:15:29Z,2014-12-22T22:20:57Z,0,https://github.com/mozilla/webmaker-login-ux/issues/110
+52693091,"Heads up!" alert has hard-to-distinguish link color,2014-12-22T21:59:48Z,2014-12-22T23:09:14Z,1,https://github.com/mozilla/webmaker-login-ux/issues/109
+52692552,Traceback on page load in IE11,2014-12-22T21:53:18Z,2014-12-22T22:20:27Z,2,https://github.com/mozilla/webmaker-login-ux/issues/108
+52691339,Checkbox looks strange on Mobile Safari,2014-12-22T21:38:58Z,2014-12-22T21:38:58Z,0,https://github.com/mozilla/webmaker-login-ux/issues/103
+52690847,Email validation starts on keyup,2014-12-22T21:32:40Z,2014-12-22T23:07:46Z,1,https://github.com/mozilla/webmaker-login-ux/issues/102
+52272888,grunt dev failures,2014-12-17T18:16:21Z,2014-12-17T18:16:21Z,0,https://github.com/mozilla/webmaker-login-ux/issues/96
+51507445,Improve Documentation,2014-12-10T01:39:27Z,2014-12-22T21:44:52Z,1,https://github.com/mozilla/webmaker-login-ux/issues/89
+50197334,"Remember me for one year" wraps to next line in mobile,2014-11-26T16:13:13Z,2014-12-22T21:57:05Z,0,https://github.com/mozilla/webmaker-login-ux/issues/85
+48711866,clarifying ui instructions. small copy edits.,2014-11-13T23:58:40Z,2014-11-13T23:58:40Z,0,https://github.com/mozilla/webmaker-login-ux/pull/69
+47633150,Add compiled source comparison to `grunt verify` ,2014-11-03T19:25:24Z,2014-11-03T19:27:08Z,1,https://github.com/mozilla/webmaker-login-ux/issues/52
+47277119,remove instant login uid and token from url after processing them,2014-10-30T14:36:03Z,2014-10-30T14:36:16Z,0,https://github.com/mozilla/webmaker-login-ux/issues/47
+46528704,Better handling for failed insta-logins,2014-10-22T16:12:35Z,2014-10-22T16:12:35Z,0,https://github.com/mozilla/webmaker-login-ux/issues/39
+46126814,Enable support for multiple languages in plain js,2014-10-17T18:01:41Z,2014-10-17T18:02:56Z,0,https://github.com/mozilla/webmaker-login-ux/issues/28
+45910772,[plainJS] Keyboard Events,2014-10-15T19:53:03Z,2014-10-17T18:42:39Z,0,https://github.com/mozilla/webmaker-login-ux/issues/19
+45910693,[plainJS] Add modal transitions,2014-10-15T19:52:26Z,2014-10-17T18:42:48Z,0,https://github.com/mozilla/webmaker-login-ux/issues/18
+121059601,Update should to version 8.0.0 🚀,2015-12-08T17:39:16Z,2015-12-08T17:39:16Z,0,https://github.com/mozilla/webmaker-core/pull/917
+120644606,Update babel-core to version 6.3.15 🚀,2015-12-06T16:41:27Z,2015-12-06T16:41:27Z,0,https://github.com/mozilla/webmaker-core/pull/916
+120498933,Make sure thumbs include new background colors,2015-12-04T22:24:52Z,2015-12-04T22:24:52Z,0,https://github.com/mozilla/webmaker-core/issues/915
+120441969,Update logo on Mozilla Assets page,2015-12-04T16:53:56Z,2015-12-04T16:53:56Z,0,https://github.com/mozilla/webmaker-core/issues/912
+120402167,Update babel to version 6.3.13 🚀,2015-12-04T13:31:51Z,2015-12-04T13:31:51Z,0,https://github.com/mozilla/webmaker-core/pull/911
+120401297,Update babel-core to version 6.3.13 🚀,2015-12-04T13:26:17Z,2015-12-04T13:26:18Z,0,https://github.com/mozilla/webmaker-core/pull/910
+120281226,Add padding to text element for background color,2015-12-03T22:07:23Z,2015-12-04T17:28:01Z,1,https://github.com/mozilla/webmaker-core/issues/908
+120280926,UI polish - tinker color,2015-12-03T22:05:20Z,2015-12-03T22:05:20Z,0,https://github.com/mozilla/webmaker-core/issues/907
+120280328,Text element background tinker color starts with zero opactiy,2015-12-03T22:02:01Z,2015-12-03T22:02:01Z,0,https://github.com/mozilla/webmaker-core/issues/906
+120256840,Add featured tags to discover,2015-12-03T19:59:32Z,2015-12-03T19:59:32Z,0,https://github.com/mozilla/webmaker-core/issues/905
+120256260,Linkify tags in description,2015-12-03T19:57:00Z,2015-12-04T15:44:24Z,1,https://github.com/mozilla/webmaker-core/issues/904
+120254876,adding descriptions,2015-12-03T19:50:59Z,2015-12-04T20:27:27Z,4,https://github.com/mozilla/webmaker-core/pull/903
+119810121,Count project views etcetera,2015-12-01T21:18:22Z,2015-12-03T19:00:39Z,6,https://github.com/mozilla/webmaker-core/issues/902
+119781073,Stop randomizing Discover,2015-12-01T18:43:41Z,2015-12-01T18:43:41Z,0,https://github.com/mozilla/webmaker-core/issues/901
+119770618,Add EditorConfig,2015-12-01T17:44:06Z,2015-12-01T18:17:01Z,1,https://github.com/mozilla/webmaker-core/issues/898
+119319993,Update lru-cache to version 3.2.0 🚀,2015-11-28T21:54:19Z,2015-11-28T21:54:19Z,0,https://github.com/mozilla/webmaker-core/pull/889
+119036544,Update react-hammerjs to version 0.4.3 🚀,2015-11-26T12:34:21Z,2015-11-26T12:34:21Z,0,https://github.com/mozilla/webmaker-core/pull/883
+118948062,Update classnames to version 2.2.1 🚀,2015-11-26T00:36:34Z,2015-11-26T00:36:35Z,0,https://github.com/mozilla/webmaker-core/pull/882
+118753483,Add element selection border to cropped elements ,2015-11-25T03:37:47Z,2015-11-25T03:37:47Z,0,https://github.com/mozilla/webmaker-core/issues/879
+118721441,Update react-intl to version 1.2.2 🚀,2015-11-24T22:55:23Z,2015-11-24T22:55:23Z,0,https://github.com/mozilla/webmaker-core/pull/878
+118511694,Add localized languages,2015-11-24T01:24:51Z,2015-12-01T15:44:36Z,2,https://github.com/mozilla/webmaker-core/issues/871
+118491536,Release 1.5.4,2015-11-23T22:51:58Z,2015-12-04T22:31:11Z,7,https://github.com/mozilla/webmaker-core/issues/869
+118440152,Tap +element icon should deselect current element,2015-11-23T18:17:25Z,2015-11-23T18:17:25Z,0,https://github.com/mozilla/webmaker-core/issues/863
+118438343,Add healthcheck,2015-11-23T18:06:27Z,2015-11-23T22:14:35Z,0,https://github.com/mozilla/webmaker-core/issues/862
+118281689,Add a more specific error text for no connection,2015-11-22T18:58:57Z,2015-11-23T22:18:01Z,0,https://github.com/mozilla/webmaker-core/issues/859
+118208071,Don't trim spaces in Text element,2015-11-21T16:57:31Z,2015-12-03T22:39:02Z,0,https://github.com/mozilla/webmaker-core/issues/858
+118153038,Only allow setting a in-project link for multi-page projects,2015-11-21T00:03:23Z,2015-12-03T22:09:01Z,1,https://github.com/mozilla/webmaker-core/issues/857
+118147954,Warn on nav to missing view,2015-11-20T23:21:56Z,2015-11-24T19:14:28Z,1,https://github.com/mozilla/webmaker-core/issues/855
+118135188,Think about use-cases and content partners,2015-11-20T22:00:42Z,2015-11-20T22:00:42Z,0,https://github.com/mozilla/webmaker-core/issues/853
+118112274,Prep analytics for upcoming features,2015-11-20T19:42:51Z,2015-11-23T13:24:03Z,1,https://github.com/mozilla/webmaker-core/issues/851
+117951119,Green arrow should dismiss keyboard in project settings,2015-11-20T02:12:42Z,2015-11-20T02:12:42Z,0,https://github.com/mozilla/webmaker-core/issues/847
+117949866,UI Polish - FTU ,2015-11-20T01:58:33Z,2015-11-30T16:42:21Z,0,https://github.com/mozilla/webmaker-core/issues/846
+117921229,Add option to render projects in browser without header,2015-11-19T22:18:01Z,2015-11-19T22:25:10Z,1,https://github.com/mozilla/webmaker-core/issues/845
+117920451,Links to URLs - can we intercept links to projects? ,2015-11-19T22:13:42Z,2015-12-04T17:30:22Z,6,https://github.com/mozilla/webmaker-core/issues/844
+117919827,Discuss - discover sidebar for desktop,2015-11-19T22:10:46Z,2015-11-19T22:10:46Z,0,https://github.com/mozilla/webmaker-core/issues/843
+117916462,Block pull to refresh from project settings,2015-11-19T21:55:55Z,2015-11-19T21:56:31Z,0,https://github.com/mozilla/webmaker-core/issues/841
+117916000,Don't auto-refresh Projects ,2015-11-19T21:53:19Z,2015-12-01T16:42:06Z,1,https://github.com/mozilla/webmaker-core/issues/840
+117913762,UI Polish - Loading indicator,2015-11-19T21:40:41Z,2015-11-30T16:42:28Z,2,https://github.com/mozilla/webmaker-core/issues/839
+117910270,Webmaker requires "uninstall for all users",2015-11-19T21:20:25Z,2015-11-19T21:20:25Z,0,https://github.com/mozilla/webmaker-core/issues/838
+117909216,UI Polish - Discover,2015-11-19T21:14:28Z,2015-11-24T15:53:29Z,0,https://github.com/mozilla/webmaker-core/issues/832
+117776646,x86 device - app is super slow,2015-11-19T09:42:55Z,2015-11-19T17:00:35Z,3,https://github.com/mozilla/webmaker-core/issues/827
+117727462,Update react to version 0.14.3 🚀,2015-11-19T02:28:49Z,2015-11-19T16:16:55Z,1,https://github.com/mozilla/webmaker-core/pull/825
+117703039,Nice to clean/discuss: Text edits indicator,2015-11-18T23:06:55Z,2015-11-19T09:12:18Z,0,https://github.com/mozilla/webmaker-core/issues/820
+117701481,Text on button - white shadow,2015-11-18T22:56:46Z,2015-11-19T03:46:12Z,0,https://github.com/mozilla/webmaker-core/issues/819
+117631281,Add "Project Details" to more actions modal in Make view,2015-11-18T16:57:21Z,2015-12-03T22:09:01Z,0,https://github.com/mozilla/webmaker-core/issues/809
+117630882,System back does not dismiss modal in Make view ,2015-11-18T16:55:29Z,2015-11-18T16:55:29Z,0,https://github.com/mozilla/webmaker-core/issues/808
+117629574,Infinite scroll seems to be finite,2015-11-18T16:50:34Z,2015-12-01T18:44:12Z,5,https://github.com/mozilla/webmaker-core/issues/805
+117323043,Update babel-loader to version 6.2.0 🚀,2015-11-17T10:15:22Z,2015-11-17T10:15:22Z,0,https://github.com/mozilla/webmaker-core/pull/800
+117163246,Build tag list view,2015-11-16T16:29:07Z,2015-12-03T22:16:57Z,4,https://github.com/mozilla/webmaker-core/issues/795
+117161293,Build project descriptions,2015-11-16T16:20:22Z,2015-12-04T16:27:08Z,4,https://github.com/mozilla/webmaker-core/issues/794
+116945276,Prompt for Title,2015-11-14T18:56:29Z,2015-11-14T18:56:29Z,0,https://github.com/mozilla/webmaker-core/issues/793
+116817241,Make Project Thumbnails Full Height,2015-11-13T17:55:32Z,2015-12-03T22:09:00Z,6,https://github.com/mozilla/webmaker-core/issues/788
+116594811,load time,2015-11-12T17:09:51Z,2015-11-24T00:11:02Z,2,https://github.com/mozilla/webmaker-core/issues/781
+116589036,Deal with RAM leaks caused by some incorrect usage patterns of Context,2015-11-12T16:43:15Z,2015-12-01T16:41:57Z,0,https://github.com/mozilla/webmaker-core/issues/780
+115740461,Remove login requirement for new users,2015-11-08T15:49:37Z,2015-11-12T18:00:33Z,0,https://github.com/mozilla/webmaker-core/issues/774
+115739043,disable scrolling of loading spinner,2015-11-08T15:12:57Z,2015-11-12T18:00:33Z,0,https://github.com/mozilla/webmaker-core/issues/773
+115724887,implement hashtags,2015-11-08T11:02:58Z,2015-12-03T20:00:53Z,4,https://github.com/mozilla/webmaker-core/issues/772
+114434780,Change color for count indicator in project name,2015-10-31T21:12:08Z,2015-11-12T09:59:47Z,0,https://github.com/mozilla/webmaker-core/issues/759
+114434744,Use Capital for name projects,2015-10-31T21:11:02Z,2015-11-12T17:58:04Z,0,https://github.com/mozilla/webmaker-core/issues/758
+114072591,Implement custom title on Author view,2015-10-29T15:18:46Z,2015-11-02T17:23:12Z,4,https://github.com/mozilla/webmaker-core/issues/750
+113652988,Rebundle React and React DOM,2015-10-27T18:38:13Z,2015-11-16T22:03:55Z,1,https://github.com/mozilla/webmaker-core/issues/748
+113652534,Upgrade hapi in webmaker-browser,2015-10-27T18:35:51Z,2015-11-16T22:03:55Z,2,https://github.com/mozilla/webmaker-core/issues/747
+113629799,Add beautiful content to Webmaker,2015-10-27T16:52:39Z,2015-12-01T18:30:46Z,1,https://github.com/mozilla/webmaker-core/issues/745
+113629200,Make it easier to flag featured projects,2015-10-27T16:49:39Z,2015-11-12T17:58:50Z,0,https://github.com/mozilla/webmaker-core/issues/743
+113628476,Enable users to add link to hashtags ,2015-10-27T16:46:01Z,2015-12-03T22:12:55Z,0,https://github.com/mozilla/webmaker-core/issues/742
+113624952,Add page to page nav with in page editor,2015-10-27T16:29:24Z,2015-12-01T18:37:00Z,0,https://github.com/mozilla/webmaker-core/issues/741
+113624143,Persist styles on new elements,2015-10-27T16:25:32Z,2015-12-01T18:29:07Z,5,https://github.com/mozilla/webmaker-core/issues/740
+113623501,Enable duplicate or copy an element,2015-10-27T16:22:41Z,2015-10-27T16:22:41Z,0,https://github.com/mozilla/webmaker-core/issues/739
+113621669,Favourites,2015-10-27T16:14:13Z,2015-12-01T18:31:01Z,0,https://github.com/mozilla/webmaker-core/issues/738
+113422926,Discussion: Maintain 2 APKs - for old and new Android devices,2015-10-26T18:39:10Z,2015-11-12T18:21:14Z,7,https://github.com/mozilla/webmaker-core/issues/736
+112835002,"Name This Project" CTA,2015-10-22T15:57:40Z,2015-11-12T18:23:47Z,0,https://github.com/mozilla/webmaker-core/issues/729
+112663513,API for Discover hashtags,2015-10-21T19:37:37Z,2015-12-03T20:01:16Z,29,https://github.com/mozilla/webmaker-core/issues/727
+112622410,Identify UX events for analytics,2015-10-21T16:00:44Z,2015-11-12T17:58:50Z,4,https://github.com/mozilla/webmaker-core/issues/726
+112499466,Browser player briefly shows "Untitled Project" when loading a project.,2015-10-21T02:31:03Z,2015-10-21T14:53:33Z,1,https://github.com/mozilla/webmaker-core/issues/723
+112481308,Android needs open Auth sign up and sign in authentication on app. Smartlock openAuth openID Android,2015-10-20T23:31:45Z,2015-11-16T17:48:02Z,1,https://github.com/mozilla/webmaker-core/issues/722
+112441004,Enhance button style and color,2015-10-20T19:17:25Z,2015-10-20T20:16:08Z,2,https://github.com/mozilla/webmaker-core/issues/719
+112424872,Visual Audit of Webmaker in Tablets,2015-10-20T17:59:12Z,2015-11-12T17:58:50Z,0,https://github.com/mozilla/webmaker-core/issues/718
+112396041,Update all dependencies 🌴,2015-10-20T15:34:54Z,2015-10-20T15:44:10Z,0,https://github.com/mozilla/webmaker-core/pull/717
+112217659,Keep images below text elements,2015-10-19T19:43:07Z,2015-12-03T22:09:00Z,12,https://github.com/mozilla/webmaker-core/issues/716
+111898087,Add photos to device gallery,2015-10-16T19:42:30Z,2015-12-03T20:12:19Z,0,https://github.com/mozilla/webmaker-core/issues/709
+111896556,Add opacity to text element,2015-10-16T19:33:03Z,2015-11-12T18:11:38Z,0,https://github.com/mozilla/webmaker-core/issues/708
+111895449,Consider react-less rendering in browser-based viewer,2015-10-16T19:25:26Z,2015-11-12T17:58:50Z,3,https://github.com/mozilla/webmaker-core/issues/707
+110038282,Reset password link is hard coded to production environment,2015-10-06T15:40:34Z,2015-11-19T03:47:24Z,0,https://github.com/mozilla/webmaker-core/issues/695
+109592600,Possibly refactor custom dispatcher w. Redux,2015-10-03T00:16:25Z,2015-10-03T00:16:25Z,0,https://github.com/mozilla/webmaker-core/issues/689
+109162978,"Best of" Content,2015-09-30T19:35:03Z,2015-11-16T22:14:52Z,7,https://github.com/mozilla/webmaker-core/issues/688
+109141027,Let's Play!,2015-09-30T17:29:53Z,2015-11-16T22:15:17Z,0,https://github.com/mozilla/webmaker-core/issues/687
+109112119,Preparing for Android 6.0 Support,2015-09-30T15:08:21Z,2015-11-12T17:50:17Z,3,https://github.com/mozilla/webmaker-core/issues/685
+108987560,Potential Optimization: shouldComponentUpdate,2015-09-30T00:41:04Z,2015-11-02T18:50:07Z,3,https://github.com/mozilla/webmaker-core/issues/684
+108378601,Test embedded Webmaker,2015-09-25T18:01:17Z,2015-09-25T18:23:04Z,4,https://github.com/mozilla/webmaker-core/issues/680
+108375504,Create Thimble tutorial on embedding Webmaker,2015-09-25T17:45:18Z,2015-11-16T22:12:51Z,1,https://github.com/mozilla/webmaker-core/issues/679
+108362615,SWOT on learning products,2015-09-25T16:48:24Z,2015-10-08T22:14:39Z,8,https://github.com/mozilla/webmaker-core/issues/678
+107269877,Share notable projects on the web,2015-09-18T20:14:41Z,2015-11-16T22:12:51Z,2,https://github.com/mozilla/webmaker-core/issues/671
+106540516,Give users more fonts to customize their text,2015-09-15T11:57:38Z,2015-09-15T23:50:48Z,5,https://github.com/mozilla/webmaker-core/issues/660
+105890932,Can't export projects nicely into Thimble,2015-09-10T20:25:19Z,2015-10-06T15:48:36Z,5,https://github.com/mozilla/webmaker-core/issues/653
+105887839,Offer option to embed via browser-based UI,2015-09-10T20:05:47Z,2015-09-25T17:33:16Z,0,https://github.com/mozilla/webmaker-core/issues/652
+105798914,Add "keep private" to enable drafts of longterm projects,2015-09-10T12:45:43Z,2015-11-12T17:48:42Z,15,https://github.com/mozilla/webmaker-core/issues/651
+105797890,implement the ability to move pages around ,2015-09-10T12:39:17Z,2015-11-30T16:42:47Z,8,https://github.com/mozilla/webmaker-core/issues/650
+105699097,Add a hashtag to shares,2015-09-09T22:48:46Z,2015-09-11T21:53:59Z,0,https://github.com/mozilla/webmaker-core/issues/649
+105388189,Enhancing Discover and sense of activity,2015-09-08T14:05:15Z,2015-09-15T12:04:37Z,11,https://github.com/mozilla/webmaker-core/issues/640
+105037225,Implement double tap to edit,2015-09-05T16:51:59Z,2015-10-08T18:26:20Z,2,https://github.com/mozilla/webmaker-core/issues/639
+105035850,Position of 3 elements moves when you leave the page,2015-09-05T16:28:44Z,2015-11-16T22:05:47Z,1,https://github.com/mozilla/webmaker-core/issues/637
+105035494,When editing text double tapping is very slow ,2015-09-05T16:19:28Z,2015-11-16T22:03:55Z,0,https://github.com/mozilla/webmaker-core/issues/636
+104884563,Consider ways to explore project in discovery and beyond,2015-09-04T12:48:07Z,2015-09-04T13:35:41Z,1,https://github.com/mozilla/webmaker-core/issues/633
+104715171,Idea - Discovery on Desktop,2015-09-03T14:58:13Z,2015-09-03T19:32:09Z,2,https://github.com/mozilla/webmaker-core/issues/628
+104650031,create new feedback survey ,2015-09-03T08:56:08Z,2015-10-21T22:33:55Z,2,https://github.com/mozilla/webmaker-core/issues/627
+104293301,Android crash report: play store,2015-09-01T15:34:24Z,2015-10-20T17:43:44Z,0,https://github.com/mozilla/webmaker-core/issues/619
+104284379,Documenting Mozfest with Webmaker,2015-09-01T14:51:44Z,2015-10-06T15:49:34Z,1,https://github.com/mozilla/webmaker-core/issues/618
+104115134,use DefinePlugin for configuration,2015-08-31T19:09:28Z,2015-10-20T17:43:22Z,0,https://github.com/mozilla/webmaker-core/issues/614
+104081524,Add "Flag as inappropriate",2015-08-31T16:02:11Z,2015-12-03T22:09:00Z,1,https://github.com/mozilla/webmaker-core/issues/612
+103766885,Track project views,2015-08-28T17:59:52Z,2015-10-21T22:19:18Z,3,https://github.com/mozilla/webmaker-core/issues/609
+103287458,Switch from html5 routing to GET routing,2015-08-26T14:48:49Z,2015-08-26T14:48:49Z,0,https://github.com/mozilla/webmaker-core/issues/602
+103094908,Rewrite project urls in browser to be prettier,2015-08-25T19:08:32Z,2015-10-21T22:25:40Z,6,https://github.com/mozilla/webmaker-core/issues/601
+102854275,Visual indicator for unlinked button in editor,2015-08-24T17:57:12Z,2015-09-11T21:52:09Z,3,https://github.com/mozilla/webmaker-core/issues/595
+102846773,project with page 0 deleted behaves rather curiously,2015-08-24T17:16:04Z,2015-10-21T22:17:14Z,11,https://github.com/mozilla/webmaker-core/issues/593
+102844900,Add `Feature Date` to DB for more control over projects in discover,2015-08-24T17:04:17Z,2015-12-01T18:37:00Z,1,https://github.com/mozilla/webmaker-core/issues/592
+102843344,unify our two caching mechanisms,2015-08-24T16:56:06Z,2015-11-23T17:05:33Z,7,https://github.com/mozilla/webmaker-core/issues/591
+102837567,Add keyboard nav to project viewer in browser,2015-08-24T16:31:55Z,2015-10-27T17:42:01Z,2,https://github.com/mozilla/webmaker-core/issues/590
+102784981,Add GA Event Tracking to Remix Events,2015-08-24T12:49:12Z,2015-10-21T22:15:19Z,0,https://github.com/mozilla/webmaker-core/issues/588
+102463963,when should projects try to databasify their content?,2015-08-21T21:18:04Z,2015-10-21T22:13:55Z,4,https://github.com/mozilla/webmaker-core/issues/585
+102408020,Webmaker Ideation,2015-08-21T15:48:33Z,2015-11-02T08:14:24Z,21,https://github.com/mozilla/webmaker-core/issues/582
+102405198,Implement Age Verification on Login,2015-08-21T15:34:39Z,2015-10-21T22:13:12Z,0,https://github.com/mozilla/webmaker-core/issues/581
+102388572,Implement onBlur for Login Validation Errors,2015-08-21T14:16:35Z,2015-10-21T22:24:34Z,0,https://github.com/mozilla/webmaker-core/issues/580
+102350931,Curate conversations with UX designers to learn about online communities ,2015-08-21T10:43:13Z,2015-11-16T22:15:17Z,11,https://github.com/mozilla/webmaker-core/issues/579
+102204106,Some pages are an island, a point of no return,2015-08-20T18:40:13Z,2015-10-20T17:59:05Z,6,https://github.com/mozilla/webmaker-core/issues/577
+102177034,Questions for Analytics // research ? ,2015-08-20T16:26:45Z,2015-10-21T15:53:46Z,5,https://github.com/mozilla/webmaker-core/issues/573
+101978195,Implement CC-by-SA in browser-based player,2015-08-19T19:25:06Z,2015-09-30T19:44:34Z,0,https://github.com/mozilla/webmaker-core/issues/568
+101943692,Track more detail about sign in errors in GA,2015-08-19T16:44:29Z,2015-10-20T17:40:05Z,3,https://github.com/mozilla/webmaker-core/issues/564
+101924332,Add apk key to the vault ,2015-08-19T15:48:34Z,2015-11-23T17:05:52Z,3,https://github.com/mozilla/webmaker-core/issues/563
+101748491,Inconsistent element placement between different views.,2015-08-18T21:04:20Z,2015-08-18T22:06:42Z,0,https://github.com/mozilla/webmaker-core/issues/561
+101745442,Can't move text element near the top of the screen.,2015-08-18T20:48:32Z,2015-08-18T20:52:41Z,0,https://github.com/mozilla/webmaker-core/issues/560
+101709005,Clarify Title length requirement,2015-08-18T17:36:23Z,2015-10-27T16:39:28Z,1,https://github.com/mozilla/webmaker-core/issues/557
+101648577,Load GA before firing GA events,2015-08-18T12:51:59Z,2015-10-20T17:58:19Z,0,https://github.com/mozilla/webmaker-core/issues/555
+101507747,Add ability to delete a project from the Play / Edit interface menu.,2015-08-17T20:53:25Z,2015-08-17T21:01:12Z,0,https://github.com/mozilla/webmaker-core/issues/551
+101137280,Can't edit middle of text, without being forwarded to the last character,2015-08-15T03:47:22Z,2015-08-18T22:10:10Z,1,https://github.com/mozilla/webmaker-core/issues/550
+101124294,Android App - Poor performance in Map mode for content-heavy projects.,2015-08-15T00:01:40Z,2015-08-17T13:12:14Z,0,https://github.com/mozilla/webmaker-core/issues/549
+101121158,Android App - Switching between apps within android to the Webmaker app causes the currently playing project to reload.,2015-08-14T23:24:00Z,2015-11-12T17:50:16Z,1,https://github.com/mozilla/webmaker-core/issues/548
+101108650,impossible usernames are not flagged as invalid on the "sign in" view, only on the "join webmaker" view. ,2015-08-14T21:48:56Z,2015-08-18T22:10:54Z,0,https://github.com/mozilla/webmaker-core/issues/546
+101107950,Webmaker App - Long-pressing a button in Play mode causes it to not navigate.,2015-08-14T21:44:00Z,2015-08-18T22:10:10Z,3,https://github.com/mozilla/webmaker-core/issues/545
+101053242,Compile changes in webmaker-android and webmaker-core into a easily downloadable APK,2015-08-14T16:56:19Z,2015-08-18T22:13:29Z,0,https://github.com/mozilla/webmaker-core/issues/541
+100865030,Set destinations position above or below the button, relative to its position,2015-08-13T20:48:04Z,2015-08-18T22:11:15Z,1,https://github.com/mozilla/webmaker-core/issues/538
+100846038,On first load of "make" page for new users, user does not exist in API DB,2015-08-13T19:10:19Z,2015-08-13T22:38:05Z,3,https://github.com/mozilla/webmaker-core/issues/532
+100653869,Element position inconsistent between Play & Edit modes in map view.,2015-08-12T23:03:42Z,2015-08-18T22:10:10Z,0,https://github.com/mozilla/webmaker-core/issues/527
+100652597,Initial Backspace when editing a text element adds a character.,2015-08-12T22:54:31Z,2015-08-18T22:10:09Z,0,https://github.com/mozilla/webmaker-core/issues/526
+100648040,Too much "Set Destination" everywhere.,2015-08-12T22:23:18Z,2015-09-30T19:44:34Z,1,https://github.com/mozilla/webmaker-core/issues/521
+100586779,Add a password reset link to error msg in Sign up when email/account already exists,2015-08-12T16:52:45Z,2015-11-02T18:50:41Z,17,https://github.com/mozilla/webmaker-core/issues/512
+100440835,Tutorial Mode,2015-08-12T00:28:54Z,2015-08-12T17:57:39Z,3,https://github.com/mozilla/webmaker-core/issues/511
+100412490,pressing the green arrow ("enter") when changing a project title does nothing,2015-08-11T21:06:36Z,2015-08-11T21:14:23Z,0,https://github.com/mozilla/webmaker-core/issues/506
+100409110,emails are not checked while signing up,2015-08-11T20:57:12Z,2015-08-12T21:43:48Z,0,https://github.com/mozilla/webmaker-core/issues/503
+100408272,why are usernames restricted to 1-20 characters?,2015-08-11T20:55:03Z,2015-08-12T21:43:48Z,0,https://github.com/mozilla/webmaker-core/issues/502
+100407434,no need to insist on a number in a password if we already test pw strength,2015-08-11T20:52:37Z,2015-08-18T22:13:29Z,0,https://github.com/mozilla/webmaker-core/issues/501
+100404692,retyping the password on a "password not strong enough" error does not clear the error,2015-08-11T20:42:36Z,2015-08-18T22:10:09Z,0,https://github.com/mozilla/webmaker-core/issues/500
+100404202,password rejection due to "too easy to guess" error comes too late,2015-08-11T20:40:31Z,2015-08-18T22:10:09Z,1,https://github.com/mozilla/webmaker-core/issues/499
+99510085,Ability to set a custom project ID, as an alternative to numbers in links,2015-08-06T19:45:17Z,2015-08-12T02:49:53Z,1,https://github.com/mozilla/webmaker-core/issues/486
+99509600,Share links show a user number, rather than username,2015-08-06T19:42:05Z,2015-08-18T22:13:29Z,0,https://github.com/mozilla/webmaker-core/issues/485
+99508790,Custom color editor doesn't look like part of the app,2015-08-06T19:37:00Z,2015-08-18T22:13:29Z,0,https://github.com/mozilla/webmaker-core/issues/483
+99507906,Can't position a element at an exact location,2015-08-06T19:31:23Z,2015-08-12T14:11:33Z,1,https://github.com/mozilla/webmaker-core/issues/481
+99507395,Ability to have text links,2015-08-06T19:28:07Z,2015-08-12T13:59:39Z,3,https://github.com/mozilla/webmaker-core/issues/479
+99507135,Options don't save unless you exit the page,2015-08-06T19:26:07Z,2015-08-18T22:13:29Z,2,https://github.com/mozilla/webmaker-core/issues/478
+99506812,No animation for setting text style,2015-08-06T19:23:47Z,2015-08-12T21:43:48Z,1,https://github.com/mozilla/webmaker-core/issues/477
+99506278,Icon for adding buttons to pages is confusing,2015-08-06T19:20:03Z,2015-08-12T21:43:48Z,7,https://github.com/mozilla/webmaker-core/issues/476
+99505730,Pinch to zoom?,2015-08-06T19:16:19Z,2015-08-18T22:13:29Z,0,https://github.com/mozilla/webmaker-core/issues/475
+99504300,Need to build in-app reset password view,2015-08-06T19:08:44Z,2015-08-12T21:43:48Z,7,https://github.com/mozilla/webmaker-core/issues/473
+99504001,Navigating pages in play mode is extremely frustrating,2015-08-06T19:06:35Z,2015-08-18T21:43:46Z,3,https://github.com/mozilla/webmaker-core/issues/471
+99503302,Staging login should link to staging password reset,2015-08-06T19:02:04Z,2015-08-13T18:33:01Z,9,https://github.com/mozilla/webmaker-core/issues/469
+99234166,Localize error messages in api.js,2015-08-05T15:39:44Z,2015-11-02T18:49:33Z,4,https://github.com/mozilla/webmaker-core/issues/459
+99074747,No visual confirmation for deleting your last (only) project,2015-08-04T22:25:48Z,2015-08-18T22:10:09Z,0,https://github.com/mozilla/webmaker-core/issues/457
+99029233,UX - Add image via URL,2015-08-04T18:25:31Z,2015-09-11T21:53:36Z,0,https://github.com/mozilla/webmaker-core/issues/454
+99015086,Extend java caching to cover the entire project creation/modification track,2015-08-04T17:07:25Z,2015-10-21T22:21:13Z,0,https://github.com/mozilla/webmaker-core/issues/452
+98798304,Edit Page UI - utilize a tap to edit a page in project view ,2015-08-03T17:28:13Z,2015-09-30T19:44:34Z,9,https://github.com/mozilla/webmaker-core/issues/445
+98261622,Can't reset password,2015-07-30T20:50:23Z,2015-10-21T22:22:48Z,8,https://github.com/mozilla/webmaker-core/issues/441
+98047609,Implement live reload for core on Android,2015-07-29T23:03:35Z,2015-08-04T01:33:52Z,1,https://github.com/mozilla/webmaker-core/issues/439
+97823126,Android App - Dragging a button by the Set Destination button shouldn't trigger the button when the drag stops.,2015-07-28T23:31:03Z,2015-10-20T17:36:27Z,1,https://github.com/mozilla/webmaker-core/issues/434
+97821882,Android App - Button - Color alpha doesn't persist between the two tinker modes.,2015-07-28T23:19:04Z,2015-10-20T17:36:03Z,0,https://github.com/mozilla/webmaker-core/issues/432
+97821558,Android App - Button - The automatically chosen color for the button label when changing the button color via Tinker mode is wrong.,2015-07-28T23:15:36Z,2015-08-18T21:57:03Z,1,https://github.com/mozilla/webmaker-core/issues/431
+97820162,Android App - Text Element - Font family dropdown selected state is wrong color,2015-07-28T23:02:15Z,2015-10-20T17:35:30Z,5,https://github.com/mozilla/webmaker-core/issues/430
+97564236,Android App - Edit Project - The Play and Edit options should be in the same spot in the dot menu,2015-07-27T22:01:56Z,2015-08-11T17:48:31Z,0,https://github.com/mozilla/webmaker-core/issues/427
+97561872,Android App - Edit Project - Cannot tell that image is selected when it is scaled really small. ,2015-07-27T21:50:28Z,2015-08-18T22:10:09Z,0,https://github.com/mozilla/webmaker-core/issues/426
+97560848,Andoid App - Tinker Mode - Tinkered color disappears when switching to a default color.,2015-07-27T21:44:18Z,2015-08-18T22:13:58Z,0,https://github.com/mozilla/webmaker-core/issues/425
+96738494,[Sample Issue] QA Feedback - Desktop Player,2015-07-23T05:56:30Z,2015-11-18T19:54:45Z,0,https://github.com/mozilla/webmaker-core/issues/403
+96692784,[Sample Issue] QA Feedback - Android App - Button Element,2015-07-22T23:46:22Z,2015-12-01T16:02:01Z,1,https://github.com/mozilla/webmaker-core/issues/401
+96690506,[Sample Issue] QA Feedback - Android App - Text Element,2015-07-22T23:30:58Z,2015-11-18T19:54:15Z,1,https://github.com/mozilla/webmaker-core/issues/400
+96689091,[Sample Issue] QA Feedback - Android App - Image Element,2015-07-22T23:20:30Z,2015-11-18T19:54:01Z,0,https://github.com/mozilla/webmaker-core/issues/399
+96685140,[Sample Issue] QA Feedback - Android App - Project Editing Basics,2015-07-22T22:55:05Z,2015-11-18T19:53:54Z,2,https://github.com/mozilla/webmaker-core/issues/398
+96681043,[Sample Issue] QA Feedback - Android App - Create & Delete Project,2015-07-22T22:31:22Z,2015-11-18T19:53:46Z,0,https://github.com/mozilla/webmaker-core/issues/397
+96677699,[Sample Issue] QA Feedback - Android App - View Project,2015-07-22T22:12:52Z,2015-11-18T19:53:39Z,1,https://github.com/mozilla/webmaker-core/issues/396
+96674260,[Sample Issue] QA Feedback - Android - Account,2015-07-22T21:55:30Z,2015-11-18T19:53:29Z,1,https://github.com/mozilla/webmaker-core/issues/395
+96614171,Version webmaker-core,2015-07-22T16:47:58Z,2015-08-03T17:00:50Z,6,https://github.com/mozilla/webmaker-core/issues/384
+96600064,QA Feedback - Firefox Mac Browser Player,2015-07-22T15:49:43Z,2015-07-22T20:57:08Z,0,https://github.com/mozilla/webmaker-core/issues/382
+96399740,[Sample Issue] QA Feedback - Browser Player,2015-07-21T19:34:00Z,2015-07-24T21:28:04Z,0,https://github.com/mozilla/webmaker-core/issues/374
+96369723,Release Engineering: Build release script,2015-07-21T17:15:48Z,2015-11-21T00:00:46Z,1,https://github.com/mozilla/webmaker-core/issues/366
+96194239,Integrate intl.js with webpack,2015-07-21T00:08:49Z,2015-07-21T17:30:57Z,0,https://github.com/mozilla/webmaker-core/issues/363
+96159948,Add device detection to browser,2015-07-20T21:06:02Z,2015-09-30T19:44:34Z,5,https://github.com/mozilla/webmaker-core/issues/360
+96123695,Let user choose initial screen,2015-07-20T18:11:09Z,2015-10-21T22:33:07Z,0,https://github.com/mozilla/webmaker-core/issues/356
+96123478,Edit default image gallery,2015-07-20T18:09:45Z,2015-10-21T22:33:07Z,0,https://github.com/mozilla/webmaker-core/issues/355
+96123262,"Follow Link" behind menu in edit mode,2015-07-20T18:08:27Z,2015-08-03T16:32:50Z,0,https://github.com/mozilla/webmaker-core/issues/354
+96123159,Need to link to external pages,2015-07-20T18:07:46Z,2015-10-21T22:33:07Z,0,https://github.com/mozilla/webmaker-core/issues/353
+96122981,Limit scrolling,2015-07-20T18:06:43Z,2015-09-30T19:44:34Z,0,https://github.com/mozilla/webmaker-core/issues/352
+96122866,Allow collaboration,2015-07-20T18:06:12Z,2015-10-21T22:33:07Z,0,https://github.com/mozilla/webmaker-core/issues/351
+96119993,Need to be able to align elements on page,2015-07-20T17:50:21Z,2015-10-21T22:33:07Z,0,https://github.com/mozilla/webmaker-core/issues/348
+96119787,Text enhancements,2015-07-20T17:49:12Z,2015-10-21T22:33:07Z,0,https://github.com/mozilla/webmaker-core/issues/347
+96118177,Lock/Unlock screen resets properties when editing elements,2015-07-20T17:40:56Z,2015-08-03T16:57:51Z,0,https://github.com/mozilla/webmaker-core/issues/345
+96116978,Enter button does nothing while editing title ,2015-07-20T17:33:51Z,2015-08-03T16:57:35Z,0,https://github.com/mozilla/webmaker-core/issues/343
+96115513,Perf problems in projects with lots of pages,2015-07-20T17:25:49Z,2015-08-03T16:57:22Z,0,https://github.com/mozilla/webmaker-core/issues/342
+96114702,Wrong selection box around long, unbroken text elements,2015-07-20T17:23:07Z,2015-08-03T16:57:09Z,0,https://github.com/mozilla/webmaker-core/issues/341
+96112192,Can't change font size,2015-07-20T17:10:09Z,2015-08-03T16:32:50Z,0,https://github.com/mozilla/webmaker-core/issues/338
+96109918,Tinker mode colours not stored for later,2015-07-20T17:00:46Z,2015-08-03T16:32:50Z,0,https://github.com/mozilla/webmaker-core/issues/335
+96102829,Feedback from users in Bangladesh,2015-07-20T16:27:07Z,2015-08-03T16:32:49Z,0,https://github.com/mozilla/webmaker-core/issues/328
+95749163,Link hover on desktop should trigger pointer cursor,2015-07-17T21:31:34Z,2015-07-21T19:12:31Z,0,https://github.com/mozilla/webmaker-core/issues/326
+95686575,Feedback from Webmaker beta research - June/July 2015, Rwanda & Cambodia,2015-07-17T15:57:57Z,2015-10-21T22:33:07Z,5,https://github.com/mozilla/webmaker-core/issues/320
+95420728,Run react-based tests in a browser,2015-07-16T12:12:50Z,2015-07-16T12:12:50Z,0,https://github.com/mozilla/webmaker-core/issues/311
+95053421,Improve swiping for play mode [player],2015-07-14T22:07:49Z,2015-08-03T16:32:49Z,0,https://github.com/mozilla/webmaker-core/issues/293
+95030965,feedback from a UX expert in Africa,2015-07-14T20:21:10Z,2015-10-21T22:33:07Z,2,https://github.com/mozilla/webmaker-core/issues/290
+95030709,Standardize the naming convention for issue tags,2015-07-14T20:20:08Z,2015-08-18T22:18:26Z,0,https://github.com/mozilla/webmaker-core/issues/288
+95030475,Sharing on whatsapp - the project does not come as a link,2015-07-14T20:19:06Z,2015-08-18T22:19:11Z,1,https://github.com/mozilla/webmaker-core/issues/286
+95030130,Feedback on Webmaker from Bangladesh -- July 2015,2015-07-14T20:17:01Z,2015-10-21T22:33:07Z,1,https://github.com/mozilla/webmaker-core/issues/282
+95029539,react loader-mixin needs to be required explicitly for npm 3+,2015-07-14T20:13:23Z,2015-07-14T20:13:23Z,0,https://github.com/mozilla/webmaker-core/issues/275
+95029283,Remotely test link and destination UX,2015-07-14T20:12:20Z,2015-08-27T20:37:45Z,0,https://github.com/mozilla/webmaker-core/issues/273
+95029024,device photographs may end up with the wrong orientation,2015-07-14T20:10:47Z,2015-07-14T20:10:47Z,0,https://github.com/mozilla/webmaker-core/issues/270
+95028868,It's too easy to move elements by accident.,2015-07-14T20:09:44Z,2015-07-14T20:09:44Z,0,https://github.com/mozilla/webmaker-core/issues/268
+95028780,I often start "signing in" on the "sign up" page.,2015-07-14T20:09:13Z,2015-07-14T20:09:13Z,0,https://github.com/mozilla/webmaker-core/issues/267
+95028706,Remove duplicate and unmaintained docs,2015-07-14T20:08:41Z,2015-08-03T16:50:03Z,0,https://github.com/mozilla/webmaker-core/issues/266
+95028550,Add contributing guidelines (again?),2015-07-14T20:07:39Z,2015-08-03T16:49:52Z,0,https://github.com/mozilla/webmaker-core/issues/264
+95028075,Text gets erased when editing ,2015-07-14T20:04:30Z,2015-11-16T22:03:55Z,0,https://github.com/mozilla/webmaker-core/issues/258
+95027991,Add phone features & capabilities ,2015-07-14T20:03:59Z,2015-10-16T21:10:34Z,0,https://github.com/mozilla/webmaker-core/issues/257
+95027896,Investigate additional tinker modes.,2015-07-14T20:03:28Z,2015-10-16T21:10:34Z,0,https://github.com/mozilla/webmaker-core/issues/256
+95027792,Explore Animations & Transitions,2015-07-14T20:02:57Z,2015-10-16T21:10:34Z,0,https://github.com/mozilla/webmaker-core/issues/255
+95027680,Asset library,2015-07-14T20:02:25Z,2015-10-16T21:10:34Z,0,https://github.com/mozilla/webmaker-core/issues/254
+95027570,Add ability to search projects,2015-07-14T20:01:54Z,2015-10-16T21:10:34Z,0,https://github.com/mozilla/webmaker-core/issues/253
+95027430,Explore social features,2015-07-14T20:01:23Z,2015-10-16T21:10:34Z,0,https://github.com/mozilla/webmaker-core/issues/252
+95027065,Resolve link behavior in map view,2015-07-14T19:59:50Z,2015-10-16T21:10:34Z,0,https://github.com/mozilla/webmaker-core/issues/249
+95026862,Add ability to set the default / starting page for a project.,2015-07-14T19:58:47Z,2015-10-16T21:10:34Z,0,https://github.com/mozilla/webmaker-core/issues/247
+95026758,Address precision of gestures,2015-07-14T19:58:16Z,2015-10-16T21:10:34Z,0,https://github.com/mozilla/webmaker-core/issues/246
+95026658,Figure out swiping between pages UX,2015-07-14T19:57:45Z,2015-10-16T21:10:34Z,0,https://github.com/mozilla/webmaker-core/issues/245
+95026532,Enhanced Z-index UX,2015-07-14T19:57:14Z,2015-09-30T19:44:34Z,2,https://github.com/mozilla/webmaker-core/issues/244
+95026426,Figure out First Time Use,2015-07-14T19:56:43Z,2015-10-16T21:10:34Z,0,https://github.com/mozilla/webmaker-core/issues/243
+95025528,Play, Project, Page and Link views are too similar and confusing.,2015-07-14T19:53:36Z,2015-10-16T21:10:34Z,0,https://github.com/mozilla/webmaker-core/issues/237
+95025254,Not require login,2015-07-14T19:52:34Z,2015-10-16T21:10:34Z,0,https://github.com/mozilla/webmaker-core/issues/235
+95024888,Play mode swiping doesn't always go in the right direction,2015-07-14T19:51:31Z,2015-11-16T22:03:55Z,0,https://github.com/mozilla/webmaker-core/issues/233
+95024665,Edit & Play mode headings could be improved,2015-07-14T19:51:00Z,2015-10-27T16:43:31Z,1,https://github.com/mozilla/webmaker-core/issues/232
+95024224,Minimum text element size is too large,2015-07-14T19:49:58Z,2015-08-18T22:35:39Z,0,https://github.com/mozilla/webmaker-core/issues/230
+95024063,Big blue loader is too intense.,2015-07-14T19:49:27Z,2015-08-18T22:35:38Z,0,https://github.com/mozilla/webmaker-core/issues/229
+95023896,When loading a project, I see two separate loading indicators.,2015-07-14T19:48:56Z,2015-11-16T22:03:55Z,0,https://github.com/mozilla/webmaker-core/issues/228
+95023738,Poor UX when rotating elements,2015-07-14T19:48:24Z,2015-07-21T19:03:38Z,0,https://github.com/mozilla/webmaker-core/issues/227
+95023552,Review user tests at Whistler work week,2015-07-14T19:47:53Z,2015-08-03T19:25:43Z,0,https://github.com/mozilla/webmaker-core/issues/226
+95023408,snap to grid on edit mode,2015-07-14T19:47:22Z,2015-08-03T19:25:43Z,0,https://github.com/mozilla/webmaker-core/issues/225
+95023126,Teaching Ideas ,2015-07-14T19:46:20Z,2015-11-16T22:04:53Z,0,https://github.com/mozilla/webmaker-core/issues/223
+95022979,Top bar looks weird on tablets/bigger screens,2015-07-14T19:45:48Z,2015-11-16T22:03:55Z,0,https://github.com/mozilla/webmaker-core/issues/222
+95022838,Enable page duplication,2015-07-14T19:45:17Z,2015-11-12T18:16:10Z,0,https://github.com/mozilla/webmaker-core/issues/221
+95022602,Button name changes to default "Button link",2015-07-14T19:44:14Z,2015-11-16T22:03:55Z,0,https://github.com/mozilla/webmaker-core/issues/219
+95022450,Ship Webmaker with b2gdroid,2015-07-14T19:43:12Z,2015-07-21T19:13:05Z,0,https://github.com/mozilla/webmaker-core/issues/217
+95022380,Label featured content to show users what 'kind' of projects there are,2015-07-14T19:42:41Z,2015-11-16T22:14:52Z,0,https://github.com/mozilla/webmaker-core/issues/216
+95022129,UX - select project's start page,2015-07-14T19:41:07Z,2015-08-03T16:30:17Z,1,https://github.com/mozilla/webmaker-core/issues/213
+95022034,Add support for PNGs with transparency,2015-07-14T19:40:36Z,2015-12-03T20:10:51Z,3,https://github.com/mozilla/webmaker-core/issues/212
+95021937,Text edits in progress are reset if user switches to another app,2015-07-14T19:40:05Z,2015-07-14T19:40:05Z,0,https://github.com/mozilla/webmaker-core/issues/211
+95021862,When deleting a page, clear the target for any buttons that link to it,2015-07-14T19:39:33Z,2015-08-03T19:25:35Z,0,https://github.com/mozilla/webmaker-core/issues/210
+95021749,Bug: Image blocking buttons,2015-07-14T19:39:02Z,2015-08-03T19:25:35Z,0,https://github.com/mozilla/webmaker-core/issues/209
+95021647,Enhacement Profile,2015-07-14T19:38:31Z,2015-08-03T19:25:35Z,0,https://github.com/mozilla/webmaker-core/issues/208
+95021558,Wording / Tips,2015-07-14T19:38:00Z,2015-08-03T19:25:34Z,0,https://github.com/mozilla/webmaker-core/issues/207
+95021450,Save chosen new colors,2015-07-14T19:37:29Z,2015-08-03T19:25:34Z,0,https://github.com/mozilla/webmaker-core/issues/206
+95021176,Reorder projects,2015-07-14T19:36:26Z,2015-08-03T19:25:34Z,0,https://github.com/mozilla/webmaker-core/issues/204
+95021074,Overlay between elemants in lower part of page and edit mode,2015-07-14T19:35:55Z,2015-08-03T19:25:34Z,0,https://github.com/mozilla/webmaker-core/issues/203
+95020969,Add an animation or effect when a button is pressed,2015-07-14T19:35:24Z,2015-08-03T19:25:34Z,0,https://github.com/mozilla/webmaker-core/issues/202
+95020340,Make - Deleting all projects leaves a phantom UI entry when deleting "the last project",2015-07-14T19:32:48Z,2015-09-17T16:08:40Z,0,https://github.com/mozilla/webmaker-core/issues/197
+95020241,Allow use of animated GIFs,2015-07-14T19:32:17Z,2015-08-05T17:28:46Z,0,https://github.com/mozilla/webmaker-core/issues/196
+95020155,Add ability to copy and paste items,2015-07-14T19:31:46Z,2015-07-14T19:31:46Z,0,https://github.com/mozilla/webmaker-core/issues/195
+95019705,UX - 404 "page" not found,2015-07-14T19:29:09Z,2015-07-14T19:29:09Z,0,https://github.com/mozilla/webmaker-core/issues/190
+95019544,Persist most recent tinker color on all edit views,2015-07-14T19:28:06Z,2015-12-03T22:15:57Z,1,https://github.com/mozilla/webmaker-core/issues/188
+95019427,Make default page color white?,2015-07-14T19:27:35Z,2015-07-14T19:27:35Z,0,https://github.com/mozilla/webmaker-core/issues/187
+95019213,Increment default project title,2015-07-14T19:26:33Z,2015-10-07T18:29:42Z,1,https://github.com/mozilla/webmaker-core/issues/185
+95018697,Production optimizations,2015-07-14T19:23:56Z,2015-07-14T19:23:57Z,0,https://github.com/mozilla/webmaker-core/issues/180
+95018619,add some jitter resilience to "taps" on elements,2015-07-14T19:23:25Z,2015-07-14T19:23:25Z,0,https://github.com/mozilla/webmaker-core/issues/179
+95018534,refactor flatten/expand functions,2015-07-14T19:22:54Z,2015-07-14T19:22:54Z,0,https://github.com/mozilla/webmaker-core/issues/178
+95018292,Permanently show outline of page,2015-07-14T19:21:52Z,2015-08-03T16:36:09Z,0,https://github.com/mozilla/webmaker-core/issues/176
+95018208,Replace document.body.style.overflowY = 'hidden'; with a better strategy,2015-07-14T19:21:21Z,2015-07-14T19:21:21Z,0,https://github.com/mozilla/webmaker-core/issues/175
+95007707,Images are empty/white until they load,2015-07-14T18:29:11Z,2015-07-14T18:29:11Z,0,https://github.com/mozilla/webmaker-core/issues/171
+95007615,Globalize image defaults,2015-07-14T18:28:49Z,2015-07-14T18:28:49Z,0,https://github.com/mozilla/webmaker-core/issues/169
+95007574,Convert documentation to DocBloc style,2015-07-14T18:28:38Z,2015-07-14T18:28:38Z,0,https://github.com/mozilla/webmaker-core/issues/168
+95007534,Add header transition to login page ,2015-07-14T18:28:26Z,2015-07-14T18:28:26Z,0,https://github.com/mozilla/webmaker-core/issues/167
+95007504,Run a remote Android beta test,2015-07-14T18:28:15Z,2015-07-14T18:28:15Z,0,https://github.com/mozilla/webmaker-core/issues/166
+95007468,Text rendering is blurry,2015-07-14T18:28:04Z,2015-07-14T18:28:04Z,0,https://github.com/mozilla/webmaker-core/issues/165
+95007424,Add dashed line between link source and destination,2015-07-14T18:27:52Z,2015-07-14T18:27:53Z,0,https://github.com/mozilla/webmaker-core/issues/164
+95007368,remove gaps from element zindexing,2015-07-14T18:27:41Z,2015-07-14T18:27:41Z,0,https://github.com/mozilla/webmaker-core/issues/163
+95007313,clean up and refactor el.jsx,2015-07-14T18:27:30Z,2015-07-14T18:27:30Z,0,https://github.com/mozilla/webmaker-core/issues/162
+95007209,Need language dropdown (in debug mode?),2015-07-14T18:27:07Z,2015-11-13T20:17:32Z,0,https://github.com/mozilla/webmaker-core/issues/160
+95007188,Border width scales with rest of element,2015-07-14T18:26:56Z,2015-07-14T18:26:56Z,0,https://github.com/mozilla/webmaker-core/issues/159
+95007154,analyse the element view <-> ...-editor <-> text/image/link component relations,2015-07-14T18:26:45Z,2015-07-14T18:26:45Z,0,https://github.com/mozilla/webmaker-core/issues/158
+95007121,rename all variables called "json" to something else, if they're not strings,2015-07-14T18:26:34Z,2015-07-14T18:26:34Z,0,https://github.com/mozilla/webmaker-core/issues/157
+95007082,clean up a bit of the confusion around element.jsx,2015-07-14T18:26:23Z,2015-07-14T18:26:23Z,0,https://github.com/mozilla/webmaker-core/issues/156
+95007047,Move Link element helper button,2015-07-14T18:26:11Z,2015-07-14T18:26:12Z,0,https://github.com/mozilla/webmaker-core/issues/155
+95007013,npm is a devDependency,2015-07-14T18:26:00Z,2015-07-14T18:26:00Z,0,https://github.com/mozilla/webmaker-core/issues/154
+95006929,Textbox to view/edit project by ID (for debugging),2015-07-14T18:25:38Z,2015-07-14T18:25:38Z,0,https://github.com/mozilla/webmaker-core/issues/152
+95006893,Ergonomics – Add browser polyfill for getRouteData binding,2015-07-14T18:25:27Z,2015-07-14T18:25:27Z,0,https://github.com/mozilla/webmaker-core/issues/151
+95006865,Element disappears when pinch zoomed quickly,2015-07-14T18:25:15Z,2015-07-14T18:25:15Z,0,https://github.com/mozilla/webmaker-core/issues/150
+95006764,Very short tap on element shouldn't move it,2015-07-14T18:24:41Z,2015-07-14T18:24:41Z,0,https://github.com/mozilla/webmaker-core/issues/147
+95006733,Elements are hard to position and rotate,2015-07-14T18:24:30Z,2015-07-14T18:24:30Z,0,https://github.com/mozilla/webmaker-core/issues/146
+95006702,Possible to end up in Play mode with a higher than max zoom level,2015-07-14T18:24:19Z,2015-07-14T18:24:19Z,0,https://github.com/mozilla/webmaker-core/issues/145
+95006677,Double tapping an unselected page creates a strange effect,2015-07-14T18:24:08Z,2015-07-14T18:24:08Z,0,https://github.com/mozilla/webmaker-core/issues/144
+95006643,Project / Play - Inconsistent zoom controls are confusing,2015-07-14T18:23:57Z,2015-08-03T16:36:09Z,0,https://github.com/mozilla/webmaker-core/issues/143
+95006607,Button height changes when the label is blank,2015-07-14T18:23:45Z,2015-07-14T18:23:45Z,0,https://github.com/mozilla/webmaker-core/issues/142
+95006577,Map view shifts after returning to it from the Project Settings view,2015-07-14T18:23:34Z,2015-07-14T18:23:34Z,0,https://github.com/mozilla/webmaker-core/issues/141
+95006541,Map view moves in unexpected way after deleting a page,2015-07-14T18:23:23Z,2015-07-14T18:23:23Z,0,https://github.com/mozilla/webmaker-core/issues/140
+95006509,Fun glitch on Add Element view,2015-07-14T18:23:12Z,2015-07-14T18:23:12Z,0,https://github.com/mozilla/webmaker-core/issues/139
+95006474,Page - Change title when adding a new element,2015-07-14T18:23:00Z,2015-07-14T18:23:00Z,0,https://github.com/mozilla/webmaker-core/issues/138
+95006446,Page - Margin inconsistent across device aspect ratios,2015-07-14T18:22:49Z,2015-07-14T18:22:49Z,0,https://github.com/mozilla/webmaker-core/issues/137
+95006387,Deleting elements and pages is too slow and feels broken,2015-07-14T18:22:26Z,2015-07-14T18:22:27Z,0,https://github.com/mozilla/webmaker-core/issues/135
+95006355,Pan animation after adding a new page isn't smooth,2015-07-14T18:22:15Z,2015-07-14T18:22:15Z,0,https://github.com/mozilla/webmaker-core/issues/134
+95006315,Refactor api to handle errors and loading states,2015-07-14T18:22:04Z,2015-07-14T22:12:23Z,0,https://github.com/mozilla/webmaker-core/issues/133
+95006294,Strange glitchy flash when starting and finishing editing text,2015-07-14T18:21:53Z,2015-07-14T18:21:53Z,0,https://github.com/mozilla/webmaker-core/issues/132
+95006272,There is a flash of black screen when going back to the Page Editor from the Edit Element view,2015-07-14T18:21:42Z,2015-07-14T18:21:42Z,0,https://github.com/mozilla/webmaker-core/issues/131
+95006219,Adding a page takes a very long time,2015-07-14T18:21:19Z,2015-07-14T18:21:19Z,0,https://github.com/mozilla/webmaker-core/issues/129
+95006180,Create Project button is too picky about what kinds of taps it likes,2015-07-14T18:21:08Z,2015-07-14T18:21:08Z,0,https://github.com/mozilla/webmaker-core/issues/128
+95006061,Move checkbox into navbar,2015-07-14T18:20:23Z,2015-11-13T20:17:51Z,0,https://github.com/mozilla/webmaker-core/issues/124
+95005974,Pictures get resized automatically ,2015-07-14T18:20:00Z,2015-07-14T18:20:00Z,0,https://github.com/mozilla/webmaker-core/issues/122
+95005940,Deleting - Make it possible to select multiple pages for deletion ,2015-07-14T18:19:49Z,2015-07-14T18:19:49Z,0,https://github.com/mozilla/webmaker-core/issues/121
+95005902,investigate what the best follow-up is for "auto select an element when you delete one",2015-07-14T18:19:38Z,2015-07-14T18:19:38Z,0,https://github.com/mozilla/webmaker-core/issues/120
+95005874,Deleting a tile is too easy and painful without undo,2015-07-14T18:19:26Z,2015-08-03T16:36:09Z,0,https://github.com/mozilla/webmaker-core/issues/119
+95005843,Identify additional opportunities for interface sounds,2015-07-14T18:19:15Z,2015-07-14T18:19:15Z,0,https://github.com/mozilla/webmaker-core/issues/118
+95005809,Too few color options,2015-07-14T18:19:04Z,2015-07-14T18:19:04Z,0,https://github.com/mozilla/webmaker-core/issues/117
+95005773,Remove "Done" button from Text Element editing flow,2015-07-14T18:18:53Z,2015-07-14T18:18:53Z,0,https://github.com/mozilla/webmaker-core/issues/116
+95005733,Add animations or touch states to button UI elements in Page Editor,2015-07-14T18:18:41Z,2015-07-14T18:18:41Z,0,https://github.com/mozilla/webmaker-core/issues/115
+95005704,Padding below Button Element when it is selected is too large,2015-07-14T18:18:30Z,2015-07-14T18:18:30Z,0,https://github.com/mozilla/webmaker-core/issues/114
+95005676,Android keyboard blends into app UI when editing the Text Element,2015-07-14T18:18:18Z,2015-11-13T20:18:12Z,0,https://github.com/mozilla/webmaker-core/issues/113
+95005608,Security Review,2015-07-14T18:17:54Z,2015-09-30T19:44:34Z,3,https://github.com/mozilla/webmaker-core/issues/111
+95005576,Pages become slightly smaller when they get the selected border,2015-07-14T18:17:43Z,2015-07-14T18:17:43Z,0,https://github.com/mozilla/webmaker-core/issues/110
+95005557,Implement multi-line text editor,2015-07-14T18:17:32Z,2015-07-14T18:17:32Z,0,https://github.com/mozilla/webmaker-core/issues/109
+95005515,Run usertesting.com tests on creating experience,2015-07-14T18:17:21Z,2015-08-27T20:17:57Z,0,https://github.com/mozilla/webmaker-core/issues/108
+95005474,Allow navigating between pages in Page Editor by swiping and show adjacent page edges.,2015-07-14T18:17:10Z,2015-07-14T18:17:10Z,0,https://github.com/mozilla/webmaker-core/issues/107
+95005440,Add some kind of indicator for images with 0 opacity in the Page Editor view to make them easier to select. ,2015-07-14T18:16:59Z,2015-07-14T18:16:59Z,0,https://github.com/mozilla/webmaker-core/issues/106
+95005415,Release Delete while holding element position glitch,2015-07-14T18:16:48Z,2015-07-14T18:16:48Z,0,https://github.com/mozilla/webmaker-core/issues/105
+95005384,Tapping the Page Editor header while dragging an element "freezes" the element,2015-07-14T18:16:36Z,2015-07-14T18:16:37Z,0,https://github.com/mozilla/webmaker-core/issues/104
+95005335,flick-swiping in the project view swipes and then does an odd little slow-repositioning,2015-07-14T18:16:25Z,2015-07-14T18:16:25Z,0,https://github.com/mozilla/webmaker-core/issues/103
+95005296,Consider 'Projects' as label for 'Make' tab,2015-07-14T18:16:14Z,2015-07-14T18:16:14Z,0,https://github.com/mozilla/webmaker-core/issues/102
+95005265,Increase maximum border thickness.,2015-07-14T18:16:03Z,2015-07-14T18:16:03Z,0,https://github.com/mozilla/webmaker-core/issues/101
+95005243,"make" view "create a project" button is the wrong color,2015-07-14T18:15:52Z,2015-07-14T18:15:52Z,0,https://github.com/mozilla/webmaker-core/issues/100
+95005222,Padding around a selected element is uneven.,2015-07-14T18:15:41Z,2015-07-14T18:15:41Z,0,https://github.com/mozilla/webmaker-core/issues/99
+95005193,Range - Tapping label causes slider to move,2015-07-14T18:15:29Z,2015-07-14T18:15:29Z,0,https://github.com/mozilla/webmaker-core/issues/98
+95005155,Color tinker mode icon is too close to the other color options.,2015-07-14T18:15:18Z,2015-07-14T18:15:18Z,0,https://github.com/mozilla/webmaker-core/issues/97
+95005111,Add animation to newly added tiles and newly generated plus tiles.,2015-07-14T18:15:07Z,2015-07-14T18:15:07Z,0,https://github.com/mozilla/webmaker-core/issues/96
+95005084,Add a "maxed out zoom animation" to indicate max zoom has been reached.,2015-07-14T18:14:55Z,2015-07-14T18:14:55Z,0,https://github.com/mozilla/webmaker-core/issues/95
+95005056,In map view, I'm able to pan really far away from the project pages and get lost.,2015-07-14T18:14:44Z,2015-07-14T18:14:44Z,0,https://github.com/mozilla/webmaker-core/issues/94
+95005028,Page Editor always starts with one of the elements on the Page selected, but shouldn't,2015-07-14T18:14:33Z,2015-07-14T18:14:33Z,0,https://github.com/mozilla/webmaker-core/issues/93
+95004989,Transparency slider values have different number of digits after the decimal, causing little jumps,2015-07-14T18:14:22Z,2015-07-14T18:14:22Z,0,https://github.com/mozilla/webmaker-core/issues/92
+95004952,When an element is very large, there's no way to tell that it is selected.,2015-07-14T18:14:11Z,2015-07-14T18:14:11Z,0,https://github.com/mozilla/webmaker-core/issues/91
+95004918,Smooth out page loading visuals when opening image heavy pages in the Page Editor,2015-07-14T18:13:59Z,2015-07-14T18:13:59Z,0,https://github.com/mozilla/webmaker-core/issues/90
+95004886,Build swipe between pages,2015-07-14T18:13:48Z,2015-07-14T18:13:48Z,0,https://github.com/mozilla/webmaker-core/issues/89
+95004847,Hard to tell when you've added the same element twice, since they appear right on top of one another,2015-07-14T18:13:37Z,2015-07-14T18:13:37Z,0,https://github.com/mozilla/webmaker-core/issues/88
+95004823,Text Element is pixelated / blurry when scaled to very large sizes,2015-07-14T18:13:26Z,2015-07-14T18:13:26Z,0,https://github.com/mozilla/webmaker-core/issues/87
+95004790,Poor range slider performance in Edit Element view,2015-07-14T18:13:14Z,2015-07-14T18:13:15Z,0,https://github.com/mozilla/webmaker-core/issues/86
+95004759,Element Edit preview should show the element in the context of the page, not just against the page background color,2015-07-14T18:13:03Z,2015-07-14T18:13:03Z,0,https://github.com/mozilla/webmaker-core/issues/85
+95004727,Element preview doesn't show the transformations applied to an element,2015-07-14T18:12:52Z,2015-07-14T18:12:52Z,0,https://github.com/mozilla/webmaker-core/issues/84
+95004701,When deleting a page, map view should auto-select an adjacent page,2015-07-14T18:12:41Z,2015-07-14T18:12:41Z,0,https://github.com/mozilla/webmaker-core/issues/83
+95004665,When deleting a page that isn't in view, pan there first, then delete it,2015-07-14T18:12:29Z,2015-07-14T18:12:29Z,0,https://github.com/mozilla/webmaker-core/issues/82
+95004639,Map view title bar doesn't show the project title,2015-07-14T18:12:18Z,2015-07-14T18:12:18Z,0,https://github.com/mozilla/webmaker-core/issues/81
+95004605,Don't scale the element border along with the element,2015-07-14T18:12:07Z,2015-07-14T18:12:07Z,0,https://github.com/mozilla/webmaker-core/issues/80
+95004575,Text style (bold, italics, underline) segmented control feels wrong,2015-07-14T18:11:56Z,2015-07-14T18:11:56Z,0,https://github.com/mozilla/webmaker-core/issues/79
+95004549,Tinker mode title says just "Options",2015-07-14T18:11:45Z,2015-11-02T18:46:35Z,1,https://github.com/mozilla/webmaker-core/issues/78
+95004524,Element updates 'jarringly' when returning from the Edit Element view to the Page Editor view,2015-07-14T18:11:33Z,2015-07-14T18:11:34Z,0,https://github.com/mozilla/webmaker-core/issues/77
+95004488,Element - Keep preview fixed to top of view,2015-07-14T18:11:22Z,2015-07-14T18:11:22Z,0,https://github.com/mozilla/webmaker-core/issues/76
+95004459,Implement font-family dropdown,2015-07-14T18:11:10Z,2015-07-14T18:11:11Z,0,https://github.com/mozilla/webmaker-core/issues/75
+95004430,When text size is set to 10px, the value becomes gray,2015-07-14T18:10:59Z,2015-07-14T18:10:59Z,0,https://github.com/mozilla/webmaker-core/issues/74
+95004398,Element Edit page doesn't include the element name in the title,2015-07-14T18:10:48Z,2015-07-14T18:10:48Z,0,https://github.com/mozilla/webmaker-core/issues/73
+95004357,Inconsistent two-finger pan behavior between map and element,2015-07-14T18:10:37Z,2015-07-14T18:10:37Z,0,https://github.com/mozilla/webmaker-core/issues/72
+95004314,Image element is not cropped by the page boundaries in the Page Editor,2015-07-14T18:10:26Z,2015-07-21T19:01:07Z,0,https://github.com/mozilla/webmaker-core/issues/71
+95004279,Create a Project button doesn't work when long-pressed,2015-07-14T18:10:14Z,2015-07-14T18:10:15Z,0,https://github.com/mozilla/webmaker-core/issues/70
+95004247,Add height to discover view items while images are loading,2015-07-14T18:10:03Z,2015-07-14T18:10:03Z,0,https://github.com/mozilla/webmaker-core/issues/69
+95004225,Build color picker for tinker mode,2015-07-14T18:09:52Z,2015-07-14T18:09:52Z,0,https://github.com/mozilla/webmaker-core/issues/68
+95004193,Add true preview to Element editor,2015-07-14T18:09:41Z,2015-07-14T18:09:41Z,0,https://github.com/mozilla/webmaker-core/issues/67
+95004167,UX for Editing Text,2015-07-14T18:09:29Z,2015-07-14T18:09:29Z,0,https://github.com/mozilla/webmaker-core/issues/66
+95004123,Implement Page view "zoom out" UI,2015-07-14T18:09:18Z,2015-07-14T18:09:18Z,0,https://github.com/mozilla/webmaker-core/issues/65
+95004074,UX - Page background image,2015-07-14T18:09:07Z,2015-07-14T18:09:07Z,0,https://github.com/mozilla/webmaker-core/issues/64
+95004032,UI for Page Background Color,2015-07-14T18:08:55Z,2015-09-30T19:44:34Z,10,https://github.com/mozilla/webmaker-core/issues/63
+95003988,Map pan animation jumps when adding a new page,2015-07-14T18:08:44Z,2015-07-14T18:08:44Z,0,https://github.com/mozilla/webmaker-core/issues/62
+95003957,Map jumps after specific scale & pan actions,2015-07-14T18:08:33Z,2015-07-14T18:08:33Z,0,https://github.com/mozilla/webmaker-core/issues/61
+95003901,Provide helpful validation on Link URLs,2015-07-14T18:08:10Z,2015-07-14T18:08:10Z,0,https://github.com/mozilla/webmaker-core/issues/59
+95003848,Implement "Assets Uploading" indicator in Project & Discover views,2015-07-14T18:07:48Z,2015-07-14T18:07:48Z,0,https://github.com/mozilla/webmaker-core/issues/57
+95003819,Implement animation for loading a project in Project Editor & Play views,2015-07-14T18:07:36Z,2015-07-14T18:07:36Z,0,https://github.com/mozilla/webmaker-core/issues/56
+95003749,Implement Link destination to another project,2015-07-14T18:07:13Z,2015-08-03T16:35:10Z,0,https://github.com/mozilla/webmaker-core/issues/54
+95003670,Transition to from /map to /project (page editor),2015-07-14T18:06:50Z,2015-07-14T18:06:50Z,0,https://github.com/mozilla/webmaker-core/issues/52
+95003630,Swiping to adjacent pages in page editor view,2015-07-14T18:06:39Z,2015-07-14T18:06:39Z,0,https://github.com/mozilla/webmaker-core/issues/51
+95003602,Adding a custom colour to colour group,2015-07-14T18:06:28Z,2015-07-14T18:06:28Z,0,https://github.com/mozilla/webmaker-core/issues/50
+95003571,Text and element selection border get blurry when element is scaled to large size,2015-07-14T18:06:17Z,2015-07-14T18:06:17Z,0,https://github.com/mozilla/webmaker-core/issues/49
+95003535,Animation - Move to center and zooming animations are little too slow,2015-07-14T18:06:05Z,2015-07-14T18:06:05Z,0,https://github.com/mozilla/webmaker-core/issues/48
+95003508,UX - Undo actions,2015-07-14T18:05:54Z,2015-07-14T18:05:54Z,0,https://github.com/mozilla/webmaker-core/issues/47
+95003477,Android - Update header navigation activity control styles to match spec,2015-07-14T18:05:43Z,2015-09-30T19:42:04Z,2,https://github.com/mozilla/webmaker-core/issues/46
+95003450,Make ColorSpectrum component functional,2015-07-14T18:05:32Z,2015-07-14T18:05:32Z,0,https://github.com/mozilla/webmaker-core/issues/45
+95003417,Work on active states for buttons and controls,2015-07-14T18:05:20Z,2015-07-14T18:05:21Z,0,https://github.com/mozilla/webmaker-core/issues/44
+95003339,Add icon component,2015-07-14T18:04:58Z,2015-07-14T18:04:58Z,0,https://github.com/mozilla/webmaker-core/issues/42
+95003295,Implement community MGMT tools,2015-07-14T18:04:47Z,2015-11-16T22:14:52Z,0,https://github.com/mozilla/webmaker-core/issues/41
+95003164,Build mvp profile ,2015-07-14T18:04:13Z,2015-07-14T18:04:13Z,0,https://github.com/mozilla/webmaker-core/issues/38
+95003119,Implement Android back button to UX spec,2015-07-14T18:04:01Z,2015-09-30T19:42:04Z,2,https://github.com/mozilla/webmaker-core/issues/37
+95003083,Implement - Choose page background color,2015-07-14T18:03:50Z,2015-08-03T16:29:21Z,0,https://github.com/mozilla/webmaker-core/issues/36
+95003032,UX for Profile,2015-07-14T18:03:38Z,2015-07-14T18:03:39Z,0,https://github.com/mozilla/webmaker-core/issues/35
+95002968,FTU - first time use experience,2015-07-14T18:03:15Z,2015-08-27T20:50:06Z,10,https://github.com/mozilla/webmaker-core/issues/33
+95002894,Contributor feedback: Stefan,2015-07-14T18:02:53Z,2015-07-14T18:02:53Z,0,https://github.com/mozilla/webmaker-core/issues/31
+95002861,Would be really nice to have an image cropping function,2015-07-14T18:02:41Z,2015-07-14T18:02:42Z,0,https://github.com/mozilla/webmaker-core/issues/30
+95002829,Build a notification system,2015-07-14T18:02:30Z,2015-07-14T18:02:30Z,0,https://github.com/mozilla/webmaker-core/issues/29
+95002784,Accessibility,2015-07-14T18:02:19Z,2015-07-14T18:02:19Z,0,https://github.com/mozilla/webmaker-core/issues/28
+95002743,RTL,2015-07-14T18:02:08Z,2015-07-14T18:02:08Z,0,https://github.com/mozilla/webmaker-core/issues/27
+95002708,In the brick editor, showing the hex value of the color is odd/confusing to a a likely user,2015-07-14T18:01:57Z,2015-07-14T18:01:57Z,0,https://github.com/mozilla/webmaker-core/issues/26
+95002689,in the brick editor the word px is jargon,2015-07-14T18:01:46Z,2015-07-14T18:01:46Z,0,https://github.com/mozilla/webmaker-core/issues/25
+95001934,Publishing requires connectivity,2015-07-14T17:57:39Z,2015-07-14T17:57:39Z,0,https://github.com/mozilla/webmaker-core/issues/24
+94992740,Service Degradation Plan,2015-07-14T17:08:09Z,2015-11-16T22:04:34Z,0,https://github.com/mozilla/webmaker-core/issues/22
+92757651, Ability to link to new page,2015-07-02T23:34:26Z,2015-08-11T16:57:31Z,8,https://github.com/mozilla/webmaker-core/issues/12
+92509142,Add docs,2015-07-01T23:40:09Z,2015-07-01T23:40:32Z,1,https://github.com/mozilla/webmaker-core/issues/5
