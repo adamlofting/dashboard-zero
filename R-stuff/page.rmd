@@ -113,5 +113,3 @@ sum(repos_data$language == "HTML")
 ```{r, echo=FALSE}
 #(Page layout and design)
 ```
-
-rmarkdown::render("page.rmd")
