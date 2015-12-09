@@ -121,7 +121,7 @@ function processRepoIssueResults (res) {
   res.forEach(function fe_repo (element, index, array) {
     var issue_line =
       element.id + ',"' +
-      element.title + '",' +
+      element.title.replace(/"/g, '&quot;') + '",' +
       element.created_at + ',' +
       element.updated_at + ',' +
       element.comments + ',' +
