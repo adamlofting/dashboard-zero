@@ -3,8 +3,6 @@ var dashboard_zero = require('./src/dashboard-zero/index.js')
 // The GitHub org name we are scanning
 var ORG_NAME = 'mozilla'
 
-
-
 var REPO_LIST = ['login.webmaker.org', 'webmaker-login-ux', 'webmaker-core']
 
 // *******************************

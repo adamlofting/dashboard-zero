@@ -65,6 +65,7 @@ function getIssuesFromRepoPage (res, callback) {
 }
 
 function processIssues (err, res) {
+  console.log('ProcessIssues: ' + REPO_LIST[repo_index])
   if (err) {
     if (err.message === 'No next page found') {
       return 'Done with this repo'
@@ -73,7 +74,11 @@ function processIssues (err, res) {
     }
   }
   var issues_count = res.length
-  console.log('res: ' + issues_count)
+  // console.log('res: ' + issues_count)
+  processRepoIssueResults(res)
+  if (issues_count === 100) {
+    getIssuesFromRepoPage(res, ProcessIssuesPage)
+  }
   return issues_count
 }
 
@@ -81,25 +86,49 @@ function fetchIssues (err, res) {
   if (err) {
     throw err
   }
-  console.log(res)
-  getIssuesFromRepoPage(res, function cb_2 (err, res) {
-    if (err) {
-      throw err
-    }
+  console.log('Results inside fetchIssues: ' + REPO_LIST[repo_index] + ' ' + res)
+  getIssuesFromRepoPage(res, ProcessIssuesPage)
+}
 
-    if (res === 'Done with this repo') {
-      repo_index++
-      if (repo_index !== REPO_LIST.length) {
-        getIssuesFromRepo(fetchIssues)
-      } else {
-        // Done
-        console.log(res)
-      }
+function ProcessIssuesPage (err, res) {
+  // console.log('ProcessIssuesPage: ' + REPO_LIST[repo_index])
+  if (err) {
+    throw err
+  }
+
+  if (res === 'Done with this repo') {
+    repo_index++
+    console.log(repo_index + ' = ' + REPO_LIST.length)
+    if (repo_index !== REPO_LIST.length) {
+      getIssuesFromRepo(fetchIssues)
     } else {
       // Done
-      console.log(res)
+      console.log('Done 1: ' + REPO_LIST[repo_index] + ' ' + res)
     }
+  } else {
+    // Done
+    console.log('Done 2: ' + REPO_LIST[repo_index] + ' ' + res)
+  }
+}
+
+function processRepoIssueResults (res) {
+  // console.log('Length: ' + res.length)
+  res.forEach(function fe_repo (element, index, array) {
+    var issue_line =
+      element.id + ',' +
+      element.title + ',' +
+      element.created_at + ',' +
+      element.updated_at + ',' +
+      element.comments + ',' +
+      element.html_url +
+      '\n'
+
+    // Add to list to be saved to csv
+    csv_issues += issue_line
+
+    total_issues++
   })
+  return res
 }
 
 // =================================================
@@ -115,42 +144,42 @@ function fetchIssues (err, res) {
 // =================================================
 // =================================================
 
-function cb_getIssuesFromRepo (err, res, callback) {
-  if (err) {
-    console.log('Error: ' + err)
-    console.log('Error: ' + res)
-    console.log('Error: ' + callback)
-    console.trace(err)
-  }
-  processRepoIssueResults(res, cb_processRepoIssueResults)
-  callback()
-}
-
-function cb_processRepoIssueResults (err, res) {
-  if (err) {
-    if (err.message === 'No next page found') {
-      return
-    } else {
-      if (err.message) {
-        console.log('Why Error?: ' + err)
-        console.log('Why Error?: ' + err)
-      } else {
-        // This is actually a success
-        res = err
-      }
-    }
-  }
-  try {
-    github.getNextPage(res, cb_processRepoIssueResults)
-  } catch (e) {
-    console.error('ERR: ' + e)
-    console.trace(e)
-  }
-}
-
-function getTeamReposByPage (callback) {
-  github.repos.getFromOrg({'org': ORG_NAME, 'type': 'sources', 'per_page': 100}, callback)
-}
+// function cb_getIssuesFromRepo (err, res, callback) {
+//   if (err) {
+//     console.log('Error: ' + err)
+//     console.log('Error: ' + res)
+//     console.log('Error: ' + callback)
+//     console.trace(err)
+//   }
+//   processRepoIssueResults(res, cb_processRepoIssueResults)
+//   callback()
+// }
+//
+// function cb_processRepoIssueResults (err, res) {
+//   if (err) {
+//     if (err.message === 'No next page found') {
+//       return
+//     } else {
+//       if (err.message) {
+//         console.log('Why Error?: ' + err)
+//         console.log('Why Error?: ' + err)
+//       } else {
+//         // This is actually a success
+//         res = err
+//       }
+//     }
+//   }
+//   try {
+//     github.getNextPage(res, cb_processRepoIssueResults)
+//   } catch (e) {
+//     console.error('ERR: ' + e)
+//     console.trace(e)
+//   }
+// }
+//
+// function getTeamReposByPage (callback) {
+//   github.repos.getFromOrg({'org': ORG_NAME, 'type': 'sources', 'per_page': 100}, callback)
+// }
 
 function saveFileIssues () {
   console.info('All Repos processed')
@@ -173,26 +202,6 @@ function cb_update_file (err, res) {
   })
 }
 
-function processRepoIssueResults (res) {
-  console.log(res.length)
-  res.forEach(function fe_repo (element, index, array) {
-    var issue_line =
-      element.id + ',' +
-      element.title + ',' +
-      element.created_at + ',' +
-      element.updated_at + ',' +
-      element.comments + ',' +
-      element.html_url +
-      '\n'
-
-    // Add to list to be saved to csv
-    csv_issues += issue_line
-
-    total_issues++
-  })
-  return res
-}
-
 // ***********************************
 // save the file
 // ***********************
@@ -206,12 +215,12 @@ function updateFile (header, contents, file_name, callback) {
 
 module.exports.init = init
 module.exports.setToken = setToken
-module.exports.getTeamReposByPage = getTeamReposByPage
+// module.exports.getTeamReposByPage = getTeamReposByPage
 module.exports.getIssuesFromRepo = getIssuesFromRepo
 module.exports.getIssuesFromRepoPage = getIssuesFromRepoPage
 module.exports.processRepoIssueResults = processRepoIssueResults
 module.exports.saveFileIssues = saveFileIssues
-module.exports.cb_getIssuesFromRepo = cb_getIssuesFromRepo
+// module.exports.cb_getIssuesFromRepo = cb_getIssuesFromRepo
 module.exports.csv_issues = csv_issues
 module.exports.processIssues = processIssues
 module.exports.fetchIssues = fetchIssues
