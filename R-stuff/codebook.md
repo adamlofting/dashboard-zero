@@ -95,7 +95,7 @@ The purpose of this document is to create some standards for future collaboratio
 
 ### Number of unanswered volunteer input in Github issues
 
-result = Count(issues.id) from (issues join comments on (issues.url == comments.issue_url)) where not (members.username in comments.user.login) 
+result = Count(issues.id) from (issues join comments on (issues.url == comments.issue_url)) where not (members.login in comments.user.login) 
 
 ### Number of Pull Requests that have had no response at all
 
@@ -115,8 +115,8 @@ result = Count(issues.id) from issues where (not labels.name in issues.labels)
 
 ### Number of bugs by triage status
 
-result = Count(issues.id) from issues where (issues.lables <> '') group by lables.name
+result = Count(issues.id) from issues where (issues.labels <> '') group by labels.name
 
 ### Number of bugs assigned to expired Milestones
 
-result = milestsones.open_issues from milestones where ((milestones.state == 'closed') && (milestones.open_issues > 0) && (milestones.due_on >= Today))
+result = milestones.open_issues from milestones where ((milestones.state == 'closed') && (milestones.open_issues > 0) && (milestones.due_on >= Today))
