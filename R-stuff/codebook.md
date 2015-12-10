@@ -13,9 +13,7 @@ The purpose of this document is to create some standards for future collaboratio
 
 ### comments.csv
 
-- Description
- 
-Holds the combined comments from all open issues in the requested repositories.
+- Description: Holds the combined comments from all open issues in the requested repositories.
 
 - Source: https://developer.github.com/v3/issues/comments/#list-comments-on-an-issue
 
@@ -28,9 +26,7 @@ Holds the combined comments from all open issues in the requested repositories.
 
 ### issues.csv
 
-- Description
- 
-Holds the combined open issues in the requested repositories.
+- Description: Holds the combined open issues in the requested repositories.
 
 - Source: https://developer.github.com/v3/issues/#list-issues-for-a-repository
 
@@ -46,9 +42,7 @@ Holds the combined open issues in the requested repositories.
 
 ### repos.csv
 
-- Description
- 
-Holds the combined data from the requested repositories.
+- Description: Holds the combined data from the requested repositories.
 
 - Source: https://developer.github.com/v3/repos/#list-organization-repositories
 
@@ -58,3 +52,71 @@ Holds the combined data from the requested repositories.
   * forks	      = forks_count
   * open_issues	= open_issues_count
   * language    = language
+
+### milestones.csv
+
+- Description: Holds the combined milestones for the requested repositories
+
+- Source: https://developer.github.com/v3/issues/milestones/#list-milestones-for-a-repository
+ 
+* Fields
+ * title
+ * state
+ * open_issues
+ * due_on
+ * html_url
+ * url
+
+### labels.csv
+
+- Description: Holds the combined labels for the requested repositories
+
+- Source: https://developer.github.com/v3/issues/milestones/#list-milestones-for-a-repository
+ 
+* Fields
+ * name
+ * url
+
+### members.csv
+
+- Description: Holds the combined members for the requested repositories
+
+- Note: This will only list public members
+
+- Source: https://developer.github.com/v3/orgs/members/#members-list
+ 
+* Fields
+ * id
+ * login
+ * avatar_url
+ * type
+
+## Formulas
+
+### Number of unanswered volunteer input in Github issues
+
+result = Count(issues.id) from (issues join comments on (issues.url == comments.issue_url)) where not (members.username in comments.user.login) 
+
+### Number of Pull Requests that have had no response at all
+
+result = Count(issues.id) from issues where (issues.is_pullrequest == false && issues.comment_count == 0)
+
+#### Number of Pull Requests that have had no activity for more than X days
+
+result = Count(issues.id) from (issues join comments on (issues.url == comments.issue_url) where (comments.updated_date < (Today - $X_days)))
+
+#### Number of open bugs (total)
+
+result = Count(issues.id)
+
+#### Number of bugs needing triage
+
+result = Count(issues.id) from issues where (not labels.name in issues.labels)
+
+### Number of bugs by triage status
+
+result = Count(issues.id) from issues where (issues.lables <> '') group by lables.name
+
+### Number of bugs assigned to expired Milestones
+
+result = milestsones.open_issues from milestones where ((milestones.state == 'closed') && (milestones.open_issues > 0) && (milestones.due_on >= Today))
