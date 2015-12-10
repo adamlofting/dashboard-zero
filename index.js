@@ -11,6 +11,9 @@ var REPO_LIST = ['login.webmaker.org', 'webmaker-login-ux', 'webmaker-core']
 dashboard_zero.init(ORG_NAME, REPO_LIST)
 dashboard_zero.setToken(
   function cb_setTokenIssues (status) {
+    // Process members
+    dashboard_zero.getMembersFromOrg(ORG_NAME)
+
     dashboard_zero.getIssuesFromRepo()
   }
 )

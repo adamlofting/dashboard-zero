@@ -3,15 +3,15 @@ var fs = require('fs')
 Promise.promisifyAll(fs)
 var GitHubApi = require('github')
 
-// Holds the total number of issues
+// Holds the totals
 var total_issues = 0
-
 var total_comments = 0
+var total_members = 0
 
-// The issues list in csv form
+// The lists in csv form
 var csv_issues = []
-
 var csv_comments = []
+var csv_members = []
 
 var repo_index = 0
 
@@ -93,12 +93,7 @@ function processIssues (err, res) {
     csv_issues += issue_line
 
     // Process comments
-    if (typeof element.number === 'number') {
-      getCommentsFromIssue(element.number)
-    } else {
-      console.log('ID: ' + element.id + ' = ' + typeof element.id)
-      process.exit()
-    }
+    getCommentsFromIssue(element.number)
 
     total_issues++
   })
@@ -122,16 +117,19 @@ function processIssuesPage (err, res) {
   if (err) {
     if (err === 'No more pages') {
       // We are done with this repo
+
       if (repo_index !== (REPO_LIST.length - 1)) {
         // Do the next one
         repo_index++
         getIssuesFromRepo(fetchIssues)
       } else {
         // We should be done and this should only get called once
+        saveFileMembers()
         saveFileIssues()
         saveFileComments()
-        console.log('Done 3-i: ' + total_issues)
-        console.log('Done 3-c: ' + total_comments)
+        console.log('Done m: ' + total_members)
+        console.log('Done i: ' + total_issues)
+        console.log('Done c: ' + total_comments)
       }
     } else {
       throw err
@@ -151,6 +149,12 @@ function processIssuesPage (err, res) {
 // COMMENTS
 // ********************************
 
+function getCommentsFromIssue (issue_id) {
+  github.issues.getComments({'user': ORG_NAME, 'repo': REPO_LIST[repo_index], 'number': issue_id, 'per_page': 100}, function cb_1 (err, res) {
+    fetchIssueComments(null, processIssueComments(err, res))
+  })
+}
+
 function fetchIssueComments (err, res) {
   if (err) {
     throw err
@@ -162,12 +166,6 @@ function fetchIssueComments (err, res) {
   } else {
     processIssueCommentsPage('No more pages')
   }
-}
-
-function getCommentsFromIssue (issue_id) {
-  github.issues.getComments({'user': ORG_NAME, 'repo': REPO_LIST[repo_index], 'number': issue_id, 'per_page': 100}, function cb_1 (err, res) {
-    fetchIssueComments(null, processIssueComments(err, res))
-  })
 }
 
 function processIssueComments (err, res) {
@@ -218,11 +216,96 @@ function processIssueCommentsPage (err, res) {
 }
 
 // ********************************
+// COMMENTS
+// ********************************
+
+function getMembersFromOrg (org_name) {
+  github.orgs.getMembers({'org': org_name, 'per_page': 100}, function cb_1 (err, res) {
+    fetchRepoMembers(null, processRepoMembers(err, res))
+  })
+}
+
+function fetchRepoMembers (err, res) {
+  if (err) {
+    throw err
+  }
+  if (github.hasNextPage(res)) {
+    github.getNextPage(res, function cb_1 (err, res) {
+      processRepoMembersPage(null, processRepoMembers(err, res))
+    })
+  } else {
+    processRepoMembersPage('No more pages')
+  }
+}
+
+function processRepoMembers (err, res) {
+  if (err) {
+    if (err.message === 'No next page found') {
+      return 'Done with this repo'
+    } else {
+      // Why does this error?
+      console.log('=' + err.message + '=')
+      console.trace(err)
+      throw err
+    }
+  }
+  res.forEach(function fe_repo (element, index, array) {
+    var member_line =
+      element.id + ',"' +
+      element.login + '",' +
+      element.avatar_url + ',' +
+      element.type +
+      '\n'
+
+    // Add to list to be saved to csv
+    csv_members += member_line
+
+    total_members++
+  })
+  return res
+}
+
+function processRepoMembersPage (err, res) {
+  if (err) {
+    if (err === 'No more pages') {
+      // We are done with this repo
+    } else {
+      throw err
+    }
+  } else {
+    if (github.hasNextPage(res)) {
+      github.getNextPage(res, function cb_1 (err, res) {
+        processRepoMembersPage(null, processRepoMembers(err, res))
+      })
+    } else {
+      processRepoMembersPage('No more pages')
+    }
+  }
+}
+
+// ********************************
 // SAVING
 // ********************************
 
+function saveFileMembers () {
+  console.info('All Members processed')
+  var repo_header = 'id,login,created_date,avatar_url,type'
+  updateFile(repo_header, csv_members, 'data/members.csv', function cb_update_file (err, res) {
+    if (err) {
+      console.error('Error updating file: ' + err)
+      process.exit(1)
+    }
+    github.misc.rateLimit({}, function cb_rateLimit (err, res) {
+      if (err) {
+        console.log('Error getting rate: ' + err)
+        throw err
+      }
+    })
+  })
+}
+
 function saveFileIssues () {
-  console.info('All Repos processed')
+  console.info('All Issues processed')
   var repo_header = 'id,title,created_date,updated_date,comments_count,is_pullrequest,html_url,url'
   updateFile(repo_header, csv_issues, 'data/issues.csv', function cb_update_file (err, res) {
     if (err) {
@@ -268,12 +351,13 @@ function updateFile (header, contents, file_name, callback) {
   })
 }
 
-module.exports.init = init
-module.exports.setToken = setToken
-module.exports.getIssuesFromRepo = getIssuesFromRepo
-// module.exports.getIssuesFromRepoPage = getIssuesFromRepoPage
-// module.exports.processRepoIssueResults = processRepoIssueResults
-module.exports.saveFileIssues = saveFileIssues
-module.exports.csv_issues = csv_issues
-module.exports.processIssues = processIssues
-module.exports.fetchIssues = fetchIssues
+module.exports = {
+  getMembersFromOrg: getMembersFromOrg,
+  init: init,
+  setToken: setToken,
+  getIssuesFromRepo: getIssuesFromRepo,
+  saveFileIssues: saveFileIssues,
+  csv_issues: csv_issues,
+  processIssues: processIssues,
+  fetchIssues: fetchIssues
+}
