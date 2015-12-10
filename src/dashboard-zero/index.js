@@ -6,8 +6,12 @@ var GitHubApi = require('github')
 // Holds the total number of issues
 var total_issues = 0
 
+var total_comments = 0
+
 // The issues list in csv form
 var csv_issues = []
+
+var csv_comments = []
 
 var repo_index = 0
 
@@ -105,7 +109,9 @@ function ProcessIssuesPage (err, res) {
       } else {
         // We should be done and this should only get called once
         saveFileIssues()
-        console.log('Done 3: ' + total_issues)
+        saveFileComments()
+        console.log('Done 3-i: ' + total_issues)
+        console.log('Done 3-c: ' + total_comments)
       }
     } else {
       throw err
@@ -130,35 +136,145 @@ function processRepoIssueResults (res) {
     } else {
       issue_line += 'false' + ','
     }
-    issue_line += element.html_url +
+    issue_line += element.html_url + ',' +
+      element.url +
       '\n'
 
     // Add to list to be saved to csv
     csv_issues += issue_line
+
+    // Process comments
+    if (typeof element.number === 'number') {
+      getCommentsFromIssue(element.number, fetchIssueComments)
+    } else {
+      console.log('ID: ' + element.id + ' = ' + typeof element.id)
+      process.exit()
+    }
 
     total_issues++
   })
   return res
 }
 
-function saveFileIssues () {
-  console.info('All Repos processed')
-  var repo_header = 'id,title,created_date,updated_date,comments_count,is_pullrequest,html_url'
-  updateFile(repo_header, csv_issues, 'data/issues.csv', cb_update_file)
+function fetchIssueComments (err, res) {
+  if (err) {
+    throw err
+  }
+  // console.log('Results inside fetchIssues: ' + REPO_LIST[repo_index] + ' ' + res.length)
+  getCommentsFromIssuePage(res, processIssueCommentsPage)
 }
 
-function cb_update_file (err, res) {
-  if (err) {
-    console.error('Error updating file: ' + err)
-    process.exit(1)
+function getCommentsFromIssue (issue_id, callback) {
+  github.issues.getComments({'user': ORG_NAME, 'repo': REPO_LIST[repo_index], 'number': issue_id, 'per_page': 100}, function cb_1 (err, res) {
+    callback(null, processIssueComments(err, res))
+  })
+}
+
+function getCommentsFromIssuePage (res, callback) {
+  if (github.hasNextPage(res)) {
+    github.getNextPage(res, function cb_1 (err, res) {
+      callback(null, processIssueComments(err, res))
+    })
+  } else {
+    callback('No more pages')
   }
-  github.misc.rateLimit({}, function cb_rateLimit (err, res) {
-    if (err) {
-      console.log('Error getting rate: ' + err)
+}
+
+function processIssueComments (err, res) {
+  // console.log('ProcessIssues: ' + REPO_LIST[repo_index])
+  if (err) {
+    if (err.message === 'No next page found') {
+      return 'Done with this repo'
+    } else {
+      // Why does this error?
+      console.log('=' + err.message + '=')
+      console.trace(err)
       throw err
     }
-    console.log(res.rate.remaining + ' calls remaining, resets at ' + new Date(res.rate.reset * 1000))
-    process.exit()
+  }
+  // var issues_count = res.length
+  // console.log('res: ' + issues_count)
+  processIssueCommentResults(res)
+  // if (issues_count === 100) {
+  //   getIssuesFromRepoPage(res, ProcessIssuesPage)
+  // }
+  return res
+}
+
+function processIssueCommentsPage (err, res) {
+  if (err) {
+    if (err === 'No more pages') {
+      // We are done with this repo
+    } else {
+      throw err
+    }
+  } else {
+    // console.log('ProcessIssuesPage: ' + REPO_LIST[repo_index] + ' ' + res.length)
+    getCommentsFromIssuePage(res, processIssueCommentsPage)
+  }
+}
+
+function processIssueCommentResults (res) {
+  // console.dir(res)
+  // console.dir('\n===================\n')
+
+  // console.log('processRepoIssueResults: ' + REPO_LIST[repo_index] + ' ' + res.length)
+  res.forEach(function fe_repo (element, index, array) {
+    var comment_line =
+      element.id + ',"' +
+      element.user.login + '",' +
+      element.updated_at + ',' +
+      element.html_url + ',' +
+      element.issue_url +
+      '\n'
+
+    // Add to list to be saved to csv
+    csv_comments += comment_line
+
+    total_comments++
+  })
+  return res
+}
+
+/**
+* Saving
+*/
+
+function saveFileIssues () {
+  console.info('All Repos processed')
+  var repo_header = 'id,title,created_date,updated_date,comments_count,is_pullrequest,html_url,url'
+  updateFile(repo_header, csv_issues, 'data/issues.csv', function cb_update_file (err, res) {
+    if (err) {
+      console.error('Error updating file: ' + err)
+      process.exit(1)
+    }
+    github.misc.rateLimit({}, function cb_rateLimit (err, res) {
+      if (err) {
+        console.log('Error getting rate: ' + err)
+        throw err
+      }
+      // console.log(res.rate.remaining + ' calls remaining, resets at ' + new Date(res.rate.reset * 1000))
+      // process.exit()
+    })
+  })
+}
+
+function saveFileComments () {
+  console.info('All Comments processed')
+  var repo_header = 'id,creator,updated_date,html_url,issue_url'
+  updateFile(repo_header, csv_comments, 'data/comments.csv', function cb_update_file (err, res) {
+    if (err) {
+      console.error('Error updating file: ' + err)
+      process.exit(1)
+    }
+    github.misc.rateLimit({}, function cb_rateLimit (err, res) {
+      if (err) {
+        console.log('Error getting rate: ' + err)
+        throw err
+      }
+      console.log(res.rate.remaining + ' calls remaining, resets at ' + new Date(res.rate.reset * 1000))
+      process.exit()
+    })
   })
 }
 
@@ -168,69 +284,17 @@ function cb_update_file (err, res) {
 function updateFile (header, contents, file_name, callback) {
   fs.writeFile(file_name, header + '\n' + contents, function (err) {
     if (err) callback(err)
-    console.info('It\'s saved!')
+    // console.info('It\'s saved!')
     callback(null)
   })
 }
 
-// =================================================
-// =================================================
-// =================================================
-// =================================================
-// =================================================
-// =================================================
-// =================================================
-// =================================================
-// =================================================
-// =================================================
-// =================================================
-// =================================================
-
-// function cb_getIssuesFromRepo (err, res, callback) {
-//   if (err) {
-//     console.log('Error: ' + err)
-//     console.log('Error: ' + res)
-//     console.log('Error: ' + callback)
-//     console.trace(err)
-//   }
-//   processRepoIssueResults(res, cb_processRepoIssueResults)
-//   callback()
-// }
-//
-// function cb_processRepoIssueResults (err, res) {
-//   if (err) {
-//     if (err.message === 'No next page found') {
-//       return
-//     } else {
-//       if (err.message) {
-//         console.log('Why Error?: ' + err)
-//         console.log('Why Error?: ' + err)
-//       } else {
-//         // This is actually a success
-//         res = err
-//       }
-//     }
-//   }
-//   try {
-//     github.getNextPage(res, cb_processRepoIssueResults)
-//   } catch (e) {
-//     console.error('ERR: ' + e)
-//     console.trace(e)
-//   }
-// }
-//
-// function getTeamReposByPage (callback) {
-//   github.repos.getFromOrg({'org': ORG_NAME, 'type': 'sources', 'per_page': 100}, callback)
-// }
-
 module.exports.init = init
 module.exports.setToken = setToken
-// module.exports.getTeamReposByPage = getTeamReposByPage
 module.exports.getIssuesFromRepo = getIssuesFromRepo
 module.exports.getIssuesFromRepoPage = getIssuesFromRepoPage
 module.exports.processRepoIssueResults = processRepoIssueResults
 module.exports.saveFileIssues = saveFileIssues
-// module.exports.cb_getIssuesFromRepo = cb_getIssuesFromRepo
 module.exports.csv_issues = csv_issues
 module.exports.processIssues = processIssues
 module.exports.fetchIssues = fetchIssues
