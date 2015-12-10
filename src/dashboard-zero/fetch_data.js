@@ -97,10 +97,10 @@ function getOrgRepos (org, callback) {
 
     // now we work through any remaining pages
     async.whilst(
-      function test() {
+      function test () {
         return hasNextPage
       },
-      function doThis(callback) {
+      function doThis (callback) {
         githubClient.getNextPage(ghResult, function gotNextPage (err, res) {
           // get the values we want out of this response
           repos = repos.concat(getSelectedRepoValues(res, org))
@@ -118,45 +118,44 @@ function getOrgRepos (org, callback) {
   })
 }
 
-/**
- * Save commits given to use from Gitub
- * @param  {JSON}   ghRes - the response from github
- * @param  {Object}   repo, reference object for which repo we're working on
- * @param  {Function} callback
- */
-function saveCommits (ghRes, repo, callback) {
-  var toSave = []
-  // look through the results from github
-  if (ghRes) {
-    for (var i = 0; i < ghRes.length; i++) {
-      var r = ghRes[i]
-
-      if (r.commit && r.commit.author && r.commit.author.date) {
-        var login = (r.author && r.author.login) ? r.author.login : null
-        var email = (r.commit.author.email) ? r.commit.author.email : null
-        var url = (r.html_url) ? r.html_url : null
-        var commitId = (r.sha) ? r.sha : null
-        var commitMsg = (r.commit.message) ? r.commit.message : null
-        if (commitMsg) {
-          // Just keep the ASCII chars
-          commitMsg = util.cleanDescriptionForDB(commitMsg)
-        }
-        toSave.push([new Date(r.commit.author.date), repo.org, repo.name, login, email, url, 'commit-author', commitId, commitMsg])
-      } else {
-        console.log('FORMAT EXCEPTION:', r)
-      }
-    }
-  }
-  if (toSave.length > 0) {
-    data.saveItems(toSave, function saved (err) {
-      console.log('Saved', toSave.length, 'commits for:', repo.org, repo.name)
-      callback(null)
-    })
-  } else {
-    callback(null)
-  }
-}
-
+// /**
+//  * Save commits given to use from Gitub
+//  * @param  {JSON}   ghRes - the response from github
+//  * @param  {Object}   repo, reference object for which repo we're working on
+//  * @param  {Function} callback
+//  */
+// function saveCommits (ghRes, repo, callback) {
+//   var toSave = []
+//   // look through the results from github
+//   if (ghRes) {
+//     for (var i = 0; i < ghRes.length; i++) {
+//       var r = ghRes[i]
+//
+//       if (r.commit && r.commit.author && r.commit.author.date) {
+//         var login = (r.author && r.author.login) ? r.author.login : null
+//         var email = (r.commit.author.email) ? r.commit.author.email : null
+//         var url = (r.html_url) ? r.html_url : null
+//         var commitId = (r.sha) ? r.sha : null
+//         var commitMsg = (r.commit.message) ? r.commit.message : null
+//         if (commitMsg) {
+//           // Just keep the ASCII chars
+//           commitMsg = util.cleanDescriptionForDB(commitMsg)
+//         }
+//         toSave.push([new Date(r.commit.author.date), repo.org, repo.name, login, email, url, 'commit-author', commitId, commitMsg])
+//       } else {
+//         console.log('FORMAT EXCEPTION:', r)
+//       }
+//     }
+//   }
+//   if (toSave.length > 0) {
+//     data.saveItems(toSave, function saved (err) {
+//       console.log('Saved', toSave.length, 'commits for:', repo.org, repo.name)
+//       callback(null)
+//     })
+//   } else {
+//     callback(null)
+//   }
+// }
 
 function getCommitsForRepoUntil(repo, dateUntil, dateSince, callback) {
   var githubClient = createGithubClient()
@@ -220,143 +219,143 @@ function getCacheKey (login) {
   return 'login' + login
 }
 
-function getEmailForLoginFromGitHub (login, callback) {
-  var githubClient = createGithubClient()
-  // The options msg we send to the client http://mikedeboer.github.io/node-github/#user.prototype.get
-  var msg = {
-    user: login
-  }
-
-  // To see the data from github: curl -i https://api.github.com/repos/mozilla-appmaker/appmaker/pulls?per_page=1
-  githubClient.user.getFrom(msg, function gotFromRepo (err, res) {
-    if (err) {
-      console.log(msg)
-      console.log(err)
-    }
-    if (res && res.email) {
-      myCache.set(getCacheKey(login), res.email, 600)
-      return callback(null, res.email)
-    } else {
-      return callback(null, null)
-    }
-  })
-}
-
-function getEmailForLoginFromDB (login, callback) {
-  data.getEmailFromLogin(login, function gotEmailFromLogin (err, res) {
-    if (res) {
-      myCache.set(getCacheKey(login), res, 600)
-      return callback(null, res)
-    } else {
-      return callback(null, null)
-    }
-  })
-}
-
-function getEmailForLoginFromCache (login) {
-  // we use node-cache to reduce the number of requests we need to make to github
-  var cacheKey = getCacheKey(login)
-  var cache = myCache.get(cacheKey)
-  if (cache[cacheKey]) {
-    return cache[cacheKey]
-  }
-  return null
-}
-
-function getEmailForLogin (login, callback) {
-  var email = getEmailForLoginFromCache(login)
-  if (email) {
-    return callback(null, email)
-  }
-
-  async.waterfall([
-    // if this isn't in the cache, we check out existing DB for a match
-    function (callback) {
-      getEmailForLoginFromDB(login, function (err, res) {
-        var email = res
-        callback(null, email)
-      })
-    },
-    function (email, callback) {
-      // if we found the email in the DB, skip this
-      if (email) {
-        return callback(null, email)
-      }
-      // or if it's completely new to us, we check with github
-      getEmailForLoginFromGitHub(login, function gotFromGithub (err, res) {
-        email = res
-        return callback(null, email)
-      })
-    }
-  ], function (err, result) {
-     return callback(null, result)
-  })
-}
-
-/**
- * Save Pull Requests given to us from Gitub
- * @param  {JSON}   ghRes - the response from github
- * @param  {Object}   repo, reference object for which repo we're working on
- * @param  {Datetime} since - oldest date we care about
- * @param  {Dateimte} until - the most recent date we care about
- * @param  {Function} callback
- */
-function savePullRequests (ghRes, repo, since, until, callback) {
-  var toSave = []
-  var keepLooking = true
-
-  console.log(repo.org, repo.name, ': saving PRs')
-
-  // look through the results from github
-  if (ghRes) {
-    async.eachSeries(ghRes,
-      function checkEach (ghItem, callback) {
-        var r = ghItem
-
-        if (r && r.user) {
-          var createdAt = new Date(r.created_at)
-          var login = (r.user && r.user.login) ? r.user.login : null
-          var url = (r.html_url) ? r.html_url : null
-          var pullNumber = (r.number) ? r.number : null
-          var pullID = repo.org + '/' + repo.name + '/pull/' + pullNumber
-          pullID = pullID.slice(-44)
-          var pullTitle = (r.title) ? r.title : null
-          if (pullTitle) {
-            pullTitle = util.cleanDescriptionForDB(pullTitle)
-          }
-
-          // check if this happened in a time period we care about
-          since = new Date(since)
-          if ((createdAt > since) && (createdAt < until)) {
-            getEmailForLogin(login, function gotEmail (err, res) {
-              var email = res
-              toSave.push([createdAt, repo.org, repo.name, login, email, url, 'pull-request-opened', pullID, pullTitle])
-              return callback(null)
-            })
-          } else {
-            // we're outsite the range we care about now, so flag this up
-            keepLooking = false
-            callback(null)
-          }
-        } else {
-          // unusual result we should skip
-          // PR from an unknown repo
-          callback(null)
-        }
-      },
-      function checkedAll (err) {
-        if (toSave.length > 0) {
-          data.saveItems(toSave, function saved (err) {
-            console.log(repo.org, repo.name, ': saved', toSave.length, 'pull-requests')
-            callback(null, keepLooking)
-          })
-        } else {
-          console.log(repo.org, repo.name, ': no more pull-requests to save')
-          callback(null, keepLooking)
-        }
-      })
-  }
-}
+// function getEmailForLoginFromGitHub (login, callback) {
+//   var githubClient = createGithubClient()
+//   // The options msg we send to the client http://mikedeboer.github.io/node-github/#user.prototype.get
+//   var msg = {
+//     user: login
+//   }
+//
+//   // To see the data from github: curl -i https://api.github.com/repos/mozilla-appmaker/appmaker/pulls?per_page=1
+//   githubClient.user.getFrom(msg, function gotFromRepo (err, res) {
+//     if (err) {
+//       console.log(msg)
+//       console.log(err)
+//     }
+//     if (res && res.email) {
+//       myCache.set(getCacheKey(login), res.email, 600)
+//       return callback(null, res.email)
+//     } else {
+//       return callback(null, null)
+//     }
+//   })
+// }
+//
+// function getEmailForLoginFromDB (login, callback) {
+//   data.getEmailFromLogin(login, function gotEmailFromLogin (err, res) {
+//     if (res) {
+//       myCache.set(getCacheKey(login), res, 600)
+//       return callback(null, res)
+//     } else {
+//       return callback(null, null)
+//     }
+//   })
+// }
+//
+// function getEmailForLoginFromCache (login) {
+//   // we use node-cache to reduce the number of requests we need to make to github
+//   var cacheKey = getCacheKey(login)
+//   var cache = myCache.get(cacheKey)
+//   if (cache[cacheKey]) {
+//     return cache[cacheKey]
+//   }
+//   return null
+// }
+//
+// function getEmailForLogin (login, callback) {
+//   var email = getEmailForLoginFromCache(login)
+//   if (email) {
+//     return callback(null, email)
+//   }
+//
+//   async.waterfall([
+//     // if this isn't in the cache, we check out existing DB for a match
+//     function (callback) {
+//       getEmailForLoginFromDB(login, function (err, res) {
+//         var email = res
+//         callback(null, email)
+//       })
+//     },
+//     function (email, callback) {
+//       // if we found the email in the DB, skip this
+//       if (email) {
+//         return callback(null, email)
+//       }
+//       // or if it's completely new to us, we check with github
+//       getEmailForLoginFromGitHub(login, function gotFromGithub (err, res) {
+//         email = res
+//         return callback(null, email)
+//       })
+//     }
+//   ], function (err, result) {
+//      return callback(null, result)
+//   })
+// }
+//
+// /**
+//  * Save Pull Requests given to us from Gitub
+//  * @param  {JSON}   ghRes - the response from github
+//  * @param  {Object}   repo, reference object for which repo we're working on
+//  * @param  {Datetime} since - oldest date we care about
+//  * @param  {Dateimte} until - the most recent date we care about
+//  * @param  {Function} callback
+//  */
+// function savePullRequests (ghRes, repo, since, until, callback) {
+//   var toSave = []
+//   var keepLooking = true
+//
+//   console.log(repo.org, repo.name, ': saving PRs')
+//
+//   // look through the results from github
+//   if (ghRes) {
+//     async.eachSeries(ghRes,
+//       function checkEach (ghItem, callback) {
+//         var r = ghItem
+//
+//         if (r && r.user) {
+//           var createdAt = new Date(r.created_at)
+//           var login = (r.user && r.user.login) ? r.user.login : null
+//           var url = (r.html_url) ? r.html_url : null
+//           var pullNumber = (r.number) ? r.number : null
+//           var pullID = repo.org + '/' + repo.name + '/pull/' + pullNumber
+//           pullID = pullID.slice(-44)
+//           var pullTitle = (r.title) ? r.title : null
+//           if (pullTitle) {
+//             pullTitle = util.cleanDescriptionForDB(pullTitle)
+//           }
+//
+//           // check if this happened in a time period we care about
+//           since = new Date(since)
+//           if ((createdAt > since) && (createdAt < until)) {
+//             getEmailForLogin(login, function gotEmail (err, res) {
+//               var email = res
+//               toSave.push([createdAt, repo.org, repo.name, login, email, url, 'pull-request-opened', pullID, pullTitle])
+//               return callback(null)
+//             })
+//           } else {
+//             // we're outsite the range we care about now, so flag this up
+//             keepLooking = false
+//             callback(null)
+//           }
+//         } else {
+//           // unusual result we should skip
+//           // PR from an unknown repo
+//           callback(null)
+//         }
+//       },
+//       function checkedAll (err) {
+//         if (toSave.length > 0) {
+//           data.saveItems(toSave, function saved (err) {
+//             console.log(repo.org, repo.name, ': saved', toSave.length, 'pull-requests')
+//             callback(null, keepLooking)
+//           })
+//         } else {
+//           console.log(repo.org, repo.name, ': no more pull-requests to save')
+//           callback(null, keepLooking)
+//         }
+//       })
+//   }
+// }
 
 function getPullRequestsForRepoUntil (repo, dateUntil, dateSince, callback) {
   var githubClient = createGithubClient()
@@ -419,61 +418,61 @@ function getPullRequestsForRepoUntil (repo, dateUntil, dateSince, callback) {
   })
 }
 
-/**
- * Save issues given to use from Gitub
- * @param  {JSON}   ghRes - the response from github
- * @param  {Object}   repo, reference object for which repo we're working on
- * @param  {Function} callback
- */
-function saveIssues (ghRes, repo, callback) {
-  var toSave = []
-  // look through the results from github
-  if (ghRes) {
-    async.eachSeries(ghRes,
-      function checkEach (ghItem, callback) {
-        var r = ghItem
-
-        if (r && r.user) {
-          var login = (r.user && r.user.login) ? r.user.login : null
-          var url = (r.html_url) ? r.html_url : null
-          var issueNumber = (r.number) ? r.number : null
-          var issueID = repo.org + '/' + repo.name + '/issue/' + issueNumber
-          issueID = issueID.slice(-44)
-          var issueTitle = (r.title) ? r.title : null
-          if (issueTitle) {
-            issueTitle = util.cleanDescriptionForDB(issueTitle)
-          }
-
-          if (url.indexOf('/issues/') === -1) {
-            // It's an autogenerated issue to go with a Pull Request which
-            // is being counted in the PR data already, so skip it
-            return callback(null)
-          }
-
-          getEmailForLogin(login, function gotEmail (err, res) {
-            var email = res
-            toSave.push([new Date(r.created_at), repo.org, repo.name, login, email, url, 'issue-opened', issueID, issueTitle])
-            return callback(null)
-          })
-        } else {
-          console.log('FORMAT EXCEPTION:', r)
-          callback(null)
-        }
-      },
-      function checkedAll (err) {
-        if (toSave.length > 0) {
-          data.saveItems(toSave, function saved (err) {
-            console.log(repo.org, repo.name, ': saved', toSave.length, 'issues')
-            callback(null)
-          })
-        } else {
-          console.log(repo.org, repo.name, ': no more pull-requests to save')
-          callback(null)
-        }
-      }
-    )
-  }
-}
+// /**
+//  * Save issues given to use from Gitub
+//  * @param  {JSON}   ghRes - the response from github
+//  * @param  {Object}   repo, reference object for which repo we're working on
+//  * @param  {Function} callback
+//  */
+// function saveIssues (ghRes, repo, callback) {
+//   var toSave = []
+//   // look through the results from github
+//   if (ghRes) {
+//     async.eachSeries(ghRes,
+//       function checkEach (ghItem, callback) {
+//         var r = ghItem
+//
+//         if (r && r.user) {
+//           var login = (r.user && r.user.login) ? r.user.login : null
+//           var url = (r.html_url) ? r.html_url : null
+//           var issueNumber = (r.number) ? r.number : null
+//           var issueID = repo.org + '/' + repo.name + '/issue/' + issueNumber
+//           issueID = issueID.slice(-44)
+//           var issueTitle = (r.title) ? r.title : null
+//           if (issueTitle) {
+//             issueTitle = util.cleanDescriptionForDB(issueTitle)
+//           }
+//
+//           if (url.indexOf('/issues/') === -1) {
+//             // It's an autogenerated issue to go with a Pull Request which
+//             // is being counted in the PR data already, so skip it
+//             return callback(null)
+//           }
+//
+//           getEmailForLogin(login, function gotEmail (err, res) {
+//             var email = res
+//             toSave.push([new Date(r.created_at), repo.org, repo.name, login, email, url, 'issue-opened', issueID, issueTitle])
+//             return callback(null)
+//           })
+//         } else {
+//           console.log('FORMAT EXCEPTION:', r)
+//           callback(null)
+//         }
+//       },
+//       function checkedAll (err) {
+//         if (toSave.length > 0) {
+//           data.saveItems(toSave, function saved (err) {
+//             console.log(repo.org, repo.name, ': saved', toSave.length, 'issues')
+//             callback(null)
+//           })
+//         } else {
+//           console.log(repo.org, repo.name, ': no more pull-requests to save')
+//           callback(null)
+//         }
+//       }
+//     )
+//   }
+// }
 
 function getIssuesForRepoUntil (repo, dateUntil, dateSince, callback) {
   var githubClient = createGithubClient()

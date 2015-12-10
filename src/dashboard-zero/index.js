@@ -56,24 +56,26 @@ function setToken (callback) {
   }
 }
 
+// ********************************
+// ISSUES
+// ********************************
 function getIssuesFromRepo (callback) {
   github.issues.repoIssues({'user': ORG_NAME, 'repo': REPO_LIST[repo_index], 'per_page': 100}, function cb_1 (err, res) {
     callback(null, processIssues(err, res))
   })
 }
 
-function getIssuesFromRepoPage (res, callback) {
-  if (github.hasNextPage(res)) {
-    github.getNextPage(res, function cb_1 (err, res) {
-      callback(null, processIssues(err, res))
-    })
-  } else {
-    callback('No more pages')
-  }
-}
+// function getIssuesFromRepoPage (res, callback) {
+//   if (github.hasNextPage(res)) {
+//     github.getNextPage(res, function cb_1 (err, res) {
+//       callback(null, processIssues(err, res))
+//     })
+//   } else {
+//     callback('No more pages')
+//   }
+// }
 
 function processIssues (err, res) {
-  // console.log('ProcessIssues: ' + REPO_LIST[repo_index])
   if (err) {
     if (err.message === 'No next page found') {
       return 'Done with this repo'
@@ -81,12 +83,7 @@ function processIssues (err, res) {
       throw err
     }
   }
-  // var issues_count = res.length
-  // console.log('res: ' + issues_count)
   processRepoIssueResults(res)
-  // if (issues_count === 100) {
-  //   getIssuesFromRepoPage(res, ProcessIssuesPage)
-  // }
   return res
 }
 
@@ -94,11 +91,17 @@ function fetchIssues (err, res) {
   if (err) {
     throw err
   }
-  // console.log('Results inside fetchIssues: ' + REPO_LIST[repo_index] + ' ' + res.length)
-  getIssuesFromRepoPage(res, ProcessIssuesPage)
+  if (github.hasNextPage(res)) {
+    github.getNextPage(res, function cb_1 (err, res) {
+      processIssuesPage(null, processIssues(err, res))
+    })
+  } else {
+    processIssuesPage('No more pages')
+  }
+  // getIssuesFromRepoPage(res, processIssuesPage)
 }
 
-function ProcessIssuesPage (err, res) {
+function processIssuesPage (err, res) {
   if (err) {
     if (err === 'No more pages') {
       // We are done with this repo
@@ -117,8 +120,14 @@ function ProcessIssuesPage (err, res) {
       throw err
     }
   } else {
-    // console.log('ProcessIssuesPage: ' + REPO_LIST[repo_index] + ' ' + res.length)
-    getIssuesFromRepoPage(res, ProcessIssuesPage)
+    if (github.hasNextPage(res)) {
+      github.getNextPage(res, function cb_1 (err, res) {
+        processIssuesPage(null, processIssues(err, res))
+      })
+    } else {
+      processIssuesPage('No more pages')
+    }
+    // getIssuesFromRepoPage(res, processIssuesPage)
   }
 }
 
@@ -156,12 +165,22 @@ function processRepoIssueResults (res) {
   return res
 }
 
+// ********************************
+// COMMENTS
+// ********************************
+
 function fetchIssueComments (err, res) {
   if (err) {
     throw err
   }
-  // console.log('Results inside fetchIssues: ' + REPO_LIST[repo_index] + ' ' + res.length)
-  getCommentsFromIssuePage(res, processIssueCommentsPage)
+  if (github.hasNextPage(res)) {
+    github.getNextPage(res, function cb_1 (err, res) {
+      processIssueCommentsPage(null, processIssueComments(err, res))
+    })
+  } else {
+    processIssueCommentsPage('No more pages')
+  }
+  // getCommentsFromIssuePage(res, processIssueCommentsPage)
 }
 
 function getCommentsFromIssue (issue_id, callback) {
@@ -170,15 +189,15 @@ function getCommentsFromIssue (issue_id, callback) {
   })
 }
 
-function getCommentsFromIssuePage (res, callback) {
-  if (github.hasNextPage(res)) {
-    github.getNextPage(res, function cb_1 (err, res) {
-      callback(null, processIssueComments(err, res))
-    })
-  } else {
-    callback('No more pages')
-  }
-}
+// function getCommentsFromIssuePage (res, callback) {
+//   if (github.hasNextPage(res)) {
+//     github.getNextPage(res, function cb_1 (err, res) {
+//       callback(null, processIssueComments(err, res))
+//     })
+//   } else {
+//     callback('No more pages')
+//   }
+// }
 
 function processIssueComments (err, res) {
   // console.log('ProcessIssues: ' + REPO_LIST[repo_index])
@@ -192,12 +211,7 @@ function processIssueComments (err, res) {
       throw err
     }
   }
-  // var issues_count = res.length
-  // console.log('res: ' + issues_count)
   processIssueCommentResults(res)
-  // if (issues_count === 100) {
-  //   getIssuesFromRepoPage(res, ProcessIssuesPage)
-  // }
   return res
 }
 
@@ -209,16 +223,18 @@ function processIssueCommentsPage (err, res) {
       throw err
     }
   } else {
-    // console.log('ProcessIssuesPage: ' + REPO_LIST[repo_index] + ' ' + res.length)
-    getCommentsFromIssuePage(res, processIssueCommentsPage)
+    if (github.hasNextPage(res)) {
+      github.getNextPage(res, function cb_1 (err, res) {
+        processIssueCommentsPage(null, processIssueComments(err, res))
+      })
+    } else {
+      processIssueCommentsPage('No more pages')
+    }
+    // getCommentsFromIssuePage(res, processIssueCommentsPage)
   }
 }
 
 function processIssueCommentResults (res) {
-  // console.dir(res)
-  // console.dir('\n===================\n')
-
-  // console.log('processRepoIssueResults: ' + REPO_LIST[repo_index] + ' ' + res.length)
   res.forEach(function fe_repo (element, index, array) {
     var comment_line =
       element.id + ',"' +
@@ -236,9 +252,9 @@ function processIssueCommentResults (res) {
   return res
 }
 
-/**
-* Saving
-*/
+// ********************************
+// SAVING
+// ********************************
 
 function saveFileIssues () {
   console.info('All Repos processed')
@@ -253,8 +269,6 @@ function saveFileIssues () {
         console.log('Error getting rate: ' + err)
         throw err
       }
-      // console.log(res.rate.remaining + ' calls remaining, resets at ' + new Date(res.rate.reset * 1000))
-      // process.exit()
     })
   })
 }
@@ -292,7 +306,7 @@ function updateFile (header, contents, file_name, callback) {
 module.exports.init = init
 module.exports.setToken = setToken
 module.exports.getIssuesFromRepo = getIssuesFromRepo
-module.exports.getIssuesFromRepoPage = getIssuesFromRepoPage
+// module.exports.getIssuesFromRepoPage = getIssuesFromRepoPage
 module.exports.processRepoIssueResults = processRepoIssueResults
 module.exports.saveFileIssues = saveFileIssues
 module.exports.csv_issues = csv_issues
