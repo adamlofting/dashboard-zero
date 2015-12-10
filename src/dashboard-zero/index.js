@@ -364,7 +364,7 @@ function saveAll () {
 
 function saveFileMembers () {
   console.info('All Members processed')
-  var repo_header = 'id,login,created_date,avatar_url,type'
+  var repo_header = 'id,login,avatar_url,type'
   updateFile(repo_header, csv_members, 'data/members.csv', function cb_update_file (err, res) {
     if (err) {
       console.error('Error updating file: ' + err)
