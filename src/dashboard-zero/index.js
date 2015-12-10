@@ -7,11 +7,13 @@ var GitHubApi = require('github')
 var total_issues = 0
 var total_comments = 0
 var total_members = 0
+var total_milestones = 0
 
 // The lists in csv form
 var csv_issues = []
 var csv_comments = []
 var csv_members = []
+var csv_milestones = []
 
 var repo_index = 0
 
@@ -60,6 +62,8 @@ function setToken (callback) {
 // ISSUES
 // ********************************
 function getIssuesFromRepo () {
+  getMilestonesFromRepo()
+
   github.issues.repoIssues({'user': ORG_NAME, 'repo': REPO_LIST[repo_index], 'per_page': 100}, function cb_1 (err, res) {
     fetchIssues(null, processIssues(err, res))
   })
@@ -117,19 +121,13 @@ function processIssuesPage (err, res) {
   if (err) {
     if (err === 'No more pages') {
       // We are done with this repo
-
       if (repo_index !== (REPO_LIST.length - 1)) {
         // Do the next one
         repo_index++
         getIssuesFromRepo(fetchIssues)
       } else {
         // We should be done and this should only get called once
-        saveFileMembers()
-        saveFileIssues()
-        saveFileComments()
-        console.log('Done m: ' + total_members)
-        console.log('Done i: ' + total_issues)
-        console.log('Done c: ' + total_comments)
+        saveAll()
       }
     } else {
       throw err
@@ -141,6 +139,72 @@ function processIssuesPage (err, res) {
       })
     } else {
       processIssuesPage('No more pages')
+    }
+  }
+}
+
+// ********************************
+// MILESTONES
+// ********************************
+function getMilestonesFromRepo () {
+  github.issues.getAllMilestones({'user': ORG_NAME, 'repo': REPO_LIST[repo_index], 'per_page': 100}, function cb_1 (err, res) {
+    fetchMilestones(null, processMilestones(err, res))
+  })
+}
+
+function processMilestones (err, res) {
+  if (err) {
+    if (err.message === 'No next page found') {
+      return 'Done with this repo'
+    } else {
+      throw err
+    }
+  }
+  res.forEach(function fe_repo (element, index, array) {
+    var milestone_line =
+      '"' + element.title.replace(/"/g, '&quot;') + '",' +
+      element.state + ',' +
+      element.open_issues + ',' +
+      element.due_on + ',' +
+      element.html_url + ',' +
+      element.url +
+      '\n'
+
+    // Add to list to be saved to csv
+    csv_milestones += milestone_line
+
+    total_milestones++
+  })
+  return res
+}
+
+function fetchMilestones (err, res) {
+  if (err) {
+    throw err
+  }
+  if (github.hasNextPage(res)) {
+    github.getNextPage(res, function cb_1 (err, res) {
+      processMilestonesPage(null, processMilestones(err, res))
+    })
+  } else {
+    processMilestonesPage('No more pages')
+  }
+}
+
+function processMilestonesPage (err, res) {
+  if (err) {
+    if (err === 'No more pages') {
+      return
+    } else {
+      throw err
+    }
+  } else {
+    if (github.hasNextPage(res)) {
+      github.getNextPage(res, function cb_1 (err, res) {
+        processMilestonesPage(null, processMilestones(err, res))
+      })
+    } else {
+      processMilestonesPage('No more pages')
     }
   }
 }
@@ -287,6 +351,17 @@ function processRepoMembersPage (err, res) {
 // SAVING
 // ********************************
 
+function saveAll () {
+  saveFileMembers()
+  saveFileIssues()
+  saveFileMilestones()
+  saveFileComments()
+  console.log('Done m: ' + total_members)
+  console.log('Done i: ' + total_issues)
+  console.log('Done m2: ' + total_milestones)
+  console.log('Done c: ' + total_comments)
+}
+
 function saveFileMembers () {
   console.info('All Members processed')
   var repo_header = 'id,login,created_date,avatar_url,type'
@@ -308,6 +383,23 @@ function saveFileIssues () {
   console.info('All Issues processed')
   var repo_header = 'id,title,created_date,updated_date,comments_count,is_pullrequest,html_url,url'
   updateFile(repo_header, csv_issues, 'data/issues.csv', function cb_update_file (err, res) {
+    if (err) {
+      console.error('Error updating file: ' + err)
+      process.exit(1)
+    }
+    github.misc.rateLimit({}, function cb_rateLimit (err, res) {
+      if (err) {
+        console.log('Error getting rate: ' + err)
+        throw err
+      }
+    })
+  })
+}
+
+function saveFileMilestones () {
+  console.info('All Milestones processed')
+  var repo_header = 'title,state,open_issues,due_on,html_url,url'
+  updateFile(repo_header, csv_milestones, 'data/milestones.csv', function cb_update_file (err, res) {
     if (err) {
       console.error('Error updating file: ' + err)
       process.exit(1)
