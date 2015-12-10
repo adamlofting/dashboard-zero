@@ -95,7 +95,7 @@ The purpose of this document is to create some standards for future collaboratio
 
 ### Number of unanswered volunteer input in Github issues
 
-result = Count(issues.id) from (issues join comments on (issues.url == comments.issue_url)) where not (members.login in comments.user.login) 
+result = Count(issues.id) from (issues join comments on (issues.url == comments.issue_url)) where not (members.login in comments.creator) 
 
 ### Number of Pull Requests that have had no response at all
 
