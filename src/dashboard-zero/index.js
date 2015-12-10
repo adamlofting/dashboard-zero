@@ -47,11 +47,11 @@ function setToken (callback) {
       if (err) {
         throw err
       }
-      console.log('Success')
+      console.info('GitHub Login: Success')
       callback()
     })
   } else {
-    console.log('No Token')
+    console.error('GutHub Login: No Token')
     callback()
   }
 }
@@ -59,21 +59,11 @@ function setToken (callback) {
 // ********************************
 // ISSUES
 // ********************************
-function getIssuesFromRepo (callback) {
+function getIssuesFromRepo () {
   github.issues.repoIssues({'user': ORG_NAME, 'repo': REPO_LIST[repo_index], 'per_page': 100}, function cb_1 (err, res) {
-    callback(null, processIssues(err, res))
+    fetchIssues(null, processIssues(err, res))
   })
 }
-
-// function getIssuesFromRepoPage (res, callback) {
-//   if (github.hasNextPage(res)) {
-//     github.getNextPage(res, function cb_1 (err, res) {
-//       callback(null, processIssues(err, res))
-//     })
-//   } else {
-//     callback('No more pages')
-//   }
-// }
 
 function processIssues (err, res) {
   if (err) {
@@ -83,7 +73,35 @@ function processIssues (err, res) {
       throw err
     }
   }
-  processRepoIssueResults(res)
+  res.forEach(function fe_repo (element, index, array) {
+    var issue_line =
+      element.id + ',"' +
+      element.title.replace(/"/g, '&quot;') + '",' +
+      element.created_at + ',' +
+      element.updated_at + ',' +
+      element.comments + ','
+    if (element.pull_request) {
+      issue_line += 'true' + ','
+    } else {
+      issue_line += 'false' + ','
+    }
+    issue_line += element.html_url + ',' +
+      element.url +
+      '\n'
+
+    // Add to list to be saved to csv
+    csv_issues += issue_line
+
+    // Process comments
+    if (typeof element.number === 'number') {
+      getCommentsFromIssue(element.number)
+    } else {
+      console.log('ID: ' + element.id + ' = ' + typeof element.id)
+      process.exit()
+    }
+
+    total_issues++
+  })
   return res
 }
 
@@ -98,7 +116,6 @@ function fetchIssues (err, res) {
   } else {
     processIssuesPage('No more pages')
   }
-  // getIssuesFromRepoPage(res, processIssuesPage)
 }
 
 function processIssuesPage (err, res) {
@@ -127,42 +144,7 @@ function processIssuesPage (err, res) {
     } else {
       processIssuesPage('No more pages')
     }
-    // getIssuesFromRepoPage(res, processIssuesPage)
   }
-}
-
-function processRepoIssueResults (res) {
-  // console.log('processRepoIssueResults: ' + REPO_LIST[repo_index] + ' ' + res.length)
-  res.forEach(function fe_repo (element, index, array) {
-    var issue_line =
-      element.id + ',"' +
-      element.title.replace(/"/g, '&quot;') + '",' +
-      element.created_at + ',' +
-      element.updated_at + ',' +
-      element.comments + ','
-    if (element.pull_request) {
-      issue_line += 'true' + ','
-    } else {
-      issue_line += 'false' + ','
-    }
-    issue_line += element.html_url + ',' +
-      element.url +
-      '\n'
-
-    // Add to list to be saved to csv
-    csv_issues += issue_line
-
-    // Process comments
-    if (typeof element.number === 'number') {
-      getCommentsFromIssue(element.number, fetchIssueComments)
-    } else {
-      console.log('ID: ' + element.id + ' = ' + typeof element.id)
-      process.exit()
-    }
-
-    total_issues++
-  })
-  return res
 }
 
 // ********************************
@@ -180,24 +162,13 @@ function fetchIssueComments (err, res) {
   } else {
     processIssueCommentsPage('No more pages')
   }
-  // getCommentsFromIssuePage(res, processIssueCommentsPage)
 }
 
-function getCommentsFromIssue (issue_id, callback) {
+function getCommentsFromIssue (issue_id) {
   github.issues.getComments({'user': ORG_NAME, 'repo': REPO_LIST[repo_index], 'number': issue_id, 'per_page': 100}, function cb_1 (err, res) {
-    callback(null, processIssueComments(err, res))
+    fetchIssueComments(null, processIssueComments(err, res))
   })
 }
-
-// function getCommentsFromIssuePage (res, callback) {
-//   if (github.hasNextPage(res)) {
-//     github.getNextPage(res, function cb_1 (err, res) {
-//       callback(null, processIssueComments(err, res))
-//     })
-//   } else {
-//     callback('No more pages')
-//   }
-// }
 
 function processIssueComments (err, res) {
   // console.log('ProcessIssues: ' + REPO_LIST[repo_index])
@@ -211,7 +182,20 @@ function processIssueComments (err, res) {
       throw err
     }
   }
-  processIssueCommentResults(res)
+  res.forEach(function fe_repo (element, index, array) {
+    var comment_line =
+      element.id + ',"' +
+      element.user.login + '",' +
+      element.updated_at + ',' +
+      element.html_url + ',' +
+      element.issue_url +
+      '\n'
+
+    // Add to list to be saved to csv
+    csv_comments += comment_line
+
+    total_comments++
+  })
   return res
 }
 
@@ -230,26 +214,7 @@ function processIssueCommentsPage (err, res) {
     } else {
       processIssueCommentsPage('No more pages')
     }
-    // getCommentsFromIssuePage(res, processIssueCommentsPage)
   }
-}
-
-function processIssueCommentResults (res) {
-  res.forEach(function fe_repo (element, index, array) {
-    var comment_line =
-      element.id + ',"' +
-      element.user.login + '",' +
-      element.updated_at + ',' +
-      element.html_url + ',' +
-      element.issue_url +
-      '\n'
-
-    // Add to list to be saved to csv
-    csv_comments += comment_line
-
-    total_comments++
-  })
-  return res
 }
 
 // ********************************
@@ -307,7 +272,7 @@ module.exports.init = init
 module.exports.setToken = setToken
 module.exports.getIssuesFromRepo = getIssuesFromRepo
 // module.exports.getIssuesFromRepoPage = getIssuesFromRepoPage
-module.exports.processRepoIssueResults = processRepoIssueResults
+// module.exports.processRepoIssueResults = processRepoIssueResults
 module.exports.saveFileIssues = saveFileIssues
 module.exports.csv_issues = csv_issues
 module.exports.processIssues = processIssues
