@@ -1,4 +1,4 @@
-var dashboard_zero = require('./src/dashboard-zero/index.js')
+var dz = require('./src/dashboard-zero/index.js')
 
 // The GitHub org name we are scanning
 var ORG_NAME = 'mozilla'
@@ -8,13 +8,22 @@ var REPO_LIST = ['login.webmaker.org', 'webmaker-login-ux', 'webmaker-core']
 // *******************************
 // Start of code
 // ****************************
-dashboard_zero.init(ORG_NAME, REPO_LIST)
-dashboard_zero.setToken(
+dz.init(ORG_NAME, REPO_LIST)
+dz.setToken(
   function cb_setTokenIssues (status) {
-    // Process members
-    dashboard_zero.getMembersFromOrg(ORG_NAME)
-
-    dashboard_zero.getIssuesFromRepo()
+    dz.getOrgMembers(function done () {
+      dz.getRepoMilestones(function done () {
+        dz.getRepoIssues(function done () {
+          dz.saveAll(function done () {
+            process.exit()
+          })
+        })
+      })
+    })
+    // // Process members
+    // dashboard_zero.getMembersFromOrg(ORG_NAME)
+    //
+    // dashboard_zero.getIssuesFromRepo()
   }
 )
 

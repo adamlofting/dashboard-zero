@@ -1,3 +1,4 @@
+var async = require('async')
 var Promise = require('bluebird')
 var fs = require('fs')
 Promise.promisifyAll(fs)
@@ -61,152 +62,200 @@ function setToken (callback) {
 // ********************************
 // ISSUES
 // ********************************
-function getIssuesFromRepo () {
-  getMilestonesFromRepo()
 
-  github.issues.repoIssues({'user': ORG_NAME, 'repo': REPO_LIST[repo_index], 'per_page': 100}, function cb_1 (err, res) {
-    fetchIssues(null, processIssues(err, res))
-  })
-}
+/**
+ * Get a list of the members linked to an org
+ * @param  {String}   org      github org name
+ * @param  {Function} callback
+ * @return {Object}
+ */
+function getRepoIssues (callback) {
+  // console.log(repo)
 
-function processIssues (err, res) {
-  if (err) {
-    if (err.message === 'No next page found') {
-      return 'Done with this repo'
-    } else {
-      throw err
-    }
+  var githubClient = github
+
+  // The options msg we send to the client http://mikedeboer.github.io/node-github/#repos.prototype.getFromOrg
+  var msg = {
+    user: ORG_NAME,
+    repo: REPO_LIST[repo_index],
+    per_page: 100
   }
-  res.forEach(function fe_repo (element, index, array) {
-    var issue_line =
-      element.id + ',"' +
-      element.title.replace(/"/g, '&quot;') + '",' +
-      element.created_at + ',' +
-      element.updated_at + ',' +
-      element.comments + ','
-    if (element.pull_request) {
-      issue_line += 'true' + ','
-    } else {
-      issue_line += 'false' + ','
+
+  // To see the data from github: curl -i https://api.github.com/orgs/mozilla/repos?per_page=1
+  github.issues.repoIssues(msg, function gotFromOrg (err, res) {
+    if (err) {
+      console.log(err)
     }
-    issue_line += element.html_url + ',' +
-      element.url +
-      '\n'
+    // this has loaded the first page of results
+    // get the values we want out of this response
+    getSelectedIssueValues(res)
 
-    // Add to list to be saved to csv
-    csv_issues += issue_line
+    // setup variables to use in the whilst loop below
+    var ghResult = res
+    var hasNextPage = truthy(githubClient.hasNextPage(res))
 
-    // Process comments
-    getCommentsFromIssue(element.number)
+    // now we work through any remaining pages
+    async.whilst(
+      function test () {
+        return hasNextPage
+      },
+      function doThis (callback) {
+        githubClient.getNextPage(ghResult, function gotNextPage (err, res) {
+          if (err) {
+            throw err
+          }
+          // get the values we want out of this response
+          getSelectedIssueValues(res)
 
-    total_issues++
-  })
-  return res
-}
+          // update the variables used in the whilst logic
+          ghResult = res
+          hasNextPage = truthy(githubClient.hasNextPage(res))
 
-function fetchIssues (err, res) {
-  if (err) {
-    throw err
-  }
-  if (github.hasNextPage(res)) {
-    github.getNextPage(res, function cb_1 (err, res) {
-      processIssuesPage(null, processIssues(err, res))
-    })
-  } else {
-    processIssuesPage('No more pages')
-  }
-}
-
-function processIssuesPage (err, res) {
-  if (err) {
-    if (err === 'No more pages') {
-      // We are done with this repo
-      if (repo_index !== (REPO_LIST.length - 1)) {
-        // Do the next one
-        repo_index++
-        getIssuesFromRepo(fetchIssues)
-      } else {
-        // We should be done and this should only get called once
-        saveAll()
-      }
-    } else {
-      throw err
-    }
-  } else {
-    if (github.hasNextPage(res)) {
-      github.getNextPage(res, function cb_1 (err, res) {
-        processIssuesPage(null, processIssues(err, res))
+          callback(null)
+        })
+      },
+      function done (err) {
+        if (err) {
+          throw err
+        }
+        if (repo_index < (REPO_LIST.length - 1)) {
+          repo_index++
+          getRepoIssues(callback)
+        } else {
+          repo_index = 0
+          callback()
+        }
       })
-    } else {
-      processIssuesPage('No more pages')
-    }
+  })
+}
+
+/**
+ * Extract the values we want from all the data available in the API
+ * @param  {JSON} ghRes, a single respsonse from the github API
+ * @return {Array}
+ */
+function getSelectedIssueValues (ghRes) {
+  if (ghRes) {
+    ghRes.forEach(function fe_repo (element, index, array) {
+      var issue_line =
+        element.id + ',"' +
+        element.title.replace(/"/g, '&quot;') + '",' +
+        element.created_at + ',' +
+        element.updated_at + ',' +
+        element.comments + ','
+      if (element.pull_request) {
+        issue_line += 'true' + ','
+      } else {
+        issue_line += 'false' + ','
+      }
+      issue_line += element.html_url + ',' +
+        element.url +
+        '\n'
+
+      // Add to list to be saved to csv
+      csv_issues += issue_line
+
+      // Process comments
+      getCommentsFromIssue(element.number)
+
+      total_issues++
+    })
   }
+  return ghRes
 }
 
 // ********************************
 // MILESTONES
 // ********************************
-function getMilestonesFromRepo () {
-  github.issues.getAllMilestones({'user': ORG_NAME, 'repo': REPO_LIST[repo_index], 'per_page': 100}, function cb_1 (err, res) {
-    fetchMilestones(null, processMilestones(err, res))
-  })
-}
 
-function processMilestones (err, res) {
-  if (err) {
-    if (err.message === 'No next page found') {
-      return 'Done with this repo'
-    } else {
-      throw err
+/**
+ * Get a list of the members linked to an org
+ * @param  {String}   org      github org name
+ * @param  {Function} callback
+ * @return {Object}
+ */
+function getRepoMilestones (callback) {
+  var githubClient = github
+
+  // The options msg we send to the client http://mikedeboer.github.io/node-github/#repos.prototype.getFromOrg
+  var msg = {
+    user: ORG_NAME,
+    repo: REPO_LIST[repo_index],
+    per_page: 100
+  }
+
+  // To see the data from github: curl -i https://api.github.com/orgs/mozilla/repos?per_page=1
+  github.issues.getAllMilestones(msg, function gotFromOrg (err, res) {
+    if (err) {
+      console.log(err)
     }
-  }
-  res.forEach(function fe_repo (element, index, array) {
-    var milestone_line =
-      '"' + element.title.replace(/"/g, '&quot;') + '",' +
-      element.state + ',' +
-      element.open_issues + ',' +
-      element.due_on + ',' +
-      element.html_url + ',' +
-      element.url +
-      '\n'
+    // this has loaded the first page of results
+    // get the values we want out of this response
+    getSelectedMilestoneValues(res)
 
-    // Add to list to be saved to csv
-    csv_milestones += milestone_line
+    // setup variables to use in the whilst loop below
+    var ghResult = res
+    var hasNextPage = truthy(githubClient.hasNextPage(res))
 
-    total_milestones++
-  })
-  return res
-}
+    // now we work through any remaining pages
+    async.whilst(
+      function test () {
+        return hasNextPage
+      },
+      function doThis (callback) {
+        githubClient.getNextPage(ghResult, function gotNextPage (err, res) {
+          if (err) {
+            throw err
+          }
+          // get the values we want out of this response
+          getSelectedMilestoneValues(res)
 
-function fetchMilestones (err, res) {
-  if (err) {
-    throw err
-  }
-  if (github.hasNextPage(res)) {
-    github.getNextPage(res, function cb_1 (err, res) {
-      processMilestonesPage(null, processMilestones(err, res))
-    })
-  } else {
-    processMilestonesPage('No more pages')
-  }
-}
+          // update the variables used in the whilst logic
+          ghResult = res
+          hasNextPage = truthy(githubClient.hasNextPage(res))
 
-function processMilestonesPage (err, res) {
-  if (err) {
-    if (err === 'No more pages') {
-      return
-    } else {
-      throw err
-    }
-  } else {
-    if (github.hasNextPage(res)) {
-      github.getNextPage(res, function cb_1 (err, res) {
-        processMilestonesPage(null, processMilestones(err, res))
+          callback(null)
+        })
+      },
+      function done (err) {
+        if (err) {
+          throw err
+        }
+        if (repo_index < (REPO_LIST.length - 1)) {
+          repo_index++
+          getRepoMilestones(callback)
+        } else {
+          repo_index = 0
+          callback()
+        }
       })
-    } else {
-      processMilestonesPage('No more pages')
-    }
+  })
+}
+
+/**
+ * Extract the values we want from all the data available in the API
+ * @param  {JSON} ghRes, a single respsonse from the github API
+ * @return {Array}
+ */
+function getSelectedMilestoneValues (ghRes) {
+  if (ghRes) {
+    ghRes.forEach(function fe_repo (element, index, array) {
+      var milestone_line =
+        '"' + element.title.replace(/"/g, '&quot;') + '",' +
+        element.state + ',' +
+        element.open_issues + ',' +
+        element.due_on + ',' +
+        element.html_url + ',' +
+        element.url +
+        '\n'
+
+      // Add to list to be saved to csv
+      csv_milestones += milestone_line
+
+      total_milestones++
+    })
   }
+  return ghRes
 }
 
 // ********************************
@@ -280,89 +329,121 @@ function processIssueCommentsPage (err, res) {
 }
 
 // ********************************
-// COMMENTS
+// MEMBERS
 // ********************************
 
-function getMembersFromOrg (org_name) {
-  github.orgs.getMembers({'org': org_name, 'per_page': 100}, function cb_1 (err, res) {
-    fetchRepoMembers(null, processRepoMembers(err, res))
-  })
-}
+/**
+ * Get a list of the members linked to an org
+ * @param  {String}   org      github org name
+ * @param  {Function} callback
+ * @return {Object}
+ */
+function getOrgMembers (callback) {
+  var githubClient = github
 
-function fetchRepoMembers (err, res) {
-  if (err) {
-    throw err
+  // The options msg we send to the client http://mikedeboer.github.io/node-github/#repos.prototype.getFromOrg
+  var msg = {
+    org: ORG_NAME,
+    type: 'public',
+    per_page: 100
   }
-  if (github.hasNextPage(res)) {
-    github.getNextPage(res, function cb_1 (err, res) {
-      processRepoMembersPage(null, processRepoMembers(err, res))
-    })
-  } else {
-    processRepoMembersPage('No more pages')
-  }
-}
 
-function processRepoMembers (err, res) {
-  if (err) {
-    if (err.message === 'No next page found') {
-      return 'Done with this repo'
-    } else {
-      // Why does this error?
-      console.log('=' + err.message + '=')
-      console.trace(err)
-      throw err
+  // To see the data from github: curl -i https://api.github.com/orgs/mozilla/repos?per_page=1
+  github.orgs.getMembers(msg, function gotFromOrg (err, res) {
+    if (err) {
+      console.log(err)
     }
-  }
-  res.forEach(function fe_repo (element, index, array) {
-    var member_line =
-      element.id + ',"' +
-      element.login + '",' +
-      element.avatar_url + ',' +
-      element.type +
-      '\n'
+    // this has loaded the first page of results
+    // get the values we want out of this response
+    getSelectedMemberValues(res)
 
-    // Add to list to be saved to csv
-    csv_members += member_line
+    // setup variables to use in the whilst loop below
+    var ghResult = res
+    var hasNextPage = truthy(githubClient.hasNextPage(res))
 
-    total_members++
-  })
-  return res
-}
+    // now we work through any remaining pages
+    async.whilst(
+      function test () {
+        return hasNextPage
+      },
+      function doThis (callback) {
+        githubClient.getNextPage(ghResult, function gotNextPage (err, res) {
+          if (err) {
+            throw err
+          }
+          // get the values we want out of this response
+          getSelectedMemberValues(res)
 
-function processRepoMembersPage (err, res) {
-  if (err) {
-    if (err === 'No more pages') {
-      // We are done with this repo
-    } else {
-      throw err
-    }
-  } else {
-    if (github.hasNextPage(res)) {
-      github.getNextPage(res, function cb_1 (err, res) {
-        processRepoMembersPage(null, processRepoMembers(err, res))
+          // update the variables used in the whilst logic
+          ghResult = res
+          hasNextPage = truthy(githubClient.hasNextPage(res))
+
+          callback(null)
+        })
+      },
+      function done (err) {
+        if (err) {
+          throw err
+        }
+        callback()
       })
-    } else {
-      processRepoMembersPage('No more pages')
-    }
+  })
+}
+
+/**
+ * Extract the values we want from all the data available in the API
+ * @param  {JSON} ghRes, a single respsonse from the github API
+ * @return {Array}
+ */
+function getSelectedMemberValues (ghRes) {
+  if (ghRes) {
+    ghRes.forEach(function fe_repo (element, index, array) {
+      var member_line =
+        element.id + ',"' +
+        element.login + '",' +
+        element.avatar_url + ',' +
+        element.type +
+        '\n'
+
+      // Add to list to be saved to csv
+      csv_members += member_line
+
+      total_members++
+    })
   }
+  return ghRes
 }
 
 // ********************************
 // SAVING
 // ********************************
 
-function saveAll () {
-  saveFileMembers()
-  saveFileIssues()
-  saveFileMilestones()
-  saveFileComments()
-  console.log('Done m: ' + total_members)
-  console.log('Done i: ' + total_issues)
-  console.log('Done m2: ' + total_milestones)
-  console.log('Done c: ' + total_comments)
+function saveAll (callback) {
+  saveFileMembers(function done () {
+    saveFileIssues(function done () {
+      saveFileMilestones(function done () {
+        saveFileComments(function done () {
+          console.log('Done m: ' + total_members)
+          console.log('Done i: ' + total_issues)
+          console.log('Done m2: ' + total_milestones)
+          console.log('Done c: ' + total_comments)
+        })
+      })
+    })
+  })
 }
 
-function saveFileMembers () {
+function getRateLeft (callback) {
+  github.misc.rateLimit({}, function cb_rateLimit (err, res) {
+    if (err) {
+      console.log('Error getting rate: ' + err)
+      throw err
+    }
+    callback(res.rate.remaining + ' calls remaining, resets at ' + new Date(res.rate.reset * 1000))
+  })
+}
+
+function saveFileMembers (callback) {
   console.info('All Members processed')
   var repo_header = 'id,login,avatar_url,type'
   updateFile(repo_header, csv_members, 'data/members.csv', function cb_update_file (err, res) {
@@ -370,16 +451,11 @@ function saveFileMembers () {
       console.error('Error updating file: ' + err)
       process.exit(1)
     }
-    github.misc.rateLimit({}, function cb_rateLimit (err, res) {
-      if (err) {
-        console.log('Error getting rate: ' + err)
-        throw err
-      }
-    })
+    callback()
   })
 }
 
-function saveFileIssues () {
+function saveFileIssues (callback) {
   console.info('All Issues processed')
   var repo_header = 'id,title,created_date,updated_date,comments_count,is_pullrequest,html_url,url'
   updateFile(repo_header, csv_issues, 'data/issues.csv', function cb_update_file (err, res) {
@@ -387,16 +463,11 @@ function saveFileIssues () {
       console.error('Error updating file: ' + err)
       process.exit(1)
     }
-    github.misc.rateLimit({}, function cb_rateLimit (err, res) {
-      if (err) {
-        console.log('Error getting rate: ' + err)
-        throw err
-      }
-    })
+    callback()
   })
 }
 
-function saveFileMilestones () {
+function saveFileMilestones (callback) {
   console.info('All Milestones processed')
   var repo_header = 'title,state,open_issues,due_on,html_url,url'
   updateFile(repo_header, csv_milestones, 'data/milestones.csv', function cb_update_file (err, res) {
@@ -404,16 +475,11 @@ function saveFileMilestones () {
       console.error('Error updating file: ' + err)
       process.exit(1)
     }
-    github.misc.rateLimit({}, function cb_rateLimit (err, res) {
-      if (err) {
-        console.log('Error getting rate: ' + err)
-        throw err
-      }
-    })
+    callback()
   })
 }
 
-function saveFileComments () {
+function saveFileComments (callback) {
   console.info('All Comments processed')
   var repo_header = 'id,creator,updated_date,html_url,issue_url'
   updateFile(repo_header, csv_comments, 'data/comments.csv', function cb_update_file (err, res) {
@@ -421,14 +487,7 @@ function saveFileComments () {
       console.error('Error updating file: ' + err)
       process.exit(1)
     }
-    github.misc.rateLimit({}, function cb_rateLimit (err, res) {
-      if (err) {
-        console.log('Error getting rate: ' + err)
-        throw err
-      }
-      console.log(res.rate.remaining + ' calls remaining, resets at ' + new Date(res.rate.reset * 1000))
-      process.exit()
-    })
+    callback()
   })
 }
 
@@ -443,13 +502,28 @@ function updateFile (header, contents, file_name, callback) {
   })
 }
 
+// ****************
+// MISC
+// ***************
+
+/**
+ * A util
+ */
+function truthy (o) {
+  if (o) {
+    return true
+  }
+  return false
+}
+
 module.exports = {
-  getMembersFromOrg: getMembersFromOrg,
   init: init,
   setToken: setToken,
-  getIssuesFromRepo: getIssuesFromRepo,
   saveFileIssues: saveFileIssues,
   csv_issues: csv_issues,
-  processIssues: processIssues,
-  fetchIssues: fetchIssues
+  getOrgMembers: getOrgMembers,
+  getRepoIssues: getRepoIssues,
+  getRepoMilestones: getRepoMilestones,
+  saveAll: saveAll,
+  getRateLeft: getRateLeft
 }
