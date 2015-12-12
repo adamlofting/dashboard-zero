@@ -7,12 +7,14 @@ var total_issues = 0
 var total_comments = 0
 var total_members = 0
 var total_milestones = 0
+var total_labels = 0
 
 // The lists in csv form
 var csv_issues = []
 var csv_comments = []
 var csv_members = []
 var csv_milestones = []
+var csv_labels = []
 
 var repo_index = 0
 
@@ -251,6 +253,100 @@ function getSelectedMilestoneValues (ghRes) {
       csv_milestones += milestone_line
 
       total_milestones++
+    })
+  }
+  return ghRes
+}
+
+// ********************************
+// LABELS
+// ********************************
+
+/**
+ * Get a list of the members linked to an org
+ * @param  {String}   org      github org name
+ * @param  {Function} callback
+ * @return {Object}
+ */
+function getRepoLabels (callback) {
+  var githubClient = github
+
+  // The options msg we send to the client http://mikedeboer.github.io/node-github/#repos.prototype.getFromOrg
+  var msg = {
+    user: ORG_NAME,
+    repo: REPO_LIST[repo_index],
+    per_page: 100
+  }
+
+  // To see the data from github: curl -i https://api.github.com/orgs/mozilla/repos?per_page=1
+  github.issues.getLabels(msg, function gotFromOrg (err, res) {
+    if (err) {
+      console.log(err)
+    }
+    // this has loaded the first page of results
+    // get the values we want out of this response
+    getSelectedLabelValues(res)
+
+    // setup variables to use in the whilst loop below
+    var ghResult = res
+    var hasNextPage = truthy(githubClient.hasNextPage(res))
+
+    // now we work through any remaining pages
+    async.whilst(
+      function test () {
+        return hasNextPage
+      },
+      function doThis (callback) {
+        githubClient.getNextPage(ghResult, function gotNextPage (err, res) {
+          if (err) {
+            throw err
+          }
+          // get the values we want out of this response
+          getSelectedMilestoneValues(res)
+
+          // update the variables used in the whilst logic
+          ghResult = res
+          hasNextPage = truthy(githubClient.hasNextPage(res))
+
+          callback(null)
+        })
+      },
+      function done (err) {
+        if (err) {
+          throw err
+        }
+        if (repo_index < (REPO_LIST.length - 1)) {
+          repo_index++
+          getRepoLabels(callback)
+        } else {
+          repo_index = 0
+          callback()
+        }
+      })
+  })
+}
+
+/**
+ * Extract the values we want from all the data available in the API
+ * @param  {JSON} ghRes, a single respsonse from the github API
+ * @return {Array}
+ */
+function getSelectedLabelValues (ghRes) {
+  if (ghRes) {
+    ghRes.forEach(function fe_repo (element, index, array) {
+      var label_line =
+        '"' + element.title.replace(/"/g, '&quot;') + '",' +
+        element.state + ',' +
+        element.open_issues + ',' +
+        element.due_on + ',' +
+        element.html_url + ',' +
+        element.url +
+        '\n'
+
+      // Add to list to be saved to csv
+      csv_labels += label_line
+
+      total_labels++
     })
   }
   return ghRes
