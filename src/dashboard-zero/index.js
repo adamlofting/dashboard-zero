@@ -529,16 +529,31 @@ function checkFiles (callback) {
   } catch (e) {
     if (e.code === 'ENOENT') {
       console.error(e.path + ' not found.')
-      console.info('Rebulding files...')
-      updateAll(function done () {
-        console.log('All files rebuilt')
-        callback()
+      cleanAll(function done () {
+        console.info('Rebulding files...')
+        updateAll(function done () {
+          console.log('All files rebuilt')
+          callback()
+        })
       })
     } else {
       console.error(e)
       throw e
     }
   }
+}
+
+function cleanAll (callback) {
+  fs.unlink('data/members.csv', function done () {
+    fs.unlink('data/issues.csv', function done () {
+      fs.unlink('data/milestones.csv', function done () {
+        fs.unlink('data/comments.csv', function done () {
+          console.log('All files cleaned')
+          callback()
+        })
+      })
+    })
+  })
 }
 
 function updateAll (callback) {
