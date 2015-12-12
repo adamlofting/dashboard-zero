@@ -1,7 +1,5 @@
 var async = require('async')
-var Promise = require('bluebird')
 var fs = require('fs')
-Promise.promisifyAll(fs)
 var GitHubApi = require('github')
 
 // Holds the totals
@@ -516,6 +514,67 @@ function truthy (o) {
   return false
 }
 
+function checkFiles (callback) {
+  var stats = []
+  try {
+    stats.push(fs.statSync('data/members.csv'))
+    stats.push(fs.statSync('data/issues.csv'))
+    stats.push(fs.statSync('data/milestones.csv'))
+    stats.push(fs.statSync('data/comments.csv'))
+    stats.forEach(function fe_repo (element, index, array) {
+      // console.log(element.isFile())
+    })
+    console.log('All files exist')
+    callback()
+  } catch (e) {
+    if (e.code === 'ENOENT') {
+      console.error(e.path + ' not found.')
+      cleanAll(function done () {
+        console.info('Rebulding files...')
+        updateAll(function done () {
+          console.log('All files rebuilt')
+          callback()
+        })
+      })
+    } else {
+      console.error(e)
+      throw e
+    }
+  }
+}
+
+function cleanAll (callback) {
+  fs.unlink('data/members.csv', function done () {
+    fs.unlink('data/issues.csv', function done () {
+      fs.unlink('data/milestones.csv', function done () {
+        fs.unlink('data/comments.csv', function done () {
+          console.log('All files cleaned')
+          callback()
+        })
+      })
+    })
+  })
+}
+
+function updateAll (callback) {
+  setToken(
+    function cb_setTokenIssues (status) {
+      getOrgMembers(function done () {
+        getRepoMilestones(function done () {
+          getRepoIssues(function done () {
+            saveAll(function done () {
+              getRateLeft(function done (rateLeft) {
+                console.log(rateLeft)
+                callback()
+              })
+            })
+          })
+        })
+      })
+    }
+  )
+}
+
 module.exports = {
   init: init,
   setToken: setToken,
@@ -525,5 +584,6 @@ module.exports = {
   getRepoIssues: getRepoIssues,
   getRepoMilestones: getRepoMilestones,
   saveAll: saveAll,
-  getRateLeft: getRateLeft
+  getRateLeft: getRateLeft,
+  checkFiles: checkFiles
 }
