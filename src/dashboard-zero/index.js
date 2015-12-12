@@ -521,6 +521,7 @@ function checkFiles (callback) {
     stats.push(fs.statSync('data/issues.csv'))
     stats.push(fs.statSync('data/milestones.csv'))
     stats.push(fs.statSync('data/comments.csv'))
+    stats.push(fs.statSync('data/labels.csv'))
     stats.forEach(function fe_repo (element, index, array) {
       // console.log(element.isFile())
     })
@@ -546,10 +547,12 @@ function checkFiles (callback) {
 function cleanAll (callback) {
   fs.unlink('data/members.csv', function done () {
     fs.unlink('data/issues.csv', function done () {
-      fs.unlink('data/milestones.csv', function done () {
-        fs.unlink('data/comments.csv', function done () {
-          console.log('All files cleaned')
-          callback()
+      fs.unlink('data/labels.csv', function done () {
+        fs.unlink('data/milestones.csv', function done () {
+          fs.unlink('data/comments.csv', function done () {
+            console.log('All files cleaned')
+            callback()
+          })
         })
       })
     })
@@ -561,11 +564,13 @@ function updateAll (callback) {
     function cb_setTokenIssues (status) {
       getOrgMembers(function done () {
         getRepoMilestones(function done () {
-          getRepoIssues(function done () {
-            saveAll(function done () {
-              getRateLeft(function done (rateLeft) {
-                console.log(rateLeft)
-                callback()
+          getRepoLabels(function done () {
+            getRepoIssues(function done () {
+              saveAll(function done () {
+                getRateLeft(function done (rateLeft) {
+                  console.log(rateLeft)
+                  callback()
+                })
               })
             })
           })
