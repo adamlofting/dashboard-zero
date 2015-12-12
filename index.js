@@ -10,14 +10,21 @@ var REPO_LIST = ['login.webmaker.org', 'webmaker-login-ux', 'webmaker-core']
 // *******************************
 // Start of code
 // ****************************
-dz.init(ORG_NAME, REPO_LIST)
 
-dz.checkFiles(function done () {
-  // Start web server
-  console.log('Starting webserver...')
-  app.get('/', function (req, res) {
-    res.send('Hello World')
+POST()
+
+function POST () {
+  dz.init(ORG_NAME, REPO_LIST)
+
+  dz.checkFiles(function done () {
+    // Start web server
+    console.log('Starting webserver...')
+    // app.get('/', function (req, res) {
+    //   res.send('Hello World')
+    // })
+    app.use(express.static('data'))
+
+    app.listen(3000)
+    console.log('Server now running on http://localhost:3000')
   })
-
-  app.listen(3000)
-})
+}
