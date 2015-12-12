@@ -1,0 +1,56 @@
+org,repository,title,state,open_issues,due_on,html_url,url
+mozilla,login.webmaker.org,"bug",https://api.github.com/repos/mozilla/login.webmaker.org/labels/bug
+mozilla,login.webmaker.org,"duplicate",https://api.github.com/repos/mozilla/login.webmaker.org/labels/duplicate
+mozilla,login.webmaker.org,"enhancement",https://api.github.com/repos/mozilla/login.webmaker.org/labels/enhancement
+mozilla,login.webmaker.org,"invalid",https://api.github.com/repos/mozilla/login.webmaker.org/labels/invalid
+mozilla,login.webmaker.org,"question",https://api.github.com/repos/mozilla/login.webmaker.org/labels/question
+mozilla,login.webmaker.org,"wontfix",https://api.github.com/repos/mozilla/login.webmaker.org/labels/wontfix
+mozilla,login.webmaker.org,"needs discussion",https://api.github.com/repos/mozilla/login.webmaker.org/labels/needs%20discussion
+mozilla,login.webmaker.org,"help report",https://api.github.com/repos/mozilla/login.webmaker.org/labels/help%20report
+mozilla,login.webmaker.org,"needs review",https://api.github.com/repos/mozilla/login.webmaker.org/labels/needs%20review
+mozilla,login.webmaker.org,"ready to merge",https://api.github.com/repos/mozilla/login.webmaker.org/labels/ready%20to%20merge
+mozilla,login.webmaker.org,"WIP",https://api.github.com/repos/mozilla/login.webmaker.org/labels/WIP
+mozilla,login.webmaker.org,"security",https://api.github.com/repos/mozilla/login.webmaker.org/labels/security
+mozilla,webmaker-login-ux,"bug",https://api.github.com/repos/mozilla/webmaker-login-ux/labels/bug
+mozilla,webmaker-login-ux,"duplicate",https://api.github.com/repos/mozilla/webmaker-login-ux/labels/duplicate
+mozilla,webmaker-login-ux,"enhancement",https://api.github.com/repos/mozilla/webmaker-login-ux/labels/enhancement
+mozilla,webmaker-login-ux,"help wanted",https://api.github.com/repos/mozilla/webmaker-login-ux/labels/help%20wanted
+mozilla,webmaker-login-ux,"invalid",https://api.github.com/repos/mozilla/webmaker-login-ux/labels/invalid
+mozilla,webmaker-login-ux,"question",https://api.github.com/repos/mozilla/webmaker-login-ux/labels/question
+mozilla,webmaker-login-ux,"wontfix",https://api.github.com/repos/mozilla/webmaker-login-ux/labels/wontfix
+mozilla,webmaker-login-ux,"plain-adaptor",https://api.github.com/repos/mozilla/webmaker-login-ux/labels/plain-adaptor
+mozilla,webmaker-login-ux,"critical",https://api.github.com/repos/mozilla/webmaker-login-ux/labels/critical
+mozilla,webmaker-core,"bug",https://api.github.com/repos/mozilla/webmaker-core/labels/bug
+mozilla,webmaker-core,"enhancement",https://api.github.com/repos/mozilla/webmaker-core/labels/enhancement
+mozilla,webmaker-core,"help wanted",https://api.github.com/repos/mozilla/webmaker-core/labels/help%20wanted
+mozilla,webmaker-core,"first bug",https://api.github.com/repos/mozilla/webmaker-core/labels/first%20bug
+mozilla,webmaker-core,"critical",https://api.github.com/repos/mozilla/webmaker-core/labels/critical
+mozilla,webmaker-core,"PR Needs Review",https://api.github.com/repos/mozilla/webmaker-core/labels/PR%20Needs%20Review
+mozilla,webmaker-core,"PR Needs Work",https://api.github.com/repos/mozilla/webmaker-core/labels/PR%20Needs%20Work
+mozilla,webmaker-core,"PR Good To Merge",https://api.github.com/repos/mozilla/webmaker-core/labels/PR%20Good%20To%20Merge
+mozilla,webmaker-core,"feedback",https://api.github.com/repos/mozilla/webmaker-core/labels/feedback
+mozilla,webmaker-core,"design",https://api.github.com/repos/mozilla/webmaker-core/labels/design
+mozilla,webmaker-core,"feature",https://api.github.com/repos/mozilla/webmaker-core/labels/feature
+mozilla,webmaker-core,"needs discussion",https://api.github.com/repos/mozilla/webmaker-core/labels/needs%20discussion
+mozilla,webmaker-core,"android",https://api.github.com/repos/mozilla/webmaker-core/labels/android
+mozilla,webmaker-core,"documentation",https://api.github.com/repos/mozilla/webmaker-core/labels/documentation
+mozilla,webmaker-core,"instrumentation",https://api.github.com/repos/mozilla/webmaker-core/labels/instrumentation
+mozilla,webmaker-core,"meta",https://api.github.com/repos/mozilla/webmaker-core/labels/meta
+mozilla,webmaker-core,"localization",https://api.github.com/repos/mozilla/webmaker-core/labels/localization
+mozilla,webmaker-core,"tech debt",https://api.github.com/repos/mozilla/webmaker-core/labels/tech%20debt
+mozilla,webmaker-core,"blocked",https://api.github.com/repos/mozilla/webmaker-core/labels/blocked
+mozilla,webmaker-core,"needs tech review",https://api.github.com/repos/mozilla/webmaker-core/labels/needs%20tech%20review
+mozilla,webmaker-core,"assigned-to-contributor",https://api.github.com/repos/mozilla/webmaker-core/labels/assigned-to-contributor
+mozilla,webmaker-core,"regression",https://api.github.com/repos/mozilla/webmaker-core/labels/regression
+mozilla,webmaker-core,"in progress",https://api.github.com/repos/mozilla/webmaker-core/labels/in%20progress
+mozilla,webmaker-core,"needs verification",https://api.github.com/repos/mozilla/webmaker-core/labels/needs%20verification
+mozilla,webmaker-core,"PR in Review",https://api.github.com/repos/mozilla/webmaker-core/labels/PR%20in%20Review
+mozilla,webmaker-core,"release engineering",https://api.github.com/repos/mozilla/webmaker-core/labels/release%20engineering
+mozilla,webmaker-core,"Quality test",https://api.github.com/repos/mozilla/webmaker-core/labels/Quality%20test
+mozilla,webmaker-core,"PR Wait To Merge",https://api.github.com/repos/mozilla/webmaker-core/labels/PR%20Wait%20To%20Merge
+mozilla,webmaker-core,"Goal Unlock Discover",https://api.github.com/repos/mozilla/webmaker-core/labels/Goal%20Unlock%20Discover
+mozilla,webmaker-core,"Goal Ease creation",https://api.github.com/repos/mozilla/webmaker-core/labels/Goal%20Ease%20creation
+mozilla,webmaker-core,"Goal Raise the roof",https://api.github.com/repos/mozilla/webmaker-core/labels/Goal%20Raise%20the%20roof
+mozilla,webmaker-core,"Goal Engage Users",https://api.github.com/repos/mozilla/webmaker-core/labels/Goal%20Engage%20Users
+mozilla,webmaker-core,"p1",https://api.github.com/repos/mozilla/webmaker-core/labels/p1
+mozilla,webmaker-core,"browser",https://api.github.com/repos/mozilla/webmaker-core/labels/browser
