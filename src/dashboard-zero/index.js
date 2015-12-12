@@ -241,6 +241,8 @@ function getSelectedMilestoneValues (ghRes) {
   if (ghRes) {
     ghRes.forEach(function fe_repo (element, index, array) {
       var milestone_line =
+        ORG_NAME + ',' +
+        REPO_LIST[repo_index] + ',' +
         '"' + element.title.replace(/"/g, '&quot;') + '",' +
         element.state + ',' +
         element.open_issues + ',' +
@@ -335,11 +337,9 @@ function getSelectedLabelValues (ghRes) {
   if (ghRes) {
     ghRes.forEach(function fe_repo (element, index, array) {
       var label_line =
-        '"' + element.title.replace(/"/g, '&quot;') + '",' +
-        element.state + ',' +
-        element.open_issues + ',' +
-        element.due_on + ',' +
-        element.html_url + ',' +
+        ORG_NAME + ',' +
+        REPO_LIST[repo_index] + ',' +
+        '"' + element.name.replace(/"/g, '&quot;') + '",' +
         element.url +
         '\n'
 
@@ -389,6 +389,8 @@ function processIssueComments (err, res) {
   }
   res.forEach(function fe_repo (element, index, array) {
     var comment_line =
+      ORG_NAME + ',' +
+      REPO_LIST[repo_index] + ',' +
       element.id + ',"' +
       element.user.login + '",' +
       element.updated_at + ',' +
@@ -516,11 +518,14 @@ function saveAll (callback) {
   saveFileMembers(function done () {
     saveFileIssues(function done () {
       saveFileMilestones(function done () {
-        saveFileComments(function done () {
-          console.log('Done m: ' + total_members)
-          console.log('Done i: ' + total_issues)
-          console.log('Done m2: ' + total_milestones)
-          console.log('Done c: ' + total_comments)
+        saveFileLabels(function done () {
+          saveFileComments(function done () {
+            console.log('Done m: ' + total_members)
+            console.log('Done i: ' + total_issues)
+            console.log('Done m2: ' + total_milestones)
+            console.log('Done c: ' + total_comments)
+            console.log('Done l: ' + total_labels)
+          })
         })
       })
     })
@@ -551,7 +556,7 @@ function saveFileMembers (callback) {
 
 function saveFileIssues (callback) {
   console.info('All Issues processed')
-  var repo_header = 'id,title,created_date,updated_date,comments_count,is_pullrequest,html_url,url'
+  var repo_header = 'org,repository,id,title,created_date,updated_date,comments_count,is_pullrequest,html_url,url'
   updateFile(repo_header, csv_issues, 'data/issues.csv', function cb_update_file (err, res) {
     if (err) {
       console.error('Error updating file: ' + err)
@@ -563,8 +568,20 @@ function saveFileIssues (callback) {
 
 function saveFileMilestones (callback) {
   console.info('All Milestones processed')
-  var repo_header = 'title,state,open_issues,due_on,html_url,url'
+  var repo_header = 'org,repository,title,state,open_issues,due_on,html_url,url'
   updateFile(repo_header, csv_milestones, 'data/milestones.csv', function cb_update_file (err, res) {
+    if (err) {
+      console.error('Error updating file: ' + err)
+      process.exit(1)
+    }
+    callback()
+  })
+}
+
+function saveFileLabels (callback) {
+  console.info('All Labels processed')
+  var repo_header = 'org,repository,title,state,open_issues,due_on,html_url,url'
+  updateFile(repo_header, csv_labels, 'data/labels.csv', function cb_update_file (err, res) {
     if (err) {
       console.error('Error updating file: ' + err)
       process.exit(1)
