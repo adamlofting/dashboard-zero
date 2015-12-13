@@ -31,6 +31,8 @@ The purpose of this document is to create some standards for future collaboratio
 - Source: https://developer.github.com/v3/issues/#list-issues-for-a-repository
 
 * Fields
+  * org	            = calulated field of the org name
+  * repository     = calulated field of the repo the record came from
   * id	            = id
   * title	          = title
   * created_date	  = created_at
@@ -40,19 +42,6 @@ The purpose of this document is to create some standards for future collaboratio
   * html_url	      = html_url
   * url             = url
 
-### repos.csv
-
-- Description: Holds the combined data from the requested repositories.
-
-- Source: https://developer.github.com/v3/repos/#list-organization-repositories
-
-* Fields
-  * name	      = name
-  * stars	      = stargazers_count
-  * forks	      = forks_count
-  * open_issues	= open_issues_count
-  * language    = language
-
 ### milestones.csv
 
 - Description: Holds the combined milestones for the requested repositories
@@ -60,6 +49,8 @@ The purpose of this document is to create some standards for future collaboratio
 - Source: https://developer.github.com/v3/issues/milestones/#list-milestones-for-a-repository
 
 * Fields
+ * org	            = calulated field of the org name
+ * repository     = calulated field of the repo the record came from
  * title
  * state
  * open_issues
@@ -74,6 +65,8 @@ The purpose of this document is to create some standards for future collaboratio
 - Source: https://developer.github.com/v3/issues/milestones/#list-milestones-for-a-repository
 
 * Fields
+ * org	            = calulated field of the org name
+ * repository     = calulated field of the repo the record came from
  * name
  * url
 
@@ -90,6 +83,21 @@ The purpose of this document is to create some standards for future collaboratio
  * login
  * avatar_url
  * type
+
+### stats.json
+
+- Description: Holds the stats for the data
+
+- Source: generated
+
+* Fields
+ * last_updated
+ * total_repositories
+ * total_members
+ * total_issues
+ * total_comments
+ * total_milestones
+ * total_labels
 
 ## Formulas
 
