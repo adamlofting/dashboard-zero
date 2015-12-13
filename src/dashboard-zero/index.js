@@ -3,6 +3,7 @@ var fs = require('fs')
 var GitHubApi = require('github')
 
 // Holds the totals
+var total_repositories = 0
 var total_issues = 0
 var total_comments = 0
 var total_members = 0
@@ -22,6 +23,8 @@ var github
 var ORG_NAME
 var REPO_LIST
 
+var json_stats = []
+
 function init (org_name, repo_list) {
   github = new GitHubApi({
     // required
@@ -37,6 +40,7 @@ function init (org_name, repo_list) {
   })
   ORG_NAME = org_name
   REPO_LIST = repo_list
+  total_repositories = REPO_LIST.length
 }
 
 function setToken (callback) {
@@ -522,12 +526,23 @@ function saveAll (callback) {
       saveFileMilestones(function done () {
         saveFileLabels(function done () {
           saveFileComments(function done () {
-            console.log('Done m: ' + total_members)
-            console.log('Done i: ' + total_issues)
-            console.log('Done m2: ' + total_milestones)
-            console.log('Done c: ' + total_comments)
-            console.log('Done l: ' + total_labels)
-            callback()
+            var stats = []
+            stats['last_updates'] = new Date()
+            stats['total_repositories'] = total_repositories
+            stats['total_members'] = total_members
+            stats['total_issues'] = total_issues
+            stats['total_comments'] = total_comments
+            stats['total_milestones'] = total_milestones
+            stats['total_labels'] = total_labels
+            json_stats = JSON.stringify(stats)
+            saveFileStats(function done () {
+              console.log('Done m: ' + total_members)
+              console.log('Done i: ' + total_issues)
+              console.log('Done m2: ' + total_milestones)
+              console.log('Done c: ' + total_comments)
+              console.log('Done l: ' + total_labels)
+              callback()
+            })
           })
         })
       })
@@ -602,6 +617,15 @@ function saveFileComments (callback) {
       process.exit(1)
     }
     callback()
+  })
+}
+
+function saveFileStats (callback) {
+  console.info('Saving stats')
+  fs.writeFile('data/stats.json', json_stats, function (err) {
+    if (err) callback(err)
+    // console.info('It\'s saved!')
+    callback(null)
   })
 }
 
