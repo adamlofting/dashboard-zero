@@ -526,14 +526,15 @@ function saveAll (callback) {
       saveFileMilestones(function done () {
         saveFileLabels(function done () {
           saveFileComments(function done () {
-            var stats = []
-            stats['last_updates'] = new Date()
-            stats['total_repositories'] = total_repositories
-            stats['total_members'] = total_members
-            stats['total_issues'] = total_issues
-            stats['total_comments'] = total_comments
-            stats['total_milestones'] = total_milestones
-            stats['total_labels'] = total_labels
+            var stats = {
+              last_updated: new Date(),
+              total_repositories: total_repositories,
+              total_members: total_members,
+              total_issues: total_issues,
+              total_comments: total_comments,
+              total_milestones: total_milestones,
+              total_labels: total_labels
+            }
             json_stats = JSON.stringify(stats)
             saveFileStats(function done () {
               console.log('Done m: ' + total_members)
@@ -662,6 +663,7 @@ function checkFiles (callback) {
     stats.push(fs.statSync('data/milestones.csv'))
     stats.push(fs.statSync('data/comments.csv'))
     stats.push(fs.statSync('data/labels.csv'))
+    stats.push(fs.statSync('data/stats.json'))
     stats.forEach(function fe_repo (element, index, array) {
       // console.log(element.isFile())
     })
@@ -690,8 +692,10 @@ function cleanAll (callback) {
       fs.unlink('data/labels.csv', function done () {
         fs.unlink('data/milestones.csv', function done () {
           fs.unlink('data/comments.csv', function done () {
-            console.log('All files cleaned')
-            callback()
+            fs.unlink('data/stats.json', function done () {
+              console.log('All files cleaned')
+              callback()
+            })
           })
         })
       })
