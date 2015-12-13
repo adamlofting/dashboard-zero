@@ -28,3 +28,4 @@ node_modules
 token.txt
 junit
 .Rproj.user
+config.json

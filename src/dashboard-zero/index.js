@@ -19,35 +19,45 @@ var csv_labels = []
 
 var repo_index = 0
 
+var CONFIG = []
 var github
-var ORG_NAME
 var REPO_LIST
 
 var json_stats = []
 
-function init (org_name, repo_list) {
-  github = new GitHubApi({
-    // required
-    version: '3.0.0',
-    // optional
-    protocol: 'https',
-    host: 'api.github.com', // should be api.github.com for GitHub
-    pathPrefix: '', // for some GHEs; none for GitHub
-    timeout: 5000,
-    headers: {
-      'user-agent': 'drazisil' // GitHub is happy with a unique user agent
+function init (callback) {
+  fs.readFile('config.json', function (err, data) {
+    if (err) throw err
+    try {
+      var config = JSON.parse(data)
+    } catch (e) {
+      throw e
+    } finally {
+      github = new GitHubApi({
+        // required
+        version: '3.0.0',
+        // optional
+        protocol: 'https',
+        host: 'api.github.com', // should be api.github.com for GitHub
+        pathPrefix: '', // for some GHEs; none for GitHub
+        timeout: 5000,
+        headers: {
+          'user-agent': 'drazisil' // GitHub is happy with a unique user agent
+        }
+      })
+      CONFIG = config
+      REPO_LIST = config['repo_list']
+      total_repositories = REPO_LIST.length
+      callback()
     }
   })
-  ORG_NAME = org_name
-  REPO_LIST = repo_list
-  total_repositories = REPO_LIST.length
 }
 
 function setToken (callback) {
-  if (process.env.GH_TOKEN !== undefined) {
+  if (CONFIG['token'] !== undefined) {
     github.authenticate({
       type: 'token',
-      token: process.env.GH_TOKEN
+      token: CONFIG['token']
     })
 
     github.misc.rateLimit({}, function cb_rateLimit (err, res) {
@@ -80,15 +90,15 @@ function getRepoIssues (callback) {
 
   // The options msg we send to the client http://mikedeboer.github.io/node-github/#repos.prototype.getFromOrg
   var msg = {
-    user: ORG_NAME,
-    repo: REPO_LIST[repo_index],
+    user: REPO_LIST[repo_index].org,
+    repo: REPO_LIST[repo_index].repo,
     per_page: 100
   }
 
   // To see the data from github: curl -i https://api.github.com/orgs/mozilla/repos?per_page=1
   github.issues.repoIssues(msg, function gotFromOrg (err, res) {
     if (err) {
-      console.log(err)
+      console.trace(err)
     }
     // this has loaded the first page of results
     // get the values we want out of this response
@@ -142,8 +152,8 @@ function getSelectedIssueValues (ghRes) {
   if (ghRes) {
     ghRes.forEach(function fe_repo (element, index, array) {
       var issue_line =
-        ORG_NAME + ',' +
-        REPO_LIST[repo_index] + ',' +
+        REPO_LIST[repo_index].org + ',' +
+        REPO_LIST[repo_index].repo + ',' +
         element.id + ',"' +
         element.title.replace(/"/g, '&quot;') + '",' +
         element.created_at + ',' +
@@ -185,15 +195,15 @@ function getRepoMilestones (callback) {
 
   // The options msg we send to the client http://mikedeboer.github.io/node-github/#repos.prototype.getFromOrg
   var msg = {
-    user: ORG_NAME,
-    repo: REPO_LIST[repo_index],
+    user: REPO_LIST[repo_index].org,
+    repo: REPO_LIST[repo_index].repo,
     per_page: 100
   }
 
   // To see the data from github: curl -i https://api.github.com/orgs/mozilla/repos?per_page=1
   github.issues.getAllMilestones(msg, function gotFromOrg (err, res) {
     if (err) {
-      console.log(err)
+      console.throw(err)
     }
     // this has loaded the first page of results
     // get the values we want out of this response
@@ -247,8 +257,8 @@ function getSelectedMilestoneValues (ghRes) {
   if (ghRes) {
     ghRes.forEach(function fe_repo (element, index, array) {
       var milestone_line =
-        ORG_NAME + ',' +
-        REPO_LIST[repo_index] + ',' +
+        REPO_LIST[repo_index].org + ',' +
+        REPO_LIST[repo_index].repo + ',' +
         '"' + element.title.replace(/"/g, '&quot;') + '",' +
         element.state + ',' +
         element.open_issues + ',' +
@@ -281,15 +291,15 @@ function getRepoLabels (callback) {
 
   // The options msg we send to the client http://mikedeboer.github.io/node-github/#repos.prototype.getFromOrg
   var msg = {
-    user: ORG_NAME,
-    repo: REPO_LIST[repo_index],
+    user: REPO_LIST[repo_index].org,
+    repo: REPO_LIST[repo_index].repo,
     per_page: 100
   }
 
   // To see the data from github: curl -i https://api.github.com/orgs/mozilla/repos?per_page=1
   github.issues.getLabels(msg, function gotFromOrg (err, res) {
     if (err) {
-      console.log(err)
+      console.throw(err)
     }
     // this has loaded the first page of results
     // get the values we want out of this response
@@ -343,8 +353,8 @@ function getSelectedLabelValues (ghRes) {
   if (ghRes) {
     ghRes.forEach(function fe_repo (element, index, array) {
       var label_line =
-        ORG_NAME + ',' +
-        REPO_LIST[repo_index] + ',' +
+        REPO_LIST[repo_index].org + ',' +
+        REPO_LIST[repo_index].repo + ',' +
         '"' + element.name.replace(/"/g, '&quot;') + '",' +
         element.url +
         '\n'
@@ -363,7 +373,7 @@ function getSelectedLabelValues (ghRes) {
 // ********************************
 
 function getCommentsFromIssue (issue_id) {
-  github.issues.getComments({'user': ORG_NAME, 'repo': REPO_LIST[repo_index], 'number': issue_id, 'per_page': 100}, function cb_1 (err, res) {
+  github.issues.getComments({'user': REPO_LIST[repo_index].org, 'repo': REPO_LIST[repo_index].repo, 'number': issue_id, 'per_page': 100}, function cb_1 (err, res) {
     fetchIssueComments(null, processIssueComments(err, res))
   })
 }
@@ -395,8 +405,8 @@ function processIssueComments (err, res) {
   }
   res.forEach(function fe_repo (element, index, array) {
     var comment_line =
-      ORG_NAME + ',' +
-      REPO_LIST[repo_index] + ',' +
+      REPO_LIST[repo_index].org + ',' +
+      REPO_LIST[repo_index].repo + ',' +
       element.id + ',"' +
       element.user.login + '",' +
       element.updated_at + ',' +
@@ -445,7 +455,7 @@ function getOrgMembers (callback) {
 
   // The options msg we send to the client http://mikedeboer.github.io/node-github/#repos.prototype.getFromOrg
   var msg = {
-    org: ORG_NAME,
+    org: REPO_LIST[repo_index].org,
     type: 'public',
     per_page: 100
   }
@@ -453,7 +463,8 @@ function getOrgMembers (callback) {
   // To see the data from github: curl -i https://api.github.com/orgs/mozilla/repos?per_page=1
   github.orgs.getMembers(msg, function gotFromOrg (err, res) {
     if (err) {
-      console.log(err)
+      console.log(REPO_LIST[repo_index].org)
+      console.trace(err)
     }
     // this has loaded the first page of results
     // get the values we want out of this response
@@ -501,6 +512,7 @@ function getSelectedMemberValues (ghRes) {
   if (ghRes) {
     ghRes.forEach(function fe_repo (element, index, array) {
       var member_line =
+        REPO_LIST[repo_index].org + ',' +
         element.id + ',"' +
         element.login + '",' +
         element.avatar_url + ',' +
@@ -563,7 +575,7 @@ function getRateLeft (callback) {
 
 function saveFileMembers (callback) {
   console.info('All Members processed')
-  var repo_header = 'id,login,avatar_url,type'
+  var repo_header = 'org,id,login,avatar_url,type'
   updateFile(repo_header, csv_members, 'data/members.csv', function cb_update_file (err, res) {
     if (err) {
       console.error('Error updating file: ' + err)
@@ -655,7 +667,7 @@ function truthy (o) {
   return false
 }
 
-function checkFiles (callback) {
+function checkDataFiles (callback) {
   var stats = []
   try {
     stats.push(fs.statSync('data/members.csv'))
@@ -676,6 +688,32 @@ function checkFiles (callback) {
         console.info('Rebulding files...')
         updateAll(function done () {
           console.log('All files rebuilt')
+          callback()
+        })
+      })
+    } else {
+      console.error(e)
+      throw e
+    }
+  }
+}
+
+function checkConfig (callback) {
+  var stats = []
+  try {
+    stats.push(fs.statSync('config.json'))
+    stats.forEach(function fe_repo (element, index, array) {
+      // console.log(element.isFile())
+    })
+    console.log('All files exist')
+    callback()
+  } catch (e) {
+    if (e.code === 'ENOENT') {
+      console.error(e.path + ' not found.')
+      cleanAll(function done () {
+        console.info('Launching setup wizard...')
+        setup(function done () {
+          console.log('Setup complete')
           callback()
         })
       })
@@ -724,6 +762,11 @@ function updateAll (callback) {
   )
 }
 
+function setup (callback) {
+  console.log('Please create config.json')
+  process.exit(1)
+}
+
 module.exports = {
   init: init,
   setToken: setToken,
@@ -734,5 +777,6 @@ module.exports = {
   getRepoMilestones: getRepoMilestones,
   saveAll: saveAll,
   getRateLeft: getRateLeft,
-  checkFiles: checkFiles
+  checkDataFiles: checkDataFiles,
+  checkConfig: checkConfig
 }
