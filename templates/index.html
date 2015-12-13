@@ -1,0 +1,33 @@
+    <div class="container" ng-controller="FrontPageController as dashboardzero">
+
+      <div class="starter-template">
+        <h1>Dashboard Zero</h1>
+        <p class="lead">An engineering dashboard for tracking the numbers we want to keep at zero
+        </p>
+      </div>
+
+      <div class="container-fluid">
+
+	<h2 class="sub-header">Metrics</h2>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>IP Address</th>
+                  <th>Hashrate</th>
+                  <th>Uptime</th>
+                  <th>Last Seen</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="peer in p2pools.peers">
+                  <td><a href="http://{{peer.host}}:9332/">{{peer.host}}</a></td>
+                  <td>{{peer.node_hashrate | hashrate}}</td>
+                  <td>{{peer.uptime / 60 / 60 / 24 | number:2}} Days</td>
+                  <td>{{peer.last_seen * 1000 | date:'yyyy-MM-dd HH:mm:ss Z' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div><!-- /.container -->
