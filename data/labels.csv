@@ -1,4 +1,4 @@
-org,repository,title,state,open_issues,due_on,html_url,url
+org,repository,name,url
 mozilla,login.webmaker.org,"bug",https://api.github.com/repos/mozilla/login.webmaker.org/labels/bug
 mozilla,login.webmaker.org,"duplicate",https://api.github.com/repos/mozilla/login.webmaker.org/labels/duplicate
 mozilla,login.webmaker.org,"enhancement",https://api.github.com/repos/mozilla/login.webmaker.org/labels/enhancement

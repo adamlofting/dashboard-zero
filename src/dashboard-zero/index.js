@@ -599,7 +599,7 @@ function saveFileMilestones (callback) {
 
 function saveFileLabels (callback) {
   console.info('All Labels processed')
-  var repo_header = 'org,repository,title,state,open_issues,due_on,html_url,url'
+  var repo_header = 'org,repository,name,url'
   updateFile(repo_header, csv_labels, 'data/labels.csv', function cb_update_file (err, res) {
     if (err) {
       console.error('Error updating file: ' + err)
