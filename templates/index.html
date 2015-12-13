@@ -1,5 +1,16 @@
     <div class="container" ng-controller="FrontPageController as dashboardzero">
-
+      <modal-dialog show='dashboardzero.myData.modalShown' width='500px' dialog-title='Modal Dialog Title' on-close='logClose()'>
+        <p>This is some html content</p>
+        <p>
+          <label for='hello'>Hello:</label>
+          <input type='text' name='hello' ng-model='myData.hello' />
+        </p>
+        <p>
+          <label for='foo'>Foo:</label>
+          <input type='text' name='foo' ng-model='myData.foo' />
+        </p>
+        <img src='http://upload.wikimedia.org/wikipedia/commons/2/22/Turkish_Van_Cat.jpg' width='300px'/>
+      </modal-dialog>
       <div class="starter-template">
         <h1>Dashboard Zero</h1>
         <p class="lead">An engineering dashboard for tracking the numbers we want to keep at zero
@@ -22,7 +33,7 @@
               <tbody>
                 <tr ng-repeat="peer in p2pools.peers">
                   <td><a href="http://{{peer.host}}:9332/">{{peer.host}}</a></td>
-                  <td>{{peer.node_hashrate | hashrate}}</td>
+                  <td>{{peer.node_hashrate}}</td>
                   <td>{{peer.uptime / 60 / 60 / 24 | number:2}} Days</td>
                   <td>{{peer.last_seen * 1000 | date:'yyyy-MM-dd HH:mm:ss Z' }}</td>
                 </tr>
