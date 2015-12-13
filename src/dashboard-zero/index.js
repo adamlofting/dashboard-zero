@@ -138,6 +138,8 @@ function getSelectedIssueValues (ghRes) {
   if (ghRes) {
     ghRes.forEach(function fe_repo (element, index, array) {
       var issue_line =
+        ORG_NAME + ',' +
+        REPO_LIST[repo_index] + ',' +
         element.id + ',"' +
         element.title.replace(/"/g, '&quot;') + '",' +
         element.created_at + ',' +
@@ -525,6 +527,7 @@ function saveAll (callback) {
             console.log('Done m2: ' + total_milestones)
             console.log('Done c: ' + total_comments)
             console.log('Done l: ' + total_labels)
+            callback()
           })
         })
       })
@@ -592,7 +595,7 @@ function saveFileLabels (callback) {
 
 function saveFileComments (callback) {
   console.info('All Comments processed')
-  var repo_header = 'id,creator,updated_date,html_url,issue_url'
+  var repo_header = 'org,repository,id,creator,updated_date,html_url,issue_url'
   updateFile(repo_header, csv_comments, 'data/comments.csv', function cb_update_file (err, res) {
     if (err) {
       console.error('Error updating file: ' + err)
