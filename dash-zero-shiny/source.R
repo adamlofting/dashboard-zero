@@ -3,6 +3,11 @@
 
 library(jsonlite)
 library(curl)
+
+### AUTH WITH GITHUB API ###
+library(httr)
+
+
 ### WEBMAKER CORE ###
 comments_webmaker_core <- fromJSON("https://api.github.com/repos/mozilla/webmaker-core/issues/comments")
 user <- fromJSON("https://api.github.com/repos/mozilla/webmaker-core/issues/comments")
@@ -45,6 +50,6 @@ write.csv(moz_issues, file = "moz_issues.csv", sep= ",")
 
 ### MOZILLA APPMAKER - COMMITS ###
 mappm_commits <- fromJSON("https://api.github.com/repos/mozilla-appmaker/appmaker/commits?per_page=1")
-
+mappm_commits_1 <- jsonlite::fromJSON(html_url)
 ### MOZILLA APPMAKER - PULLS ###
 mappm_pulls <- fromJSON("https://api.github.com/repos/mozilla-appmaker/appmaker/pulls?per_page=1")
