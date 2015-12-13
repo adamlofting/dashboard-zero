@@ -1,0 +1,12 @@
+---
+title: "dashboard-zero"
+author: "gsilvapt"
+date: "December 13, 2015"
+output: html_document
+runtime: shiny
+---
+
+```{r, echo=FALSE}
+library(shinyapps)
+shinyapps::deployApp("~/Documents/dashboard-zero/dash-zero-shiny")
+```
