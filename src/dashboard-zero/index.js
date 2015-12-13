@@ -253,7 +253,7 @@ function getSelectedMilestoneValues (ghRes) {
         element.state + ',' +
         element.open_issues + ',' +
         element.due_on + ',' +
-        '"' + element.html_url.replace(/"/g, '&quot;').replace(/,/g, '%44') + '",' +
+        '"' + element.html_url.replace(/"/g, '&quot;').replace(/,/g, '%2C') + '",' +
         element.url +
         '\n'
 
