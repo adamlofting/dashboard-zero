@@ -1,7 +1,7 @@
 org,repository,title,state,open_issues,due_on,html_url,url
 mozilla,login.webmaker.org,"March 13, 2015",open,1,2015-03-13T07:00:00Z,"https://github.com/mozilla/login.webmaker.org/milestones/March%2013%2C%202015",https://api.github.com/repos/mozilla/login.webmaker.org/milestones/2
-mozilla,webmaker-core,"1.5.4",open,4,2015-12-04T05:00:00Z,"https://github.com/mozilla/webmaker-core/milestones/1.5.4",https://api.github.com/repos/mozilla/webmaker-core/milestones/51
-mozilla,webmaker-core,"1.6.0",open,35,2015-12-18T05:00:00Z,"https://github.com/mozilla/webmaker-core/milestones/1.6.0",https://api.github.com/repos/mozilla/webmaker-core/milestones/53
+mozilla,webmaker-core,"1.5.4",open,3,2015-12-04T05:00:00Z,"https://github.com/mozilla/webmaker-core/milestones/1.5.4",https://api.github.com/repos/mozilla/webmaker-core/milestones/51
+mozilla,webmaker-core,"1.6.0",open,36,2015-12-18T05:00:00Z,"https://github.com/mozilla/webmaker-core/milestones/1.6.0",https://api.github.com/repos/mozilla/webmaker-core/milestones/53
 mozilla,webmaker-core,"Ideation",open,13,2016-01-05T05:00:00Z,"https://github.com/mozilla/webmaker-core/milestones/Ideation",https://api.github.com/repos/mozilla/webmaker-core/milestones/50
 mozilla,webmaker-core,"Analytics",open,7,2016-01-15T05:00:00Z,"https://github.com/mozilla/webmaker-core/milestones/Analytics",https://api.github.com/repos/mozilla/webmaker-core/milestones/52
 mozilla,webmaker-core,"1.7.0",open,20,2016-01-15T05:00:00Z,"https://github.com/mozilla/webmaker-core/milestones/1.7.0",https://api.github.com/repos/mozilla/webmaker-core/milestones/54

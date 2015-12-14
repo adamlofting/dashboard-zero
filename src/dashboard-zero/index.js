@@ -182,6 +182,12 @@ function getRepoIssues (callback) {
 function getSelectedIssueValues (ghRes) {
   if (ghRes) {
     ghRes.forEach(function fe_repo (element, index, array) {
+      // Check if PR
+      var is_pr = false
+      if (element.pull_request) {
+        is_pr = 'true'
+      }
+
       var issue_line =
         REPO_LIST[repo_index].org + ',' +
         REPO_LIST[repo_index].repo + ',' +
@@ -189,18 +195,30 @@ function getSelectedIssueValues (ghRes) {
         element.title.replace(/"/g, '&quot;') + '",' +
         element.created_at + ',' +
         element.updated_at + ',' +
-        element.comments + ','
-      if (element.pull_request) {
-        issue_line += 'true' + ','
-      } else {
-        issue_line += 'false' + ','
-      }
-      issue_line += element.html_url + ',' +
+        element.comments + ',' +
+        is_pr + ',' + ',' +
+        element.html_url + ',' +
         element.url +
         '\n'
 
       // Add to list to be saved to csv
       csv_issues += issue_line
+
+      issue_line = {
+        'org': REPO_LIST[repo_index].org,
+        'repository': REPO_LIST[repo_index].repo,
+        'id': element.id,
+        'title': element.title.replace(/"/g, '&quot;'),
+        'created_at': element.created_at,
+        'updated_at': element.updated_at,
+        'comments': element.comments,
+        'is_pullrequest': is_pr,
+        'html_url': element.html_url.replace(/"/g, '&quot;').replace(/,/g, '%2C'),
+        'url': element.url
+      }
+
+      // Add to list to be saved to csv
+      json_issues.push(issue_line)
 
       // Process comments
       getCommentsFromIssue(element.number)
@@ -638,7 +656,11 @@ function saveFileIssues (callback) {
       console.error('Error updating file: ' + err)
       process.exit(1)
     }
-    callback()
+    fs.writeFile('data/issues.json', JSON.stringify(json_issues), function (err) {
+      if (err) callback(err)
+      // console.info('It\'s saved!')
+      callback(null)
+    })
   })
 }
 
@@ -717,16 +739,20 @@ function truthy (o) {
 }
 
 function checkDataFiles (callback) {
+  var files = [
+    'members.csv',
+    'issues.csv', 'issues.json',
+    'milestones.csv', 'milestones.json',
+    'comments.csv',
+    'labels.csv',
+    'stats.json'
+  ]
   var stats = []
   try {
-    stats.push(fs.statSync('data/members.csv'))
-    stats.push(fs.statSync('data/issues.csv'))
-    stats.push(fs.statSync('data/milestones.csv'))
-    stats.push(fs.statSync('data/milestones.json'))
-    stats.push(fs.statSync('data/comments.csv'))
-    stats.push(fs.statSync('data/labels.csv'))
-    stats.push(fs.statSync('data/stats.json'))
-    stats.forEach(function fe_repo (element, index, array) {
+    files.forEach(function fe_file (element, index, array) {
+      stats.push(fs.statSync('data/' + element))
+    })
+    stats.forEach(function fe_file (element, index, array) {
       // console.log(element.isFile())
     })
     callback()
@@ -775,13 +801,15 @@ function checkConfig (callback) {
 function cleanAll (callback) {
   fs.unlink('data/members.csv', function done () {
     fs.unlink('data/issues.csv', function done () {
-      fs.unlink('data/labels.csv', function done () {
-        fs.unlink('data/milestones.csv', function done () {
-          fs.unlink('data/milestones.json', function done () {
-            fs.unlink('data/comments.csv', function done () {
-              fs.unlink('data/stats.json', function done () {
-                console.log('All files cleaned')
-                callback()
+      fs.unlink('data/issues.json', function done () {
+        fs.unlink('data/labels.csv', function done () {
+          fs.unlink('data/milestones.csv', function done () {
+            fs.unlink('data/milestones.json', function done () {
+              fs.unlink('data/comments.csv', function done () {
+                fs.unlink('data/stats.json', function done () {
+                  console.log('All files cleaned')
+                  callback()
+                })
               })
             })
           })
