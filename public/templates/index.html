@@ -12,18 +12,16 @@
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th>IP Address</th>
-                  <th>Hashrate</th>
-                  <th>Uptime</th>
-                  <th>Last Seen</th>
+                  <th>Name</th>
+                  <th>Due on</th>
+                  <th>Open Issues</th>
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="peer in dashboardzero.peers">
-                  <td><a href="{{peer.html_url}}">{{peer.title}}</a></td>
-                  <td>{{peer.node_hashrate}}</td>
-                  <td>{{peer.uptime / 60 / 60 / 24 | number:2}} Days</td>
-                  <td>{{peer.last_seen * 1000 | date:'yyyy-MM-dd HH:mm:ss Z' }}</td>
+                <tr ng-repeat="milestone in dashboardzero.milestones | filter:'webmaker-core' | orderBy:'due_on'">
+                  <td><a href="{{milestone.html_url}}">{{milestone.title}}</a></td>
+                  <td>{{milestone.due_on | date:'yyyy-MM-dd HH:mm:ss Z' }}</td>
+                  <td>{{milestone.open_issues}}</td>
                 </tr>
               </tbody>
             </table>

@@ -32,11 +32,11 @@
     var frontpage = this
     frontpage.scope = $scope
 
-    frontpage.peers = {}
+    frontpage.milestones = {}
 
     function updateData (frontpage) {
       $http.get('/milestones.json').then(function (r) {
-          frontpage.peers = r.data
+          frontpage.milestones = r.data
       })
     }
     //
