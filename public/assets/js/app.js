@@ -6,15 +6,15 @@
   .config(['$routeProvider', function ($routeProvider) {
     $routeProvider
       .when('/about', {
-        templateUrl: '/templates/about.html',
+        templateUrl: 'templates/about.html',
         controller: 'AboutController'
       })
       .when('/contact', {
-        templateUrl: '/templates/contact.html',
+        templateUrl: 'templates/contact.html',
         controller: 'ContactController'
       })
       .otherwise({
-        templateUrl: '/templates/index.html',
+        templateUrl: 'templates/index.html',
         controller: 'FrontPageController'
       })
   }])
@@ -39,43 +39,19 @@
       frontpage.myData.modalShown = true
     }
 
-    frontpage.data = {}
+    frontpage.peers = {}
 
-    // function updateData (frontpage) {
-    //   var req = {
-    //     method: 'GET',
-    //     url: '/issues.csv'
-    //     // headers: {
-    //     //   'Accept': 'application/json'
-    //     // }
-    //   }
-    //   try {
-    //     $http(req).then(function cb_response (r) {
-    //       try {
-    //         // Received data are not parsed
-    //         console.dir(r)
-    //         frontpage.data.foo = r.last_updated
-    //       } catch (e) {
-    //         console.log('moo')
-    //         throw e
-    //       }
-    //       if (!frontpage.data.last_updates) {
-    //         frontpage.myData.modalShown = true
-    //       } else {
-    //         console.log(frontpage.data)
-    //       }
-    //     })
-    //   } catch (e) {
-    //     console.log('moo2')
-    //     throw e
-    //   }
-    // }
-
-    // setInterval(function (scope) {
-    //   updateData(frontpage)
-    // }, 5000)
-
-    // updateData(frontpage)
+    function updateData (frontpage) {
+      $http.get('/milestones.json').then(function (r) {
+          frontpage.peers = r.data
+      })
+    }
+    //
+    // // setInterval(function (scope) {
+    // //   updateData(frontpage)
+    // // }, 5000)
+    //
+    updateData(frontpage)
   }])
 })();
 

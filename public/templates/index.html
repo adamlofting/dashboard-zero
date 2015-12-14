@@ -31,8 +31,8 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="peer in p2pools.peers">
-                  <td><a href="http://{{peer.host}}:9332/">{{peer.host}}</a></td>
+                <tr ng-repeat="peer in dashboardzero.peers">
+                  <td><a href="{{peer.html_url}}">{{peer.title}}</a></td>
                   <td>{{peer.node_hashrate}}</td>
                   <td>{{peer.uptime / 60 / 60 / 24 | number:2}} Days</td>
                   <td>{{peer.last_seen * 1000 | date:'yyyy-MM-dd HH:mm:ss Z' }}</td>
