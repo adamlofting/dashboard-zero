@@ -1,7 +1,7 @@
 /* global angular */
 // Dashboard Zero
 (function () {
-  angular.module('dashboardzero', ['dashboardzero-filters', 'dashboardzero-frontpage', 'dashboardzero-about', 'dashboardzero-contact', 'ngRoute', 'ngModal'])
+  angular.module('dashboardzero', ['dashboardzero-filters', 'dashboardzero-frontpage', 'dashboardzero-about', 'dashboardzero-contact', 'ngRoute'])
 
   .config(['$routeProvider', function ($routeProvider) {
     $routeProvider
@@ -31,13 +31,6 @@
   .controller('FrontPageController', ['$http', '$scope', function ($http, $scope) {
     var frontpage = this
     frontpage.scope = $scope
-
-    frontpage.myData = {
-      modalShown: false
-    }
-    $scope.logClose = function () {
-      frontpage.myData.modalShown = true
-    }
 
     frontpage.peers = {}
 
