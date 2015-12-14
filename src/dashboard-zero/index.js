@@ -17,6 +17,13 @@ var csv_members = []
 var csv_milestones = []
 var csv_labels = []
 
+// The lists in json form
+var json_issues = []
+var json_comments = []
+var json_members = []
+var json_milestones = []
+var json_labels = []
+
 var repo_index = 0
 
 var CONFIG = []
@@ -269,6 +276,20 @@ function getSelectedMilestoneValues (ghRes) {
 
       // Add to list to be saved to csv
       csv_milestones += milestone_line
+
+      milestone_line = {
+        'org': REPO_LIST[repo_index].org,
+        'repository': REPO_LIST[repo_index].repo,
+        'title': element.title.replace(/"/g, '&quot;'),
+        'state': element.state,
+        'open_issues': element.open_issues,
+        'due_on': element.due_on,
+        'html_url': element.html_url.replace(/"/g, '&quot;').replace(/,/g, '%2C'),
+        'url': element.url
+      }
+
+      // Add to list to be saved to csv
+      json_milestones.push(milestone_line)
 
       total_milestones++
     })
@@ -605,7 +626,11 @@ function saveFileMilestones (callback) {
       console.error('Error updating file: ' + err)
       process.exit(1)
     }
-    callback()
+    fs.writeFile('data/milestones.json', JSON.stringify(json_milestones), function (err) {
+      if (err) callback(err)
+      // console.info('It\'s saved!')
+      callback(null)
+    })
   })
 }
 
@@ -673,6 +698,7 @@ function checkDataFiles (callback) {
     stats.push(fs.statSync('data/members.csv'))
     stats.push(fs.statSync('data/issues.csv'))
     stats.push(fs.statSync('data/milestones.csv'))
+    stats.push(fs.statSync('data/milestones.json'))
     stats.push(fs.statSync('data/comments.csv'))
     stats.push(fs.statSync('data/labels.csv'))
     stats.push(fs.statSync('data/stats.json'))
@@ -727,10 +753,12 @@ function cleanAll (callback) {
     fs.unlink('data/issues.csv', function done () {
       fs.unlink('data/labels.csv', function done () {
         fs.unlink('data/milestones.csv', function done () {
-          fs.unlink('data/comments.csv', function done () {
-            fs.unlink('data/stats.json', function done () {
-              console.log('All files cleaned')
-              callback()
+          fs.unlink('data/milestones.json', function done () {
+            fs.unlink('data/comments.csv', function done () {
+              fs.unlink('data/stats.json', function done () {
+                console.log('All files cleaned')
+                callback()
+              })
             })
           })
         })
