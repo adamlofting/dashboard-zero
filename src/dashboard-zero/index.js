@@ -679,7 +679,6 @@ function checkDataFiles (callback) {
     stats.forEach(function fe_repo (element, index, array) {
       // console.log(element.isFile())
     })
-    console.log('All files exist')
     callback()
   } catch (e) {
     if (e.code === 'ENOENT') {
@@ -705,7 +704,6 @@ function checkConfig (callback) {
     stats.forEach(function fe_repo (element, index, array) {
       // console.log(element.isFile())
     })
-    console.log('All files exist')
     callback()
   } catch (e) {
     if (e.code === 'ENOENT') {

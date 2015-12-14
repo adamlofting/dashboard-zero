@@ -28,7 +28,7 @@ function POST () {
         // app.use(express.static('data'))
 
         app.listen(3000)
-        console.log('Server now running on http://mc.drazisil.com:3000')
+        console.log('Server now running on http://localhost:3000')
       })
     })
   })
