@@ -1,6 +1,8 @@
 # dashboard-zero
 An engineering dashboard for tracking the numbers we want to keep at zero.
 
+See the [docs](./docs/index.md) directory for instructions
+
 This is a new project. Please jump into the [issues](https://github.com/drazisil/dashboard-zero/issues) to get involved in the design and planning phase.
 
 ## Project Vision
