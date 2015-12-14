@@ -36,7 +36,7 @@
 
     function updateData (frontpage) {
       $http.get('/milestones.json').then(function (r) {
-          frontpage.milestones = r.data
+        frontpage.milestones = r.data
       })
     }
     //
@@ -56,6 +56,21 @@
     return function (input) {
       var str = input.replace(/[^\x20-\x7E]/g, '')
       return str
+    }
+  })
+
+  .filter('reverse', function () {
+    return function (input, uppercase) {
+      input = input || ''
+      var out = ''
+      for (var i = 0; i < input.length; i++) {
+        out = input.charAt(i) + out
+      }
+      // conditional based on optional argument
+      if (uppercase) {
+        out = out.toUpperCase()
+      }
+      return out
     }
   })
 })();
