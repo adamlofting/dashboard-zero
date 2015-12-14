@@ -1,5 +1,7 @@
 var async = require('async')
 var fs = require('fs')
+var express = require('express')
+var app = express()
 var GitHubApi = require('github')
 
 // Holds the totals
@@ -29,6 +31,7 @@ var repo_index = 0
 var CONFIG = []
 var github
 var REPO_LIST
+var SERVER_PORT
 
 var json_stats = []
 
@@ -54,6 +57,7 @@ function init (callback) {
       })
       CONFIG = config
       REPO_LIST = config['repo_list']
+      SERVER_PORT = config['server_port'] || 3000
       total_repositories = REPO_LIST.length
       callback()
     }
@@ -78,6 +82,26 @@ function setToken (callback) {
     console.error('GutHub Login: No Token')
     callback()
   }
+}
+
+function startServer (callback) {
+  // Start web server
+  console.log('Starting webserver...')
+  // app.get('/', function (req, res) {
+  //   res.send('Hello World')
+  // })
+  // app.use(function (req, res, next) {
+  //   res.header('Access-Control-Allow-Origin', '*')
+  //   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+  //   next()
+  // })
+  app.use(express.static(__dirname + '/public'))
+  app.use(express.static(__dirname + '/data'))
+
+  // app.use(express.static('data'))
+
+  app.listen(SERVER_PORT)
+  console.log('Server now running on http://localhost:' + SERVER_PORT)
 }
 
 // ********************************
@@ -804,5 +828,6 @@ module.exports = {
   saveAll: saveAll,
   getRateLeft: getRateLeft,
   checkDataFiles: checkDataFiles,
-  checkConfig: checkConfig
+  checkConfig: checkConfig,
+  startServer: startServer
 }
