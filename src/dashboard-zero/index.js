@@ -3,6 +3,7 @@ var fs = require('fs')
 var express = require('express')
 var app = express()
 var GitHubApi = require('github')
+var sqlite3 = require('sqlite3').verbose();
 
 // Holds the totals
 var total_repositories = 0
@@ -26,7 +27,15 @@ var json_members = []
 var json_milestones = []
 var json_labels = []
 
+// Index of the repo currently being processed
 var repo_index = 0
+
+// Database setup
+var dbComments = new sqlite3.Database('data/comments.db')
+var dbIssues = new sqlite3.Database('data/issues.db')
+var dbLabels = new sqlite3.Database('data/labels.db')
+var dbMembers = new sqlite3.Database('data/members.db')
+var dbMilestones = new sqlite3.Database('data/milestones.db')
 
 var CONFIG = []
 var github
@@ -84,6 +93,10 @@ function setToken (callback) {
   }
 }
 
+
+/*
+* Start the expressjs server
+*/
 function startServer (callback) {
   // Start web server
   console.log('Starting webserver...')
@@ -103,6 +116,12 @@ function startServer (callback) {
   app.listen(SERVER_PORT)
   console.log('Server now running on http://localhost:' + SERVER_PORT)
 }
+
+// *****************************
+// DB
+// ****************************
+
+
 
 // ********************************
 // ISSUES
