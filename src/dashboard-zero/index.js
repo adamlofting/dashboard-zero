@@ -3,7 +3,7 @@ var fs = require('fs')
 var express = require('express')
 var app = express()
 var GitHubApi = require('github')
-var sqlite3 = require('sqlite3').verbose();
+var sqlite3 = require('sqlite3').verbose()
 
 // Holds the totals
 var total_repositories = 0
@@ -31,11 +31,7 @@ var json_labels = []
 var repo_index = 0
 
 // Database setup
-var dbComments = new sqlite3.Database('data/comments.db')
-var dbIssues = new sqlite3.Database('data/issues.db')
-var dbLabels = new sqlite3.Database('data/labels.db')
-var dbMembers = new sqlite3.Database('data/members.db')
-var dbMilestones = new sqlite3.Database('data/milestones.db')
+var dbDashZero = new sqlite3.Database('data/dash_zero.db')
 
 var CONFIG = []
 var github
@@ -93,7 +89,6 @@ function setToken (callback) {
   }
 }
 
-
 /*
 * Start the expressjs server
 */
@@ -121,7 +116,26 @@ function startServer (callback) {
 // DB
 // ****************************
 
+function updateDbMilestones (callback) {
+  dbDashZero.serialize(function () {
+    dbDashZero.run('CREATE TABLE IF NOT EXISTS milestones (org TEXT, repository TEXT, title TEXT, open_issues INTEGER, due_on TEXT, html_url TEXT, url TEXT)')
 
+    var stmt = dbDashZero.prepare('INSERT INTO milestones (org,repository,title,open_issues,due_on,html_url,url) VALUES (?,?,?,?,?,?,?)')
+    json_milestones.forEach(function fe_db_milestones (element, index, array) {
+      var e = element
+      stmt.run(e.org, e.repository, e.title, e.open_issues, e.due_on, e.html_url, e.url)
+    })
+    stmt.finalize()
+
+    dbDashZero.each('SELECT title,due_on FROM milestones', function (err, row) {
+      if (err) {
+        throw err
+      }
+      console.log(row.title + ': ' + row.due_on)
+    })
+  })
+  callback()
+}
 
 // ********************************
 // ISSUES
@@ -843,12 +857,14 @@ function updateAll (callback) {
     function cb_setTokenIssues (status) {
       getOrgMembers(function done () {
         getRepoMilestones(function done () {
-          getRepoLabels(function done () {
-            getRepoIssues(function done () {
-              saveAll(function done () {
-                getRateLeft(function done (rateLeft) {
-                  console.log(rateLeft)
-                  callback()
+          updateDbMilestones(function done () {
+            getRepoLabels(function done () {
+              getRepoIssues(function done () {
+                saveAll(function done () {
+                  getRateLeft(function done (rateLeft) {
+                    console.log(rateLeft)
+                    callback()
+                  })
                 })
               })
             })
