@@ -116,23 +116,40 @@ function startServer (callback) {
 // DB
 // ****************************
 
+function updateDbComments (callback) {
+  dbDashZero.serialize(function () {
+    dbDashZero.run('DROP TABLE IF EXISTS comments')
+    dbDashZero.run('CREATE TABLE IF NOT EXISTS comments (org TEXT, repository TEXT, id INTEGER, creator TEXT, updated_date TEXT, html_url TEXT, issue_url TEXT)')
+
+    try {
+      var stmt = dbDashZero.prepare('INSERT INTO comments   (org,repository,id,creator,updated_date,html_url,issue_url) VALUES (?,?,?,?,?,?,?)')
+      json_comments.forEach(function fe_db_comments (element, index, array) {
+        var e = element
+        stmt.run(e.org, e.repository, e.id, e.creator, e.updated_date, e.html_url, e.issue_url)
+      })
+      stmt.finalize()
+    } catch (e) {
+      throw e
+    }
+  })
+  callback()
+}
+
 function updateDbMilestones (callback) {
   dbDashZero.serialize(function () {
-    dbDashZero.run('CREATE TABLE IF NOT EXISTS milestones (org TEXT, repository TEXT, title TEXT, open_issues INTEGER, due_on TEXT, html_url TEXT, url TEXT)')
+    try {
+      dbDashZero.run('DROP TABLE IF EXISTS milestones')
+      dbDashZero.run('CREATE TABLE IF NOT EXISTS milestones (org TEXT, repository TEXT, title TEXT, open_issues INTEGER, due_on TEXT, html_url TEXT, url TEXT)')
 
-    var stmt = dbDashZero.prepare('INSERT INTO milestones (org,repository,title,open_issues,due_on,html_url,url) VALUES (?,?,?,?,?,?,?)')
-    json_milestones.forEach(function fe_db_milestones (element, index, array) {
-      var e = element
-      stmt.run(e.org, e.repository, e.title, e.open_issues, e.due_on, e.html_url, e.url)
-    })
-    stmt.finalize()
-
-    dbDashZero.each('SELECT title,due_on FROM milestones', function (err, row) {
-      if (err) {
-        throw err
-      }
-      console.log(row.title + ': ' + row.due_on)
-    })
+      var stmt = dbDashZero.prepare('INSERT INTO milestones (org,repository,title,open_issues,due_on,html_url,url) VALUES (?,?,?,?,?,?,?)')
+      json_milestones.forEach(function fe_db_milestones (element, index, array) {
+        var e = element
+        stmt.run(e.org, e.repository, e.title, e.creator, e.updated_date, e.html_url, e.url)
+      })
+      stmt.finalize()
+    } catch (e) {
+      throw e
+    }
   })
   callback()
 }
@@ -500,20 +517,38 @@ function processIssueComments (err, res) {
     }
   }
   res.forEach(function fe_repo (element, index, array) {
-    var comment_line =
-      REPO_LIST[repo_index].org + ',' +
-      REPO_LIST[repo_index].repo + ',' +
-      element.id + ',"' +
-      element.user.login + '",' +
-      element.updated_at + ',' +
-      element.html_url + ',' +
-      element.issue_url +
-      '\n'
+    try {
+      var comment_line =
+        REPO_LIST[repo_index].org + ',' +
+        REPO_LIST[repo_index].repo + ',' +
+        element.id + ',"' +
+        element.user.login + '",' +
+        element.updated_at + ',' +
+        element.html_url + ',' +
+        element.issue_url +
+        '\n'
 
-    // Add to list to be saved to csv
-    csv_comments += comment_line
+      // Add to list to be saved to csv
+      csv_comments += comment_line
 
-    total_comments++
+      comment_line = {
+        'org': REPO_LIST[repo_index].org,
+        'repository': REPO_LIST[repo_index].repo,
+        'id': element.id,
+        'creator': element.user.login.replace(/"/g, '&quot;'),
+        'updated_date': element.updated_at,
+        'html_url': element.html_url.replace(/"/g, '&quot;').replace(/,/g, '%2C'),
+        'issue_url': element.issue_url.replace(/"/g, '&quot;').replace(/,/g, '%2C')
+      }
+
+      // Add to list to be saved to csv
+      json_comments.push(comment_line)
+
+      total_comments++
+    } catch (e) {
+      console.dir(element)
+      throw e
+    }
   })
   return res
 }
@@ -645,11 +680,11 @@ function saveAll (callback) {
             }
             json_stats = JSON.stringify(stats)
             saveFileStats(function done () {
-              console.log('Done m: ' + total_members)
-              console.log('Done i: ' + total_issues)
-              console.log('Done m2: ' + total_milestones)
-              console.log('Done c: ' + total_comments)
-              console.log('Done l: ' + total_labels)
+              console.log('Done m: ' + total_members + ', ' + json_members.length)
+              console.log('Done i: ' + total_issues + ', ' + json_issues.length)
+              console.log('Done m2: ' + total_milestones + ', ' + json_milestones.length)
+              console.log('Done c: ' + total_comments + ', ' + json_comments.length)
+              console.log('Done l: ' + total_labels + ', ' + json_labels.length)
               callback()
             })
           })
@@ -788,7 +823,19 @@ function checkDataFiles (callback) {
     stats.forEach(function fe_file (element, index, array) {
       // console.log(element.isFile())
     })
-    callback()
+    var args = process.argv
+    if (args[2] === 'rebuild') {
+      // Rebuild requested
+      cleanAll(function done () {
+        console.info('Rebulding files...')
+        updateAll(function done () {
+          console.log('All files rebuilt')
+          callback()
+        })
+      })
+    } else {
+      callback()
+    }
   } catch (e) {
     if (e.code === 'ENOENT') {
       console.error(e.path + ' not found.')
@@ -860,10 +907,12 @@ function updateAll (callback) {
           updateDbMilestones(function done () {
             getRepoLabels(function done () {
               getRepoIssues(function done () {
-                saveAll(function done () {
-                  getRateLeft(function done (rateLeft) {
-                    console.log(rateLeft)
-                    callback()
+                updateDbComments(function done () {
+                  saveAll(function done () {
+                    getRateLeft(function done (rateLeft) {
+                      console.log(rateLeft)
+                      callback()
+                    })
                   })
                 })
               })

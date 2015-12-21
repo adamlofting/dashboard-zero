@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "rebuild": "node server.js rebuild",
     "test": "gulp dev"
   },
   "repository": {
