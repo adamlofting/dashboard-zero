@@ -89,6 +89,10 @@ function setToken (callback) {
   }
 }
 
+// *************
+// WEB
+// *************
+
 /*
 * Start the expressjs server
 */
@@ -118,40 +122,78 @@ function startServer (callback) {
 
 function updateDbComments (callback) {
   dbDashZero.serialize(function () {
-    dbDashZero.run('DROP TABLE IF EXISTS comments')
-    dbDashZero.run('CREATE TABLE IF NOT EXISTS comments (org TEXT, repository TEXT, id INTEGER, creator TEXT, updated_date TEXT, html_url TEXT, issue_url TEXT)')
-
+    console.info('Saving issue comments to database...')
     try {
-      var stmt = dbDashZero.prepare('INSERT INTO comments   (org,repository,id,creator,updated_date,html_url,issue_url) VALUES (?,?,?,?,?,?,?)')
+      dbDashZero.run('CREATE TABLE IF NOT EXISTS comments (org TEXT, repository TEXT, id INTEGER, creator TEXT, updated_date TEXT, html_url TEXT, issue_url TEXT, PRIMARY KEY(id))')
+
+      var stmt = dbDashZero.prepare('REPLACE INTO comments   (org,repository,id,creator,updated_date,html_url,issue_url) VALUES (?,?,?,?,?,?,?)')
       json_comments.forEach(function fe_db_comments (element, index, array) {
         var e = element
         stmt.run(e.org, e.repository, e.id, e.creator, e.updated_date, e.html_url, e.issue_url)
       })
-      stmt.finalize()
+      stmt.finalize(callback)
     } catch (e) {
+      console.trace(e)
       throw e
     }
   })
-  callback()
+}
+
+function updateDbIssues (callback) {
+  dbDashZero.serialize(function () {
+    console.info('Saving issues to database...')
+    try {
+      dbDashZero.run('CREATE TABLE IF NOT EXISTS issues (org TEXT, repository TEXT, title TEXT, created_date TEXT, comments_count INTEGER, is_pullrequest TEXT, html_url TEXT, url TEXT, PRIMARY KEY(url))')
+
+      var stmt = dbDashZero.prepare('REPLACE INTO issues   (org,repository,title,created_date,comments_count,is_pullrequest,html_url,url) VALUES (?,?,?,?,?,?,?,?)')
+      json_issues.forEach(function fe_db_issues (element, index, array) {
+        var e = element
+        stmt.run(e.org, e.repository, e.title, e.created_at, e.comments, e.is_pullrequest, e.html_url, e.url)
+      })
+      stmt.finalize(callback)
+    } catch (e) {
+      console.trace(e)
+      throw e
+    }
+  })
+}
+
+function updateDbMembers (callback) {
+  dbDashZero.serialize(function () {
+    console.info('Saving members to database...')
+    try {
+      dbDashZero.run('CREATE TABLE IF NOT EXISTS members (org TEXT, id INTEGER, login TEXT, avatar_url TEXT, type TEXT, PRIMARY KEY(id))')
+
+      var stmt = dbDashZero.prepare('INSERT INTO members (org,id,login,avatar_url,type) VALUES (?,?,?,?,?)')
+      json_members.forEach(function fe_db_members (element, index, array) {
+        var e = element
+        stmt.run(e.org, e.id, e.login, e.avatar_url, e.type)
+      })
+      stmt.finalize(callback)
+    } catch (e) {
+      console.trace(e)
+      throw e
+    }
+  })
 }
 
 function updateDbMilestones (callback) {
   dbDashZero.serialize(function () {
+    console.info('Saving milestones to database...')
     try {
-      dbDashZero.run('DROP TABLE IF EXISTS milestones')
-      dbDashZero.run('CREATE TABLE IF NOT EXISTS milestones (org TEXT, repository TEXT, title TEXT, open_issues INTEGER, due_on TEXT, html_url TEXT, url TEXT)')
+      dbDashZero.run('CREATE TABLE IF NOT EXISTS milestones (org TEXT, repository TEXT, title TEXT, state TEXT, open_issues INTEGER, due_on TEXT, html_url TEXT, url TEXT, PRIMARY KEY(url))')
 
-      var stmt = dbDashZero.prepare('INSERT INTO milestones (org,repository,title,open_issues,due_on,html_url,url) VALUES (?,?,?,?,?,?,?)')
+      var stmt = dbDashZero.prepare('REPLACE INTO milestones (org,repository,title,state,open_issues,due_on,html_url,url) VALUES (?,?,?,?,?,?,?,?)')
       json_milestones.forEach(function fe_db_milestones (element, index, array) {
         var e = element
-        stmt.run(e.org, e.repository, e.title, e.creator, e.updated_date, e.html_url, e.url)
+        stmt.run(e.org, e.repository, e.title, e.state, e.open_issues, e.due_on, e.html_url, e.url)
       })
-      stmt.finalize()
+      stmt.finalize(callback)
     } catch (e) {
+      console.trace(e)
       throw e
     }
   })
-  callback()
 }
 
 // ********************************
@@ -233,7 +275,7 @@ function getSelectedIssueValues (ghRes) {
   if (ghRes) {
     ghRes.forEach(function fe_repo (element, index, array) {
       // Check if PR
-      var is_pr = false
+      var is_pr = 'false'
       if (element.pull_request) {
         is_pr = 'true'
       }
@@ -653,6 +695,18 @@ function getSelectedMemberValues (ghRes) {
       // Add to list to be saved to csv
       csv_members += member_line
 
+      member_line = {
+        'org': REPO_LIST[repo_index].org,
+        'id': element.id,
+        'login': element.login,
+        'due_on': element.due_on,
+        'avatar_url': element.avatar_url.replace(/"/g, '&quot;').replace(/,/g, '%2C'),
+        'type': element.type
+      }
+
+      // Add to list to be saved to csv
+      json_members.push(member_line)
+
       total_members++
     })
   }
@@ -903,15 +957,19 @@ function updateAll (callback) {
   setToken(
     function cb_setTokenIssues (status) {
       getOrgMembers(function done () {
-        getRepoMilestones(function done () {
-          updateDbMilestones(function done () {
-            getRepoLabels(function done () {
-              getRepoIssues(function done () {
-                updateDbComments(function done () {
-                  saveAll(function done () {
-                    getRateLeft(function done (rateLeft) {
-                      console.log(rateLeft)
-                      callback()
+        updateDbMembers(function done () {
+          getRepoMilestones(function done () {
+            updateDbMilestones(function done () {
+              getRepoLabels(function done () {
+                getRepoIssues(function done () {
+                  updateDbIssues(function done () {
+                    updateDbComments(function done () {
+                      saveAll(function done () {
+                        getRateLeft(function done (rateLeft) {
+                          console.log(rateLeft)
+                          callback()
+                        })
+                      })
                     })
                   })
                 })
