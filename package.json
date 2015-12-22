@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "getRate": "node server.js getRate",
     "rebuild": "node server.js rebuild",
     "test": "gulp dev"
   },

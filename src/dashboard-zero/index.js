@@ -26,6 +26,7 @@ var json_comments = []
 var json_members = []
 var json_milestones = []
 var json_labels = []
+var json_stats = []
 
 // Index of the repo currently being processed
 var repo_index = 0
@@ -37,8 +38,6 @@ var CONFIG = []
 var github
 var REPO_LIST
 var SERVER_PORT
-
-var json_stats = []
 
 function init (callback) {
   fs.readFile('config.json', function (err, data) {
@@ -294,10 +293,30 @@ function dbUpdateLabels (callback) {
     try {
       dbDashZero.run('CREATE TABLE IF NOT EXISTS labels (org TEXT, repository TEXT, name TEXT, url TEXT, PRIMARY KEY(url))')
 
-      var stmt = dbDashZero.prepare('REPLACE INTO milestones (org,repository,name,url) VALUES (?,?,?,?)')
+      var stmt = dbDashZero.prepare('REPLACE INTO labels (org,repository,name,url) VALUES (?,?,?,?)')
       json_milestones.forEach(function fe_db_milestones (element, index, array) {
         var e = element
         stmt.run(e.org, e.repository, e.name, e.url)
+      })
+      stmt.finalize(callback)
+    } catch (e) {
+      console.trace(e)
+      throw e
+    }
+  })
+}
+
+function dbUpdateStats (callback) {
+  dbDashZero.serialize(function () {
+    console.info('Saving stats to database...')
+    try {
+      dbDashZero.run('DROP TABLE IF EXISTS stats')
+      dbDashZero.run('CREATE TABLE IF NOT EXISTS stats (last_updated TEXT, total_repositories INTEGER, total_members INTEGER, total_issues INTEGER, total_comments INTEGER, total_milestones INTEGER, total_labels INTEGER)')
+
+      var stmt = dbDashZero.prepare('REPLACE INTO stats (last_updated,total_repositories,total_members,total_issues,total_comments,total_milestones,total_labels) VALUES (?,?,?,?,?,?,?)')
+      json_stats.forEach(function fe_db_stats (element, index, array) {
+        var e = element
+        stmt.run(e.last_updated, e.total_repositories, e.total_issues, e.total_comments, e.total_milestones, e.total_labels)
       })
       stmt.finalize(callback)
     } catch (e) {
@@ -640,7 +659,7 @@ function getSelectedLabelValues (ghRes) {
       var label_line = {
         'org': REPO_LIST[repo_index].org,
         'repository': REPO_LIST[repo_index].repo,
-        'name': element.title.replace(/"/g, '&quot;'),
+        'name': element.name.replace(/"/g, '&quot;'),
         'url': element.url
       }
 
@@ -853,23 +872,33 @@ function saveAll (callback) {
 //      saveFileMilestones(function done () {
 //  saveFileLabels(function done () {
 //          saveFileComments(function done () {
-  var stats = {
-    last_updated: new Date(),
-    total_repositories: total_repositories,
-    total_members: total_members,
-    total_issues: total_issues,
-    total_comments: total_comments,
-    total_milestones: total_milestones,
-    total_labels: total_labels
-  }
-  json_stats = JSON.stringify(stats)
-  saveFileStats(function done () {
-    console.log('Done m: ' + total_members + ', ' + json_members.length)
-    console.log('Done i: ' + total_issues + ', ' + json_issues.length)
-    console.log('Done m2: ' + total_milestones + ', ' + json_milestones.length)
-    console.log('Done c: ' + total_comments + ', ' + json_comments.length)
-    console.log('Done l: ' + total_labels + ', ' + json_labels.length)
-    callback()
+  dbUpdateMembers(function done () {
+    dbUpdateMilestones(function done () {
+      dbUpdateIssues(function done () {
+        dbUpdateComments(function done () {
+          dbUpdateLabels(function done () {
+            var stats = {
+              last_updated: new Date(),
+              total_repositories: total_repositories,
+              total_members: total_members,
+              total_issues: total_issues,
+              total_comments: total_comments,
+              total_milestones: total_milestones,
+              total_labels: total_labels
+            }
+            json_stats.push(JSON.stringify(stats))
+            dbUpdateStats(function done () {
+              console.log('Done m: ' + total_members + ', ' + json_members.length)
+              console.log('Done i: ' + total_issues + ', ' + json_issues.length)
+              console.log('Done m2: ' + total_milestones + ', ' + json_milestones.length)
+              console.log('Done c: ' + total_comments + ', ' + json_comments.length)
+              console.log('Done l: ' + total_labels + ', ' + json_labels.length)
+              callback()
+            })
+          })
+        })
+      })
+    })
   })
 //  })
 //        })
@@ -971,14 +1000,17 @@ function getRateLeft (callback) {
 //   })
 // }
 
-function saveFileStats (callback) {
-  console.info('Saving stats')
-  fs.writeFile('data/stats.json', json_stats, function (err) {
-    if (err) callback(err)
-    // console.info('It\'s saved!')
-    callback(null)
-  })
-}
+// /**
+// * Exports stats from memory to json
+// */
+// function saveFileStats (callback) {
+//   console.info('Saving stats')
+//   fs.writeFile('data/stats.json', json_stats, function (err) {
+//     if (err) callback(err)
+//     // console.info('It\'s saved!')
+//     callback(null)
+//   })
+// }
 
 // // ***********************************
 // // save the file
@@ -1006,49 +1038,54 @@ function truthy (o) {
 }
 
 function checkDataFiles (callback) {
-  var files = [
-//    'members.csv',
-//    'issues.csv', 'issues.json',
-//    'milestones.csv', 'milestones.json',
-//    'comments.csv',
-    'labels.csv',
-    'stats.json'
-  ]
-  var stats = []
+//   var files = [
+// //    'members.csv',
+// //    'issues.csv', 'issues.json',
+// //    'milestones.csv', 'milestones.json',
+// //    'comments.csv',
+// //    'labels.csv',
+// //    'stats.json'
+//   ]
+  // var stats = []
   try {
-    files.forEach(function fe_file (element, index, array) {
-      stats.push(fs.statSync('data/' + element))
-    })
-    stats.forEach(function fe_file (element, index, array) {
-      // console.log(element.isFile())
-    })
+    // files.forEach(function fe_file (element, index, array) {
+    //   stats.push(fs.statSync('data/' + element))
+    // })
+    // stats.forEach(function fe_file (element, index, array) {
+    //   // console.log(element.isFile())
+    // })
     var args = process.argv
     if (args[2] === 'rebuild') {
       // Rebuild requested
-      cleanAll(function done () {
-        console.info('Rebulding files...')
-        updateAll(function done () {
-          console.log('All files rebuilt')
-          callback()
-        })
+      // cleanAll(function done () {
+      //   console.info('Rebulding files...')
+      updateAll(function done () {
+        console.log('All files rebuilt')
+        callback()
+      })
+      // })
+    } else if (args[2] === 'getRate') {
+      getRateLeft(function done (rateLeft) {
+        console.log(rateLeft)
+        callback()
       })
     } else {
       callback()
     }
   } catch (e) {
-    if (e.code === 'ENOENT') {
-      console.error(e.path + ' not found.')
-      cleanAll(function done () {
-        console.info('Rebulding files...')
-        updateAll(function done () {
-          console.log('All files rebuilt')
-          callback()
-        })
-      })
-    } else {
-      console.error(e)
-      throw e
-    }
+    // if (e.code === 'ENOENT') {
+    //   console.error(e.path + ' not found.')
+    //   cleanAll(function done () {
+    //     console.info('Rebulding files...')
+    //     updateAll(function done () {
+    //       console.log('All files rebuilt')
+    //       callback()
+    //     })
+    //   })
+    // } else {
+    console.trace(e)
+    throw e
+//    }
   }
 }
 
@@ -1063,13 +1100,13 @@ function checkConfig (callback) {
   } catch (e) {
     if (e.code === 'ENOENT') {
       console.error(e.path + ' not found.')
-      cleanAll(function done () {
-        console.info('Launching setup wizard...')
-        setup(function done () {
-          console.log('Setup complete')
-          callback()
-        })
+      // cleanAll(function done () {
+      console.info('Launching setup wizard...')
+      setup(function done () {
+        console.log('Setup complete')
+        callback()
       })
+      // })
     } else {
       console.error(e)
       throw e
@@ -1077,16 +1114,37 @@ function checkConfig (callback) {
   }
 }
 
-function cleanAll (callback) {
-  fs.unlink('data/members.csv', function done () {
-    fs.unlink('data/issues.csv', function done () {
-      fs.unlink('data/issues.json', function done () {
-        fs.unlink('data/labels.csv', function done () {
-          fs.unlink('data/milestones.csv', function done () {
-            fs.unlink('data/milestones.json', function done () {
-              fs.unlink('data/comments.csv', function done () {
-                fs.unlink('data/stats.json', function done () {
-                  console.log('All files cleaned')
+// function cleanAll (callback) {
+//   fs.unlink('data/members.csv', function done () {
+//     fs.unlink('data/issues.csv', function done () {
+//       fs.unlink('data/issues.json', function done () {
+//         fs.unlink('data/labels.csv', function done () {
+//           fs.unlink('data/milestones.csv', function done () {
+//             fs.unlink('data/milestones.json', function done () {
+//               fs.unlink('data/comments.csv', function done () {
+//                 fs.unlink('data/stats.json', function done () {
+//                   console.log('All files cleaned')
+//                   callback()
+//                 })
+//               })
+//             })
+//           })
+//         })
+//       })
+//     })
+//   })
+// }
+
+function updateAll (callback) {
+  setToken(
+    function cb_setTokenIssues (status) {
+      getOrgMembers(function done () {
+        getRepoMilestones(function done () {
+          getRepoLabels(function done () {
+            getRepoIssues(function done () {
+              saveAll(function done () {
+                getRateLeft(function done (rateLeft) {
+                  console.log(rateLeft)
                   callback()
                 })
               })
@@ -1095,38 +1153,6 @@ function cleanAll (callback) {
         })
       })
     })
-  })
-}
-
-function updateAll (callback) {
-  setToken(
-    function cb_setTokenIssues (status) {
-      getOrgMembers(function done () {
-        dbUpdateMembers(function done () {
-          getRepoMilestones(function done () {
-            dbUpdateMilestones(function done () {
-              getRepoLabels(function done () {
-                getRepoIssues(function done () {
-                  dbUpdateIssues(function done () {
-                    dbUpdateComments(function done () {
-                      dbUpdateLabels(function done () {
-                        saveAll(function done () {
-                          getRateLeft(function done (rateLeft) {
-                            console.log(rateLeft)
-                            callback()
-                          })
-                        })
-                      })
-                    })
-                  })
-                })
-              })
-            })
-          })
-        })
-      })
-    }
-  )
 }
 
 function setup (callback) {
