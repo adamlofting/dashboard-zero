@@ -19,7 +19,7 @@
       })
   }])
 
-  .controller('NavController', ['$scope', '$location', function ($scope, $location) {
+  .controller('NavController', ['$http', '$scope', '$location', function ($http, $scope, $location) {
     $scope.$location = $location
   }])
 })();
@@ -32,10 +32,24 @@
     var frontpage = this
     frontpage.scope = $scope
 
+    frontpage.stats = {}
+
+    function updateStats (frontpage) {
+      $http.get('/api/stats').then(function (r) {
+        frontpage.stats = r.data
+      })
+    }
+    //
+    // // setInterval(function (scope) {
+    // //   updateData(frontpage)
+    // // }, 5000)
+    //
+    updateStats(frontpage)
+
     frontpage.milestones = {}
 
     function updateData (frontpage) {
-      $http.get('/milestones.json').then(function (r) {
+      $http.get('/api/milestones').then(function (r) {
         frontpage.milestones = r.data
       })
     }
