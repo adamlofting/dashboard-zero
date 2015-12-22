@@ -13,12 +13,12 @@ var total_members = 0
 var total_milestones = 0
 var total_labels = 0
 
-// The lists in csv form
-var csv_issues = []
-var csv_comments = []
-var csv_members = []
-var csv_milestones = []
-var csv_labels = []
+// // The lists in csv form
+// var csv_issues = []
+// var csv_comments = []
+// var csv_members = []
+// var csv_milestones = []
+// var csv_labels = []
 
 // The lists in json form
 var json_issues = []
@@ -99,16 +99,97 @@ function setToken (callback) {
 function startServer (callback) {
   // Start web server
   console.log('Starting webserver...')
-  // app.get('/', function (req, res) {
-  //   res.send('Hello World')
-  // })
-  // app.use(function (req, res, next) {
-  //   res.header('Access-Control-Allow-Origin', '*')
-  //   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-  //   next()
-  // })
+  app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*')
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+    next()
+  })
+  app.get('/api/comments', function (req, res) {
+    var sql = 'SELECT * FROM comments'
+    dbFetchAll(sql, function cb_db_fetch_comments (err, rows) {
+      if (err) {
+        console.trace(err)
+        throw err
+      }
+      if (req.query.export) {
+        res.send('Export not supported...yet')
+      } else {
+        res.send(rows)
+      }
+    })
+  })
+  app.get('/api/issues', function (req, res) {
+    var sql = 'SELECT * FROM issues'
+    dbFetchAll(sql, function cb_db_fetch_issues (err, rows) {
+      if (err) {
+        console.trace(err)
+        throw err
+      }
+      if (req.query.export) {
+        res.send('Export not supported...yet')
+      } else {
+        res.send(rows)
+      }
+    })
+  })
+  app.get('/api/labels', function (req, res) {
+    var sql = 'SELECT * FROM labels'
+    dbFetchAll(sql, function cb_db_fetch_labels (err, rows) {
+      if (err) {
+        console.trace(err)
+        throw err
+      }
+      if (req.query.export) {
+        res.send('Export not supported...yet')
+      } else {
+        res.send(rows)
+      }
+    })
+  })
+  app.get('/api/members', function (req, res) {
+    var sql = 'SELECT * FROM members'
+    dbFetchAll(sql, function cb_db_fetch_members (err, rows) {
+      if (err) {
+        console.trace(err)
+        throw err
+      }
+      if (req.query.export) {
+        res.send('Export not supported...yet')
+      } else {
+        res.send(rows)
+      }
+    })
+  })
+  app.get('/api/milestones', function (req, res) {
+    var sql = 'SELECT * FROM milestones'
+    dbFetchAll(sql, function cb_db_fetch_milestones (err, rows) {
+      if (err) {
+        console.trace(err)
+        throw err
+      }
+      if (req.query.export) {
+        res.send('Export not supported...yet')
+      } else {
+        res.send(rows)
+      }
+    })
+  })
+  app.get('/api/stats', function (req, res) {
+    var sql = 'SELECT * FROM stats'
+    dbFetchAll(sql, function cb_db_fetch_stats (err, rows) {
+      if (err) {
+        console.trace(err)
+        throw err
+      }
+      if (req.query.export) {
+        res.send('Export not supported...yet')
+      } else {
+        res.send(rows)
+      }
+    })
+  })
   app.use(express.static(__dirname + '../../../public'))
-  app.use(express.static(__dirname + '../../../data'))
+//  app.use(express.static(__dirname + '../../../data'))
 
   // app.use(express.static('data'))
 
@@ -120,7 +201,18 @@ function startServer (callback) {
 // DB
 // ****************************
 
-function updateDbComments (callback) {
+function dbFetchAll (sql, callback) {
+  dbDashZero.serialize(function () {
+    try {
+      dbDashZero.all(sql, callback)
+    } catch (e) {
+      console.trace(e)
+      throw e
+    }
+  })
+}
+
+function dbUpdateComments (callback) {
   dbDashZero.serialize(function () {
     console.info('Saving issue comments to database...')
     try {
@@ -139,7 +231,7 @@ function updateDbComments (callback) {
   })
 }
 
-function updateDbIssues (callback) {
+function dbUpdateIssues (callback) {
   dbDashZero.serialize(function () {
     console.info('Saving issues to database...')
     try {
@@ -158,13 +250,13 @@ function updateDbIssues (callback) {
   })
 }
 
-function updateDbMembers (callback) {
+function dbUpdateMembers (callback) {
   dbDashZero.serialize(function () {
     console.info('Saving members to database...')
     try {
       dbDashZero.run('CREATE TABLE IF NOT EXISTS members (org TEXT, id INTEGER, login TEXT, avatar_url TEXT, type TEXT, PRIMARY KEY(id))')
 
-      var stmt = dbDashZero.prepare('INSERT INTO members (org,id,login,avatar_url,type) VALUES (?,?,?,?,?)')
+      var stmt = dbDashZero.prepare('REPLACE INTO members (org,id,login,avatar_url,type) VALUES (?,?,?,?,?)')
       json_members.forEach(function fe_db_members (element, index, array) {
         var e = element
         stmt.run(e.org, e.id, e.login, e.avatar_url, e.type)
@@ -177,7 +269,7 @@ function updateDbMembers (callback) {
   })
 }
 
-function updateDbMilestones (callback) {
+function dbUpdateMilestones (callback) {
   dbDashZero.serialize(function () {
     console.info('Saving milestones to database...')
     try {
@@ -187,6 +279,25 @@ function updateDbMilestones (callback) {
       json_milestones.forEach(function fe_db_milestones (element, index, array) {
         var e = element
         stmt.run(e.org, e.repository, e.title, e.state, e.open_issues, e.due_on, e.html_url, e.url)
+      })
+      stmt.finalize(callback)
+    } catch (e) {
+      console.trace(e)
+      throw e
+    }
+  })
+}
+
+function dbUpdateLabels (callback) {
+  dbDashZero.serialize(function () {
+    console.info('Saving labels to database...')
+    try {
+      dbDashZero.run('CREATE TABLE IF NOT EXISTS labels (org TEXT, repository TEXT, name TEXT, url TEXT, PRIMARY KEY(url))')
+
+      var stmt = dbDashZero.prepare('REPLACE INTO milestones (org,repository,name,url) VALUES (?,?,?,?)')
+      json_milestones.forEach(function fe_db_milestones (element, index, array) {
+        var e = element
+        stmt.run(e.org, e.repository, e.name, e.url)
       })
       stmt.finalize(callback)
     } catch (e) {
@@ -279,43 +390,47 @@ function getSelectedIssueValues (ghRes) {
       if (element.pull_request) {
         is_pr = 'true'
       }
+      try {
+        // var issue_line =
+        //   REPO_LIST[repo_index].org + ',' +
+        //   REPO_LIST[repo_index].repo + ',' +
+        //   element.id + ',"' +
+        //   element.title.replace(/"/g, '&quot;') + '",' +
+        //   element.created_at + ',' +
+        //   element.updated_at + ',' +
+        //   element.comments + ',' +
+        //   is_pr + ',' + ',' +
+        //   element.html_url + ',' +
+        //   element.url +
+        //   '\n'
+        //
+        // // Add to list to be saved to csv
+        // csv_issues += issue_line
+        //
+        var issue_line = {
+          'org': REPO_LIST[repo_index].org,
+          'repository': REPO_LIST[repo_index].repo,
+          'id': element.id,
+          'title': element.title.replace(/"/g, '&quot;'),
+          'created_at': element.created_at,
+          'updated_at': element.updated_at,
+          'comments': element.comments,
+          'is_pullrequest': is_pr,
+          'html_url': element.html_url.replace(/"/g, '&quot;').replace(/,/g, '%2C'),
+          'url': element.url
+        }
 
-      var issue_line =
-        REPO_LIST[repo_index].org + ',' +
-        REPO_LIST[repo_index].repo + ',' +
-        element.id + ',"' +
-        element.title.replace(/"/g, '&quot;') + '",' +
-        element.created_at + ',' +
-        element.updated_at + ',' +
-        element.comments + ',' +
-        is_pr + ',' + ',' +
-        element.html_url + ',' +
-        element.url +
-        '\n'
+        // Add to list to be saved to csv
+        json_issues.push(issue_line)
 
-      // Add to list to be saved to csv
-      csv_issues += issue_line
+        // Process comments
+        getCommentsFromIssue(element.number)
 
-      issue_line = {
-        'org': REPO_LIST[repo_index].org,
-        'repository': REPO_LIST[repo_index].repo,
-        'id': element.id,
-        'title': element.title.replace(/"/g, '&quot;'),
-        'created_at': element.created_at,
-        'updated_at': element.updated_at,
-        'comments': element.comments,
-        'is_pullrequest': is_pr,
-        'html_url': element.html_url.replace(/"/g, '&quot;').replace(/,/g, '%2C'),
-        'url': element.url
+        total_issues++
+      } catch (e) {
+        console.trace(e)
+        throw e
       }
-
-      // Add to list to be saved to csv
-      json_issues.push(issue_line)
-
-      // Process comments
-      getCommentsFromIssue(element.number)
-
-      total_issues++
     })
   }
   return ghRes
@@ -397,35 +512,40 @@ function getRepoMilestones (callback) {
 function getSelectedMilestoneValues (ghRes) {
   if (ghRes) {
     ghRes.forEach(function fe_repo (element, index, array) {
-      var milestone_line =
-        REPO_LIST[repo_index].org + ',' +
-        REPO_LIST[repo_index].repo + ',' +
-        '"' + element.title.replace(/"/g, '&quot;') + '",' +
-        element.state + ',' +
-        element.open_issues + ',' +
-        element.due_on + ',' +
-        '"' + element.html_url.replace(/"/g, '&quot;').replace(/,/g, '%2C') + '",' +
-        element.url +
-        '\n'
+      try {
+        // var milestone_line =
+        //   REPO_LIST[repo_index].org + ',' +
+        //   REPO_LIST[repo_index].repo + ',' +
+        //   '"' + element.title.replace(/"/g, '&quot;') + '",' +
+        //   element.state + ',' +
+        //   element.open_issues + ',' +
+        //   element.due_on + ',' +
+        //   '"' + element.html_url.replace(/"/g, '&quot;').replace(/,/g, '%2C') + '",' +
+        //   element.url +
+        //   '\n'
+        //
+        // // Add to list to be saved to csv
+        // csv_milestones += milestone_line
+        //
+        var milestone_line = {
+          'org': REPO_LIST[repo_index].org,
+          'repository': REPO_LIST[repo_index].repo,
+          'title': element.title.replace(/"/g, '&quot;'),
+          'state': element.state,
+          'open_issues': element.open_issues,
+          'due_on': element.due_on,
+          'html_url': element.html_url.replace(/"/g, '&quot;').replace(/,/g, '%2C'),
+          'url': element.url
+        }
 
-      // Add to list to be saved to csv
-      csv_milestones += milestone_line
+        // Add to list to be saved to csv
+        json_milestones.push(milestone_line)
 
-      milestone_line = {
-        'org': REPO_LIST[repo_index].org,
-        'repository': REPO_LIST[repo_index].repo,
-        'title': element.title.replace(/"/g, '&quot;'),
-        'state': element.state,
-        'open_issues': element.open_issues,
-        'due_on': element.due_on,
-        'html_url': element.html_url.replace(/"/g, '&quot;').replace(/,/g, '%2C'),
-        'url': element.url
+        total_milestones++
+      } catch (e) {
+        console.trace(e)
+        throw e
       }
-
-      // Add to list to be saved to csv
-      json_milestones.push(milestone_line)
-
-      total_milestones++
     })
   }
   return ghRes
@@ -507,15 +627,25 @@ function getRepoLabels (callback) {
 function getSelectedLabelValues (ghRes) {
   if (ghRes) {
     ghRes.forEach(function fe_repo (element, index, array) {
-      var label_line =
-        REPO_LIST[repo_index].org + ',' +
-        REPO_LIST[repo_index].repo + ',' +
-        '"' + element.name.replace(/"/g, '&quot;') + '",' +
-        element.url +
-        '\n'
+      // var label_line =
+      //   REPO_LIST[repo_index].org + ',' +
+      //   REPO_LIST[repo_index].repo + ',' +
+      //   '"' + element.name.replace(/"/g, '&quot;') + '",' +
+      //   element.url +
+      //   '\n'
+      //
+      // // Add to list to be saved to csv
+      // csv_labels += label_line
+      //
+      var label_line = {
+        'org': REPO_LIST[repo_index].org,
+        'repository': REPO_LIST[repo_index].repo,
+        'name': element.title.replace(/"/g, '&quot;'),
+        'url': element.url
+      }
 
       // Add to list to be saved to csv
-      csv_labels += label_line
+      json_labels.push(label_line)
 
       total_labels++
     })
@@ -560,20 +690,20 @@ function processIssueComments (err, res) {
   }
   res.forEach(function fe_repo (element, index, array) {
     try {
-      var comment_line =
-        REPO_LIST[repo_index].org + ',' +
-        REPO_LIST[repo_index].repo + ',' +
-        element.id + ',"' +
-        element.user.login + '",' +
-        element.updated_at + ',' +
-        element.html_url + ',' +
-        element.issue_url +
-        '\n'
-
-      // Add to list to be saved to csv
-      csv_comments += comment_line
-
-      comment_line = {
+      // var comment_line =
+      //   REPO_LIST[repo_index].org + ',' +
+      //   REPO_LIST[repo_index].repo + ',' +
+      //   element.id + ',"' +
+      //   element.user.login + '",' +
+      //   element.updated_at + ',' +
+      //   element.html_url + ',' +
+      //   element.issue_url +
+      //   '\n'
+      //
+      // // Add to list to be saved to csv
+      // csv_comments += comment_line
+      //
+      var comment_line = {
         'org': REPO_LIST[repo_index].org,
         'repository': REPO_LIST[repo_index].repo,
         'id': element.id,
@@ -684,18 +814,18 @@ function getOrgMembers (callback) {
 function getSelectedMemberValues (ghRes) {
   if (ghRes) {
     ghRes.forEach(function fe_repo (element, index, array) {
-      var member_line =
-        REPO_LIST[repo_index].org + ',' +
-        element.id + ',"' +
-        element.login + '",' +
-        element.avatar_url + ',' +
-        element.type +
-        '\n'
-
-      // Add to list to be saved to csv
-      csv_members += member_line
-
-      member_line = {
+      // var member_line =
+      //   REPO_LIST[repo_index].org + ',' +
+      //   element.id + ',"' +
+      //   element.login + '",' +
+      //   element.avatar_url + ',' +
+      //   element.type +
+      //   '\n'
+      //
+      // // Add to list to be saved to csv
+      // csv_members += member_line
+      //
+      var member_line = {
         'org': REPO_LIST[repo_index].org,
         'id': element.id,
         'login': element.login,
@@ -718,34 +848,34 @@ function getSelectedMemberValues (ghRes) {
 // ********************************
 
 function saveAll (callback) {
-  saveFileMembers(function done () {
-    saveFileIssues(function done () {
-      saveFileMilestones(function done () {
-        saveFileLabels(function done () {
-          saveFileComments(function done () {
-            var stats = {
-              last_updated: new Date(),
-              total_repositories: total_repositories,
-              total_members: total_members,
-              total_issues: total_issues,
-              total_comments: total_comments,
-              total_milestones: total_milestones,
-              total_labels: total_labels
-            }
-            json_stats = JSON.stringify(stats)
-            saveFileStats(function done () {
-              console.log('Done m: ' + total_members + ', ' + json_members.length)
-              console.log('Done i: ' + total_issues + ', ' + json_issues.length)
-              console.log('Done m2: ' + total_milestones + ', ' + json_milestones.length)
-              console.log('Done c: ' + total_comments + ', ' + json_comments.length)
-              console.log('Done l: ' + total_labels + ', ' + json_labels.length)
-              callback()
-            })
-          })
-        })
-      })
-    })
+//  saveFileMembers(function done () {
+//    saveFileIssues(function done () {
+//      saveFileMilestones(function done () {
+//  saveFileLabels(function done () {
+//          saveFileComments(function done () {
+  var stats = {
+    last_updated: new Date(),
+    total_repositories: total_repositories,
+    total_members: total_members,
+    total_issues: total_issues,
+    total_comments: total_comments,
+    total_milestones: total_milestones,
+    total_labels: total_labels
+  }
+  json_stats = JSON.stringify(stats)
+  saveFileStats(function done () {
+    console.log('Done m: ' + total_members + ', ' + json_members.length)
+    console.log('Done i: ' + total_issues + ', ' + json_issues.length)
+    console.log('Done m2: ' + total_milestones + ', ' + json_milestones.length)
+    console.log('Done c: ' + total_comments + ', ' + json_comments.length)
+    console.log('Done l: ' + total_labels + ', ' + json_labels.length)
+    callback()
   })
+//  })
+//        })
+//      })
+//    })
+//  })
 }
 
 function getRateLeft (callback) {
@@ -758,73 +888,88 @@ function getRateLeft (callback) {
   })
 }
 
-function saveFileMembers (callback) {
-  console.info('All Members processed')
-  var repo_header = 'org,id,login,avatar_url,type'
-  updateFile(repo_header, csv_members, 'data/members.csv', function cb_update_file (err, res) {
-    if (err) {
-      console.error('Error updating file: ' + err)
-      process.exit(1)
-    }
-    callback()
-  })
-}
+// /**
+// * Export members from memory to csv
+// */
+// function saveFileMembers (callback) {
+//   console.info('All Members processed')
+//   var repo_header = 'org,id,login,avatar_url,type'
+//   updateFile(repo_header, csv_members, 'data/members.csv', function cb_update_file (err, res) {
+//     if (err) {
+//       console.error('Error updating file: ' + err)
+//       process.exit(1)
+//     }
+//     callback()
+//   })
+// }
 
-function saveFileIssues (callback) {
-  console.info('All Issues processed')
-  var repo_header = 'org,repository,id,title,created_date,updated_date,comments_count,is_pullrequest,html_url,url'
-  updateFile(repo_header, csv_issues, 'data/issues.csv', function cb_update_file (err, res) {
-    if (err) {
-      console.error('Error updating file: ' + err)
-      process.exit(1)
-    }
-    fs.writeFile('data/issues.json', JSON.stringify(json_issues), function (err) {
-      if (err) callback(err)
-      // console.info('It\'s saved!')
-      callback(null)
-    })
-  })
-}
+// /**
+// * Exports issues from memory to csv
+// */
+// function saveFileIssues (callback) {
+//   console.info('All Issues processed')
+//   var repo_header = 'org,repository,id,title,created_date,updated_date,comments_count,is_pullrequest,html_url,url'
+//   updateFile(repo_header, csv_issues, 'data/issues.csv', function cb_update_file (err, res) {
+//     if (err) {
+//       console.error('Error updating file: ' + err)
+//       process.exit(1)
+//     }
+//     fs.writeFile('data/issues.json', JSON.stringify(json_issues), function (err) {
+//       if (err) callback(err)
+//       // console.info('It\'s saved!')
+//       callback(null)
+//     })
+//   })
+// }
 
-function saveFileMilestones (callback) {
-  console.info('All Milestones processed')
-  var repo_header = 'org,repository,title,state,open_issues,due_on,html_url,url'
-  updateFile(repo_header, csv_milestones, 'data/milestones.csv', function cb_update_file (err, res) {
-    if (err) {
-      console.error('Error updating file: ' + err)
-      process.exit(1)
-    }
-    fs.writeFile('data/milestones.json', JSON.stringify(json_milestones), function (err) {
-      if (err) callback(err)
-      // console.info('It\'s saved!')
-      callback(null)
-    })
-  })
-}
+// /**
+// * Export milestones from memory to csv
+// */
+// function saveFileMilestones (callback) {
+//   console.info('All Milestones processed')
+//   var repo_header = 'org,repository,title,state,open_issues,due_on,html_url,url'
+//   updateFile(repo_header, csv_milestones, 'data/milestones.csv', function cb_update_file (err, res) {
+//     if (err) {
+//       console.error('Error updating file: ' + err)
+//       process.exit(1)
+//     }
+//     fs.writeFile('data/milestones.json', JSON.stringify(json_milestones), function (err) {
+//       if (err) callback(err)
+//       // console.info('It\'s saved!')
+//       callback(null)
+//     })
+//   })
+// }
 
-function saveFileLabels (callback) {
-  console.info('All Labels processed')
-  var repo_header = 'org,repository,name,url'
-  updateFile(repo_header, csv_labels, 'data/labels.csv', function cb_update_file (err, res) {
-    if (err) {
-      console.error('Error updating file: ' + err)
-      process.exit(1)
-    }
-    callback()
-  })
-}
+// /**
+// * Exports issue labels from memory to csv
+// */
+// function saveFileLabels (callback) {
+//   console.info('All Labels processed')
+//   var repo_header = 'org,repository,name,url'
+//   updateFile(repo_header, csv_labels, 'data/labels.csv', function cb_update_file (err, res) {
+//     if (err) {
+//       console.error('Error updating file: ' + err)
+//       process.exit(1)
+//     }
+//     callback()
+//   })
+// }
 
-function saveFileComments (callback) {
-  console.info('All Comments processed')
-  var repo_header = 'org,repository,id,creator,updated_date,html_url,issue_url'
-  updateFile(repo_header, csv_comments, 'data/comments.csv', function cb_update_file (err, res) {
-    if (err) {
-      console.error('Error updating file: ' + err)
-      process.exit(1)
-    }
-    callback()
-  })
-}
+// /**
+// * Export issue comments from memory to csv
+// */
+// function saveFileComments (callback) {
+//   console.info('All Comments processed')
+//   var repo_header = 'org,repository,id,creator,updated_date,html_url,issue_url'
+//   updateFile(repo_header, csv_comments, 'data/comments.csv', function cb_update_file (err, res) {
+//     if (err) {
+//       console.error('Error updating file: ' + err)
+//       process.exit(1)
+//     }
+//     callback()
+//   })
+// }
 
 function saveFileStats (callback) {
   console.info('Saving stats')
@@ -835,16 +980,16 @@ function saveFileStats (callback) {
   })
 }
 
-// ***********************************
-// save the file
-// ***********************
-function updateFile (header, contents, file_name, callback) {
-  fs.writeFile(file_name, header + '\n' + contents, function (err) {
-    if (err) callback(err)
-    // console.info('It\'s saved!')
-    callback(null)
-  })
-}
+// // ***********************************
+// // save the file
+// // ***********************
+// function updateFile (header, contents, file_name, callback) {
+//   fs.writeFile(file_name, header + '\n' + contents, function (err) {
+//     if (err) callback(err)
+//     // console.info('It\'s saved!')
+//     callback(null)
+//   })
+// }
 
 // ****************
 // MISC
@@ -862,10 +1007,10 @@ function truthy (o) {
 
 function checkDataFiles (callback) {
   var files = [
-    'members.csv',
-    'issues.csv', 'issues.json',
-    'milestones.csv', 'milestones.json',
-    'comments.csv',
+//    'members.csv',
+//    'issues.csv', 'issues.json',
+//    'milestones.csv', 'milestones.json',
+//    'comments.csv',
     'labels.csv',
     'stats.json'
   ]
@@ -957,17 +1102,19 @@ function updateAll (callback) {
   setToken(
     function cb_setTokenIssues (status) {
       getOrgMembers(function done () {
-        updateDbMembers(function done () {
+        dbUpdateMembers(function done () {
           getRepoMilestones(function done () {
-            updateDbMilestones(function done () {
+            dbUpdateMilestones(function done () {
               getRepoLabels(function done () {
                 getRepoIssues(function done () {
-                  updateDbIssues(function done () {
-                    updateDbComments(function done () {
-                      saveAll(function done () {
-                        getRateLeft(function done (rateLeft) {
-                          console.log(rateLeft)
-                          callback()
+                  dbUpdateIssues(function done () {
+                    dbUpdateComments(function done () {
+                      dbUpdateLabels(function done () {
+                        saveAll(function done () {
+                          getRateLeft(function done (rateLeft) {
+                            console.log(rateLeft)
+                            callback()
+                          })
                         })
                       })
                     })
@@ -990,8 +1137,6 @@ function setup (callback) {
 module.exports = {
   init: init,
   setToken: setToken,
-  saveFileIssues: saveFileIssues,
-  csv_issues: csv_issues,
   getOrgMembers: getOrgMembers,
   getRepoIssues: getRepoIssues,
   getRepoMilestones: getRepoMilestones,
