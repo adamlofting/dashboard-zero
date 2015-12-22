@@ -6,6 +6,7 @@
   "scripts": {
     "getRate": "node server.js getRate",
     "rebuild": "node server.js rebuild",
+    "updateLabels": "node server.js updateLabels",
     "test": "gulp dev"
   },
   "repository": {

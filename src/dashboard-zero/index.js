@@ -294,7 +294,7 @@ function dbUpdateLabels (callback) {
       dbDashZero.run('CREATE TABLE IF NOT EXISTS labels (org TEXT, repository TEXT, name TEXT, url TEXT, PRIMARY KEY(url))')
 
       var stmt = dbDashZero.prepare('REPLACE INTO labels (org,repository,name,url) VALUES (?,?,?,?)')
-      json_milestones.forEach(function fe_db_milestones (element, index, array) {
+      json_labels.forEach(function fe_db_labels (element, index, array) {
         var e = element
         stmt.run(e.org, e.repository, e.name, e.url)
       })
@@ -309,15 +309,21 @@ function dbUpdateLabels (callback) {
 function dbUpdateStats (callback) {
   dbDashZero.serialize(function () {
     console.info('Saving stats to database...')
+    console.dir(json_stats)
     try {
       dbDashZero.run('DROP TABLE IF EXISTS stats')
       dbDashZero.run('CREATE TABLE IF NOT EXISTS stats (last_updated TEXT, total_repositories INTEGER, total_members INTEGER, total_issues INTEGER, total_comments INTEGER, total_milestones INTEGER, total_labels INTEGER)')
 
-      var stmt = dbDashZero.prepare('REPLACE INTO stats (last_updated,total_repositories,total_members,total_issues,total_comments,total_milestones,total_labels) VALUES (?,?,?,?,?,?,?)')
-      json_stats.forEach(function fe_db_stats (element, index, array) {
-        var e = element
-        stmt.run(e.last_updated, e.total_repositories, e.total_issues, e.total_comments, e.total_milestones, e.total_labels)
-      })
+      var stmt = dbDashZero.prepare('INSERT INTO stats (last_updated,total_repositories,total_members,total_issues,total_comments,total_milestones,total_labels) VALUES (?,?,?,?,?,?,?)')
+      stmt.run(
+        json_stats.last_updated,
+        json_stats.total_repositories,
+        json_stats.total_members,
+        json_stats.total_issues,
+        json_stats.total_comments,
+        json_stats.total_milestones,
+        json_stats.total_labels
+      )
       stmt.finalize(callback)
     } catch (e) {
       console.trace(e)
@@ -877,7 +883,7 @@ function saveAll (callback) {
       dbUpdateIssues(function done () {
         dbUpdateComments(function done () {
           dbUpdateLabels(function done () {
-            var stats = {
+            json_stats = {
               last_updated: new Date(),
               total_repositories: total_repositories,
               total_members: total_members,
@@ -886,7 +892,6 @@ function saveAll (callback) {
               total_milestones: total_milestones,
               total_labels: total_labels
             }
-            json_stats.push(JSON.stringify(stats))
             dbUpdateStats(function done () {
               console.log('Done m: ' + total_members + ', ' + json_members.length)
               console.log('Done i: ' + total_issues + ', ' + json_issues.length)
@@ -1065,10 +1070,26 @@ function checkDataFiles (callback) {
       })
       // })
     } else if (args[2] === 'getRate') {
-      getRateLeft(function done (rateLeft) {
-        console.log(rateLeft)
-        callback()
-      })
+      setToken(
+        function cb_setToken (status) {
+          getRateLeft(function done (rateLeft) {
+            console.log(rateLeft)
+            callback()
+          })
+        })
+    } else if (args[2] === 'updateLabels') {
+      setToken(
+        function cb_setToken (status) {
+          getRepoLabels(function done () {
+            dbUpdateLabels(function done () {
+              getRateLeft(function done (rateLeft) {
+                console.log(rateLeft)
+                console.log(json_labels)
+                callback()
+              })
+            })
+          })
+        })
     } else {
       callback()
     }
