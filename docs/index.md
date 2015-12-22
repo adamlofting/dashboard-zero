@@ -8,3 +8,9 @@ See [configuration](./docs/configuration.md)
 ````
 npm start
 ````
+
+### Rebuilding the full database
+
+````
+npm run rebuild
+````
