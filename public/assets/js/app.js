@@ -55,6 +55,7 @@
     function updateData (frontpage) {
       $http.get('/api/milestones').then(function (r) {
         frontpage.milestones = r.data
+        $window.alert(frontpage.stats);
       })
     }
     //
