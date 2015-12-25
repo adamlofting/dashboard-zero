@@ -1,7 +1,7 @@
 
 ### Configuration
 
-See [configuration](./docs/configuration.md)
+See [configuration](./configuration.md)
 
 ### Running the report
 
