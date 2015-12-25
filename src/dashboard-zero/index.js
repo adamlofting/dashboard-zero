@@ -77,7 +77,7 @@ function setToken (callback) {
         console.trace(err)
         throw err
       }
-      console.info('GitHub Login: Success')
+      // console.info('GitHub Login: Success')
       callback()
     })
   } else {
@@ -95,13 +95,13 @@ function setToken (callback) {
 */
 function startServer () {
   // Start web server
-  console.log('Starting webserver...')
+  console.info('Starting webserver...')
   app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*')
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
     next()
   })
-  app.get('/api/comments', function (req, res) {
+  app.get('/api/all/comments', function (req, res) {
     var sql = 'SELECT * FROM comments'
     dbFetchAll(sql, function cb_db_fetch_comments (err, rows) {
       if (err) {
@@ -115,7 +115,7 @@ function startServer () {
       }
     })
   })
-  app.get('/api/issues', function (req, res) {
+  app.get('/api/all/issues', function (req, res) {
     var sql = 'SELECT * FROM issues'
     dbFetchAll(sql, function cb_db_fetch_issues (err, rows) {
       if (err) {
@@ -129,7 +129,7 @@ function startServer () {
       }
     })
   })
-  app.get('/api/labels', function (req, res) {
+  app.get('/api/all/labels', function (req, res) {
     var sql = 'SELECT * FROM labels'
     dbFetchAll(sql, function cb_db_fetch_labels (err, rows) {
       if (err) {
@@ -143,7 +143,7 @@ function startServer () {
       }
     })
   })
-  app.get('/api/members', function (req, res) {
+  app.get('/api/all/members', function (req, res) {
     var sql = 'SELECT * FROM members'
     dbFetchAll(sql, function cb_db_fetch_members (err, rows) {
       if (err) {
@@ -157,7 +157,7 @@ function startServer () {
       }
     })
   })
-  app.get('/api/milestones', function (req, res) {
+  app.get('/api/all/milestones', function (req, res) {
     var sql = 'SELECT * FROM milestones'
     dbFetchAll(sql, function cb_db_fetch_milestones (err, rows) {
       if (err) {
@@ -171,7 +171,7 @@ function startServer () {
       }
     })
   })
-  app.get('/api/stats', function (req, res) {
+  app.get('/api/all/stats', function (req, res) {
     var sql = 'SELECT * FROM stats'
     dbFetchAll(sql, function cb_db_fetch_stats (err, rows) {
       if (err) {
@@ -188,7 +188,7 @@ function startServer () {
   app.use(express.static(__dirname + '../../../public'))
 
   app.listen(SERVER_PORT)
-  console.log('Server now running on http://localhost:' + SERVER_PORT)
+  console.info('Server now running on http://localhost:' + SERVER_PORT)
 }
 
 // *****************************
@@ -324,8 +324,6 @@ function dbUpdateStats (callback) {
  * @return {Object}
  */
 function getRepoIssues (callback) {
-  // console.log(repo)
-
   var githubClient = github
 
   // The options msg we send to the client http://mikedeboer.github.io/node-github/#repos.prototype.getFromOrg
@@ -650,13 +648,12 @@ function fetchIssueComments (err, res) {
 }
 
 function processIssueComments (err, res) {
-  // console.log('ProcessIssues: ' + REPO_LIST[repo_index])
   if (err) {
     if (err.message === 'No next page found') {
       return 'Done with this repo'
     } else {
       // Why does this error?
-      console.log('=' + err.message + '=')
+      console.error('=' + err.message + '=')
       console.trace(err)
       throw err
     }
@@ -727,7 +724,7 @@ function getOrgMembers (callback) {
   // To see the data from github: curl -i https://api.github.com/orgs/mozilla/repos?per_page=1
   github.orgs.getMembers(msg, function gotFromOrg (err, res) {
     if (err) {
-      console.log(REPO_LIST[repo_index].org)
+      console.error(REPO_LIST[repo_index].org)
       console.trace(err)
     }
     // this has loaded the first page of results
@@ -815,12 +812,12 @@ function saveAll (callback) {
               total_labels: total_labels
             }
             dbUpdateStats(function done () {
-              console.log('Done m: ' + total_members + ', ' + json_members.length)
-              console.log('Done i: ' + total_issues + ', ' + json_issues.length)
-              console.log('Done m2: ' + total_milestones + ', ' + json_milestones.length)
-              console.log('Done c: ' + total_comments + ', ' + json_comments.length)
-              console.log('Done l: ' + total_labels + ', ' + json_labels.length)
-              callback()
+              // console.info('Done m: ' + total_members + ', ' + json_members.length)
+              // console.info('Done i: ' + total_issues + ', ' + json_issues.length)
+              // console.info('Done m2: ' + total_milestones + ', ' + json_milestones.length)
+              // console.info('Done c: ' + total_comments + ', ' + json_comments.length)
+              // console.info('Done l: ' + total_labels + ', ' + json_labels.length)
+              // callback()
             })
           })
         })
@@ -832,7 +829,7 @@ function saveAll (callback) {
 function getRateLeft (callback) {
   github.misc.rateLimit({}, function cb_rateLimit (err, res) {
     if (err) {
-      console.log('Error getting rate: ' + err)
+      console.error('Error getting rate: ' + err)
       throw err
     }
     callback(res.rate.remaining + ' calls remaining, resets at ' + new Date(res.rate.reset * 1000))
@@ -964,14 +961,14 @@ function checkDataFiles (callback) {
     var args = process.argv
     if (args[2] === 'rebuild') {
       updateAll(function done () {
-        console.log('All files rebuilt')
+        console.info('All files rebuilt')
         callback()
       })
     } else if (args[2] === 'getRate') {
       setToken(
         function cb_setToken (status) {
           getRateLeft(function done (rateLeft) {
-            console.log(rateLeft)
+            console.info(rateLeft)
             callback()
           })
         })
@@ -981,8 +978,8 @@ function checkDataFiles (callback) {
           getRepoLabels(function done () {
             dbUpdateLabels(function done () {
               getRateLeft(function done (rateLeft) {
-                console.log(rateLeft)
-                console.log(json_labels)
+                console.info(rateLeft)
+                // console.info(json_labels)
                 callback()
               })
             })
@@ -994,7 +991,7 @@ function checkDataFiles (callback) {
         if (err) {
           if (err.message === 'SQLITE_ERROR: no such table: stats') {
             updateAll(function done () {
-              console.log('All files rebuilt')
+              console.info('All files rebuilt')
               callback()
             })
           } else {
@@ -1025,7 +1022,7 @@ function checkConfig (callback) {
       console.error(e.path + ' not found.')
       console.info('Launching setup wizard...')
       setup(function done () {
-        console.log('Setup complete')
+        console.info('Setup complete')
         callback()
       })
     } else {
@@ -1044,7 +1041,7 @@ function updateAll (callback) {
             getRepoIssues(function done () {
               saveAll(function done () {
                 getRateLeft(function done (rateLeft) {
-                  console.log(rateLeft)
+                  console.info(rateLeft)
                   callback()
                 })
               })
@@ -1058,25 +1055,36 @@ function updateAll (callback) {
 function updateData (callback) {
   setToken(
     function cb_setTokenUpdateData (status) {
-      console.info('Updating data...')
-      getRepoMilestones(function done () {
-        getRepoLabels(function done () {
-          getRepoIssues(function done () {
-            saveAll(function done () {
-              getRateLeft(function done (rateLeft) {
-                console.info('Data updated: ' + new Date().toLocaleString())
-                console.log(rateLeft)
-                callback()
+      var sql = 'SELECT last_updated FROM stats'
+      dbFetchAll(sql, function cb_db_fetch_stats (err, rows) {
+        if (err) {
+          console.trace(err)
+          throw err
+        }
+        if (new Date() - new Date(Number(rows[0].last_updated)) > 1700000) {
+          console.info('Updating data...')
+          getRepoMilestones(function done () {
+            getRepoLabels(function done () {
+              getRepoIssues(function done () {
+                saveAll(function done () {
+                  getRateLeft(function done (rateLeft) {
+                    console.info('Data updated: ' + new Date().toLocaleString())
+                    console.info(rateLeft)
+                    callback()
+                  })
+                })
               })
             })
           })
-        })
+        } else {
+          callback()
+        }
       })
     })
 }
 
 function setup (callback) {
-  console.log('Please create config.json')
+  console.error('Please create config.json')
   process.exit(1)
 }
 

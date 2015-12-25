@@ -18,10 +18,10 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="milestone in dashboardzero.milestones | filter:'webmaker-core' | orderBy:'due_on'">
-                  <td><a href="{{milestone.html_url}}">{{milestone.title}}</a></td>
-                  <td>{{milestone.due_on | date:'yyyy-MM-dd HH:mm:ss Z' }}</td>
-                  <td>{{milestone.open_issues}}</td>
+                <tr ng-repeat="issues in dashboardzero.issues | filter:'webmaker-core' | orderBy:'created_date'">
+                  <td><a href="{{issue.html_url}}">{{issue.title}}</a></td>
+                  <td>{{issue.due_on | date:'yyyy-MM-dd HH:mm:ss Z' }}</td>
+                  <td>{{issue.open_issues}}</td>
                 </tr>
               </tbody>
             </table>

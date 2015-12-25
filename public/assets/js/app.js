@@ -28,18 +28,18 @@
 (function () {
   angular.module('dashboardzero-frontpage', [])
 
-  .controller('FrontPageController', ['$http', '$scope', '$window', function ($http, $scope, $window) {
+  .controller('FrontPageController', ['$http', '$rootScope', '$scope', '$window', function ($http, $scope, $rootScope, $window) {
     var frontpage = this
 
-    frontpage.milestones = {}
+    frontpage.stats = {}
 
     function updateData (frontpage) {
-      $http.get('/api/stats').then(function (r) {
+      $http.get('/api/all/stats').then(function (r) {
         frontpage.stats = r.data
         $('#last_updated').text(new Date(Number(frontpage.stats[0].last_updated)).toLocaleString())
       })
-      $http.get('/api/milestones').then(function (r) {
-        frontpage.milestones = r.data
+      $http.get('/api/all/issues').then(function (r) {
+        frontpage.issues = r.data
       })
     }
 
