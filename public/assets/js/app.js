@@ -21,14 +21,7 @@
 
   .controller('NavController', ['$http', '$scope', '$location', function ($http, $scope, $location) {
     $scope.$location = $location
-  }])
-})();
-
-// Dashboard Zero Frontpage
-(function () {
-  angular.module('dashboardzero-frontpage', [])
-
-  .controller('FrontPageController', ['$http', '$scope', function ($http, $scope) {
+    
     var frontpage = this
     frontpage.scope = $scope
 
@@ -45,6 +38,16 @@
     // // }, 5000)
     //
     updateStats(frontpage)
+
+  }])
+})();
+
+// Dashboard Zero Frontpage
+(function () {
+  angular.module('dashboardzero-frontpage', [])
+
+  .controller('FrontPageController', ['$http', '$scope', function ($http, $scope) {
+    var frontpage = this
 
     frontpage.milestones = {}
 
