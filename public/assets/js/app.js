@@ -21,6 +21,8 @@
 
   .controller('NavController', ['$http', '$scope', '$location', function ($http, $scope, $location) {
     $scope.$location = $location
+    
+    $scope.stats = {}
   }])
 })();
 
@@ -32,7 +34,6 @@
     var frontpage = this
 
     frontpage.milestones = {}
-    frontpage.stats = {}
 
     function updateData (frontpage) {
       $http.get('/api/stats').then(function (r) {
