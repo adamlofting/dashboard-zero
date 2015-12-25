@@ -22,14 +22,15 @@
   .controller('NavController', ['$http', '$scope', '$location', function ($http, $scope, $location) {
     $scope.$location = $location
     
-    var frontpage = this
-    frontpage.scope = $scope
+    var mainpage = this
+    mainpage.scope = $scope
 
-    frontpage.stats = {}
+    mainpage.stats = {}
 
-    function updateStats (frontpage) {
+    function updateStats (mainpage) {
       $http.get('/api/stats').then(function (r) {
         frontpage.stats = r.data
+        $window.alert(mainpage.stats);
       })
     }
     //
@@ -37,7 +38,7 @@
     // //   updateData(frontpage)
     // // }, 5000)
     //
-    updateStats(frontpage)
+    updateStats(mainpage)
 
   }])
 })();
