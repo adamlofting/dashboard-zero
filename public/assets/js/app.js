@@ -37,7 +37,7 @@
     function updateData (frontpage) {
       $http.get('/api/stats').then(function (r) {
         frontpage.stats = r.data
-        $window.alert(frontpage.stats[0].last_updated);
+        // $window.alert(frontpage.stats[0].last_updated);
       })
       $http.get('/api/milestones').then(function (r) {
         frontpage.milestones = r.data
