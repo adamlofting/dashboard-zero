@@ -22,7 +22,9 @@
   .controller('NavController', ['$http', '$scope', '$location', function ($http, $scope, $location) {
     $scope.$location = $location
     
-    $scope.stats = {}
+    $scope.stats = {
+      "last_updated": "moo"
+    }
   }])
 })();
 
