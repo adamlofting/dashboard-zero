@@ -39,14 +39,14 @@
           </button>
           <a class="navbar-brand" href="#">Dashboard Zero</a>
         </div>
-        <div id="navbar" class="collapse navbar-collapse"  ng-controller="NavController">
+        <div id="navbar" class="collapse navbar-collapse" ng-controller="NavController">
           <ul class="nav navbar-nav">
             <li ng-class="{active: $location.path() == ''}"><a href="#">Home</a></li>
             <li ng-class="{active: $location.path() == '/about'}"><a href="#about">About</a></li>
             <li ng-class="{active: $location.path() == '/contact'}"><a href="#contact">Contact</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li class="navbar-text navbar-right">last updated: <span>{{dashboardzero.stats[0].last_updated}}</span></li>
+            <li class="navbar-text navbar-right">last updated: <span ng-bind="dashboardzero.stats[0].last_updated"></span></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
