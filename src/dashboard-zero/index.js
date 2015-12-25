@@ -1059,6 +1059,15 @@ function checkDataFiles (callback) {
     // stats.forEach(function fe_file (element, index, array) {
     //   // console.log(element.isFile())
     // })
+    var sql = 'SELECT * from stats'
+    dbDashZero.serialize(function () {
+    try {
+      //
+    } catch (e) {
+      console.trace(e)
+      throw e
+    }
+  })
     var args = process.argv
     if (args[2] === 'rebuild') {
       // Rebuild requested
