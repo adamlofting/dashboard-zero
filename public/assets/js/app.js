@@ -39,7 +39,7 @@
     function updateData (frontpage) {
       $http.get('/api/stats').then(function (r) {
         frontpage.stats = r.data
-        $('#last_updated').text(frontpage.stats[0].last_updated)
+        $('#last_updated').text(new Date(frontpage.stats[0].last_updated).toLocaleSring())
       })
       $http.get('/api/milestones').then(function (r) {
         frontpage.milestones = r.data
