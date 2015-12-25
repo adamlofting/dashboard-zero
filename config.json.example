@@ -1,6 +1,6 @@
 {
   "token": "<github api token>",
-  "server_port": "<server port>" (default: 3000)
+  "server_port": "<server port>",
   "repo_list": [{
     "org": "org1",
     "repo": "repo1"
