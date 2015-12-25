@@ -1043,41 +1043,13 @@ function truthy (o) {
 }
 
 function checkDataFiles (callback) {
-//   var files = [
-// //    'members.csv',
-// //    'issues.csv', 'issues.json',
-// //    'milestones.csv', 'milestones.json',
-// //    'comments.csv',
-// //    'labels.csv',
-// //    'stats.json'
-//   ]
-  // var stats = []
   try {
-    // files.forEach(function fe_file (element, index, array) {
-    //   stats.push(fs.statSync('data/' + element))
-    // })
-    // stats.forEach(function fe_file (element, index, array) {
-    //   // console.log(element.isFile())
-    // })
-    var sql = 'SELECT * from stats'
-    dbDashZero.serialize(function () {
-    try {
-      //
-    } catch (e) {
-      console.trace(e)
-      throw e
-    }
-  })
     var args = process.argv
     if (args[2] === 'rebuild') {
-      // Rebuild requested
-      // cleanAll(function done () {
-      //   console.info('Rebulding files...')
       updateAll(function done () {
         console.log('All files rebuilt')
         callback()
       })
-      // })
     } else if (args[2] === 'getRate') {
       setToken(
         function cb_setToken (status) {
@@ -1100,22 +1072,27 @@ function checkDataFiles (callback) {
           })
         })
     } else {
-      callback()
+      var sql = 'SELECT * FROM stats'
+      dbFetchAll(sql, function cb_db_fetch_stats (err, rows) {
+        if (err) {
+          if (err.message === 'SQLITE_ERROR: no such table: stats') {
+            updateAll(function done () {
+              console.log('All files rebuilt')
+              callback()
+            })
+          } else {
+            console.error(err.message)
+            console.trace(err)
+            throw err
+          }
+        } else {
+          callback()
+        }
+      })
     }
   } catch (e) {
-    // if (e.code === 'ENOENT') {
-    //   console.error(e.path + ' not found.')
-    //   cleanAll(function done () {
-    //     console.info('Rebulding files...')
-    //     updateAll(function done () {
-    //       console.log('All files rebuilt')
-    //       callback()
-    //     })
-    //   })
-    // } else {
     console.trace(e)
     throw e
-//    }
   }
 }
 
@@ -1124,46 +1101,22 @@ function checkConfig (callback) {
   try {
     stats.push(fs.statSync('config.json'))
     stats.forEach(function fe_repo (element, index, array) {
-      // console.log(element.isFile())
     })
     callback()
   } catch (e) {
     if (e.code === 'ENOENT') {
       console.error(e.path + ' not found.')
-      // cleanAll(function done () {
       console.info('Launching setup wizard...')
       setup(function done () {
         console.log('Setup complete')
         callback()
       })
-      // })
     } else {
       console.error(e)
       throw e
     }
   }
 }
-
-// function cleanAll (callback) {
-//   fs.unlink('data/members.csv', function done () {
-//     fs.unlink('data/issues.csv', function done () {
-//       fs.unlink('data/issues.json', function done () {
-//         fs.unlink('data/labels.csv', function done () {
-//           fs.unlink('data/milestones.csv', function done () {
-//             fs.unlink('data/milestones.json', function done () {
-//               fs.unlink('data/comments.csv', function done () {
-//                 fs.unlink('data/stats.json', function done () {
-//                   console.log('All files cleaned')
-//                   callback()
-//                 })
-//               })
-//             })
-//           })
-//         })
-//       })
-//     })
-//   })
-// }
 
 function updateAll (callback) {
   setToken(
