@@ -30,7 +30,7 @@
     function updateStats (mainpage) {
       $http.get('/api/stats').then(function (r) {
         mainpage.stats = r.data
-        $window.alert(mainpage.stats);
+        $window.alert(mainpage.stats[0].last_updated);
       })
     }
     //
