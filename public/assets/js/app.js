@@ -32,6 +32,8 @@
 
   .controller('FrontPageController', ['$http', '$scope', '$window', function ($http, $scope, $window) {
     var frontpage = this
+    
+    $scope.last_updated = "foo"
 
     frontpage.milestones = {}
 
