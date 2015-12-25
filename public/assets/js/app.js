@@ -19,27 +19,8 @@
       })
   }])
 
-  .controller('NavController', ['$http', '$scope', '$location', '$window', function ($http, $scope, $location, $window) {
+  .controller('NavController', ['$http', '$scope', '$location', function ($http, $scope, $location) {
     $scope.$location = $location
-    
-    var mainpage = this
-    mainpage.scope = $scope
-
-    mainpage.stats = {}
-
-    function updateStats (mainpage) {
-      $http.get('/api/stats').then(function (r) {
-        mainpage.stats = r.data
-        $window.alert(mainpage.stats[0].last_updated);
-      })
-    }
-    //
-    // // setInterval(function (scope) {
-    // //   updateData(frontpage)
-    // // }, 5000)
-    //
-    updateStats(mainpage)
-
   }])
 })();
 
@@ -47,12 +28,17 @@
 (function () {
   angular.module('dashboardzero-frontpage', [])
 
-  .controller('FrontPageController', ['$http', '$scope', function ($http, $scope) {
+  .controller('FrontPageController', ['$http', '$scope', '$window', function ($http, $scope, $window) {
     var frontpage = this
 
     frontpage.milestones = {}
+    frontpage.stats = {}
 
     function updateData (frontpage) {
+      $http.get('/api/stats').then(function (r) {
+        frontpage.stats = r.data
+        $window.alert(frontpage.stats[0].last_updated);
+      })
       $http.get('/api/milestones').then(function (r) {
         frontpage.milestones = r.data
         $window.alert(frontpage.stats);
