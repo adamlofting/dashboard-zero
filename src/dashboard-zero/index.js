@@ -13,13 +13,6 @@ var total_members = 0
 var total_milestones = 0
 var total_labels = 0
 
-// // The lists in csv form
-// var csv_issues = []
-// var csv_comments = []
-// var csv_members = []
-// var csv_milestones = []
-// var csv_labels = []
-
 // The lists in json form
 var json_issues = []
 var json_comments = []
@@ -41,10 +34,14 @@ var SERVER_PORT
 
 function init (callback) {
   fs.readFile('config.json', function (err, data) {
-    if (err) throw err
+    if (err) {
+      console.trace(err)
+      throw err
+    }
     try {
       var config = JSON.parse(data)
     } catch (e) {
+      console.trace(e)
       throw e
     } finally {
       github = new GitHubApi({
@@ -77,6 +74,7 @@ function setToken (callback) {
 
     github.misc.rateLimit({}, function cb_rateLimit (err, res) {
       if (err) {
+        console.trace(err)
         throw err
       }
       console.info('GitHub Login: Success')
@@ -95,7 +93,7 @@ function setToken (callback) {
 /*
 * Start the expressjs server
 */
-function startServer (callback) {
+function startServer () {
   // Start web server
   console.log('Starting webserver...')
   app.use(function (req, res, next) {
@@ -188,9 +186,6 @@ function startServer (callback) {
     })
   })
   app.use(express.static(__dirname + '../../../public'))
-//  app.use(express.static(__dirname + '../../../data'))
-
-  // app.use(express.static('data'))
 
   app.listen(SERVER_PORT)
   console.log('Server now running on http://localhost:' + SERVER_PORT)
@@ -201,135 +196,121 @@ function startServer (callback) {
 // ****************************
 
 function dbFetchAll (sql, callback) {
-  dbDashZero.serialize(function () {
-    try {
-      dbDashZero.all(sql, callback)
-    } catch (e) {
-      console.trace(e)
-      throw e
-    }
-  })
+  try {
+    dbDashZero.all(sql, callback)
+  } catch (e) {
+    console.trace(e)
+    throw e
+  }
 }
 
 function dbUpdateComments (callback) {
-  dbDashZero.serialize(function () {
-    console.info('Saving issue comments to database...')
-    try {
-      dbDashZero.run('CREATE TABLE IF NOT EXISTS comments (org TEXT, repository TEXT, id INTEGER, creator TEXT, updated_date TEXT, html_url TEXT, issue_url TEXT, PRIMARY KEY(id))')
+  console.info('Saving issue comments to database...')
+  try {
+    dbDashZero.run('CREATE TABLE IF NOT EXISTS comments (org TEXT, repository TEXT, id INTEGER, creator TEXT, updated_date TEXT, html_url TEXT, issue_url TEXT, PRIMARY KEY(id))')
 
-      var stmt = dbDashZero.prepare('REPLACE INTO comments   (org,repository,id,creator,updated_date,html_url,issue_url) VALUES (?,?,?,?,?,?,?)')
-      json_comments.forEach(function fe_db_comments (element, index, array) {
-        var e = element
-        stmt.run(e.org, e.repository, e.id, e.creator, e.updated_date, e.html_url, e.issue_url)
-      })
-      stmt.finalize(callback)
-    } catch (e) {
-      console.trace(e)
-      throw e
-    }
-  })
+    var stmt = dbDashZero.prepare('REPLACE INTO comments   (org,repository,id,creator,updated_date,html_url,issue_url) VALUES (?,?,?,?,?,?,?)')
+    json_comments.forEach(function fe_db_comments (element, index, array) {
+      var e = element
+      stmt.run(e.org, e.repository, e.id, e.creator, e.updated_date, e.html_url, e.issue_url)
+    })
+    stmt.finalize(callback)
+  } catch (e) {
+    console.trace(e)
+    throw e
+  }
 }
 
 function dbUpdateIssues (callback) {
-  dbDashZero.serialize(function () {
-    console.info('Saving issues to database...')
-    try {
-      dbDashZero.run('CREATE TABLE IF NOT EXISTS issues (org TEXT, repository TEXT, title TEXT, created_date TEXT, comments_count INTEGER, is_pullrequest TEXT, html_url TEXT, url TEXT, PRIMARY KEY(url))')
+  console.info('Saving issues to database...')
+  try {
+    dbDashZero.run('CREATE TABLE IF NOT EXISTS issues (org TEXT, repository TEXT, title TEXT, created_date TEXT, comments_count INTEGER, is_pullrequest TEXT, html_url TEXT, url TEXT, PRIMARY KEY(url))')
 
-      var stmt = dbDashZero.prepare('REPLACE INTO issues   (org,repository,title,created_date,comments_count,is_pullrequest,html_url,url) VALUES (?,?,?,?,?,?,?,?)')
-      json_issues.forEach(function fe_db_issues (element, index, array) {
-        var e = element
-        stmt.run(e.org, e.repository, e.title, e.created_at, e.comments, e.is_pullrequest, e.html_url, e.url)
-      })
-      stmt.finalize(callback)
-    } catch (e) {
-      console.trace(e)
-      throw e
-    }
-  })
+    var stmt = dbDashZero.prepare('REPLACE INTO issues   (org,repository,title,created_date,comments_count,is_pullrequest,html_url,url) VALUES (?,?,?,?,?,?,?,?)')
+    json_issues.forEach(function fe_db_issues (element, index, array) {
+      var e = element
+      stmt.run(e.org, e.repository, e.title, e.created_at, e.comments, e.is_pullrequest, e.html_url, e.url)
+    })
+    stmt.finalize(callback)
+  } catch (e) {
+    console.trace(e)
+    throw e
+  }
 }
 
 function dbUpdateMembers (callback) {
-  dbDashZero.serialize(function () {
-    console.info('Saving members to database...')
-    try {
-      dbDashZero.run('CREATE TABLE IF NOT EXISTS members (org TEXT, id INTEGER, login TEXT, avatar_url TEXT, type TEXT, PRIMARY KEY(id))')
+  console.info('Saving members to database...')
+  try {
+    dbDashZero.run('CREATE TABLE IF NOT EXISTS members (org TEXT, id INTEGER, login TEXT, avatar_url TEXT, type TEXT, PRIMARY KEY(id))')
 
-      var stmt = dbDashZero.prepare('REPLACE INTO members (org,id,login,avatar_url,type) VALUES (?,?,?,?,?)')
-      json_members.forEach(function fe_db_members (element, index, array) {
-        var e = element
-        stmt.run(e.org, e.id, e.login, e.avatar_url, e.type)
-      })
-      stmt.finalize(callback)
-    } catch (e) {
-      console.trace(e)
-      throw e
-    }
-  })
+    var stmt = dbDashZero.prepare('REPLACE INTO members (org,id,login,avatar_url,type) VALUES (?,?,?,?,?)')
+    json_members.forEach(function fe_db_members (element, index, array) {
+      var e = element
+      stmt.run(e.org, e.id, e.login, e.avatar_url, e.type)
+    })
+    stmt.finalize(callback)
+  } catch (e) {
+    console.trace(e)
+    throw e
+  }
 }
 
 function dbUpdateMilestones (callback) {
-  dbDashZero.serialize(function () {
-    console.info('Saving milestones to database...')
-    try {
-      dbDashZero.run('CREATE TABLE IF NOT EXISTS milestones (org TEXT, repository TEXT, title TEXT, state TEXT, open_issues INTEGER, due_on TEXT, html_url TEXT, url TEXT, PRIMARY KEY(url))')
+  console.info('Saving milestones to database...')
+  try {
+    dbDashZero.run('CREATE TABLE IF NOT EXISTS milestones (org TEXT, repository TEXT, title TEXT, state TEXT, open_issues INTEGER, due_on TEXT, html_url TEXT, url TEXT, PRIMARY KEY(url))')
 
-      var stmt = dbDashZero.prepare('REPLACE INTO milestones (org,repository,title,state,open_issues,due_on,html_url,url) VALUES (?,?,?,?,?,?,?,?)')
-      json_milestones.forEach(function fe_db_milestones (element, index, array) {
-        var e = element
-        stmt.run(e.org, e.repository, e.title, e.state, e.open_issues, e.due_on, e.html_url, e.url)
-      })
-      stmt.finalize(callback)
-    } catch (e) {
-      console.trace(e)
-      throw e
-    }
-  })
+    var stmt = dbDashZero.prepare('REPLACE INTO milestones (org,repository,title,state,open_issues,due_on,html_url,url) VALUES (?,?,?,?,?,?,?,?)')
+    json_milestones.forEach(function fe_db_milestones (element, index, array) {
+      var e = element
+      stmt.run(e.org, e.repository, e.title, e.state, e.open_issues, e.due_on, e.html_url, e.url)
+    })
+    stmt.finalize(callback)
+  } catch (e) {
+    console.trace(e)
+    throw e
+  }
 }
 
 function dbUpdateLabels (callback) {
-  dbDashZero.serialize(function () {
-    console.info('Saving labels to database...')
-    try {
-      dbDashZero.run('CREATE TABLE IF NOT EXISTS labels (org TEXT, repository TEXT, name TEXT, url TEXT, PRIMARY KEY(url))')
+  console.info('Saving labels to database...')
+  try {
+    dbDashZero.run('CREATE TABLE IF NOT EXISTS labels (org TEXT, repository TEXT, name TEXT, url TEXT, PRIMARY KEY(url))')
 
-      var stmt = dbDashZero.prepare('REPLACE INTO labels (org,repository,name,url) VALUES (?,?,?,?)')
-      json_labels.forEach(function fe_db_labels (element, index, array) {
-        var e = element
-        stmt.run(e.org, e.repository, e.name, e.url)
-      })
-      stmt.finalize(callback)
-    } catch (e) {
-      console.trace(e)
-      throw e
-    }
-  })
+    var stmt = dbDashZero.prepare('REPLACE INTO labels (org,repository,name,url) VALUES (?,?,?,?)')
+    json_labels.forEach(function fe_db_labels (element, index, array) {
+      var e = element
+      stmt.run(e.org, e.repository, e.name, e.url)
+    })
+    stmt.finalize(callback)
+  } catch (e) {
+    console.trace(e)
+    throw e
+  }
 }
 
 function dbUpdateStats (callback) {
-  dbDashZero.serialize(function () {
-    console.info('Saving stats to database...')
-    console.dir(json_stats)
-    try {
-      dbDashZero.run('DROP TABLE IF EXISTS stats')
-      dbDashZero.run('CREATE TABLE IF NOT EXISTS stats (last_updated TEXT, total_repositories INTEGER, total_members INTEGER, total_issues INTEGER, total_comments INTEGER, total_milestones INTEGER, total_labels INTEGER)')
-
-      var stmt = dbDashZero.prepare('INSERT INTO stats (last_updated,total_repositories,total_members,total_issues,total_comments,total_milestones,total_labels) VALUES (?,?,?,?,?,?,?)')
-      stmt.run(
-        json_stats.last_updated,
-        json_stats.total_repositories,
-        json_stats.total_members,
-        json_stats.total_issues,
-        json_stats.total_comments,
-        json_stats.total_milestones,
-        json_stats.total_labels
-      )
-      stmt.finalize(callback)
-    } catch (e) {
-      console.trace(e)
-      throw e
-    }
-  })
+  console.info('Saving stats to database...')
+  try {
+    dbDashZero.run('DROP TABLE IF EXISTS stats', function done () {
+      dbDashZero.run('CREATE TABLE IF NOT EXISTS stats (last_updated TEXT, total_repositories INTEGER, total_members INTEGER, total_issues INTEGER, total_comments INTEGER, total_milestones INTEGER, total_labels INTEGER)', function done () {
+        var stmt = dbDashZero.prepare('INSERT INTO stats (last_updated,total_repositories,total_members,total_issues,total_comments,total_milestones,total_labels) VALUES (?,?,?,?,?,?,?)')
+        stmt.run(
+          json_stats.last_updated,
+          json_stats.total_repositories,
+          json_stats.total_members,
+          json_stats.total_issues,
+          json_stats.total_comments,
+          json_stats.total_milestones,
+          json_stats.total_labels
+        )
+        stmt.finalize(callback)
+      })
+    })
+  } catch (e) {
+    console.trace(e)
+    throw e
+  }
 }
 
 // ********************************
@@ -375,6 +356,7 @@ function getRepoIssues (callback) {
       function doThis (callback) {
         githubClient.getNextPage(ghResult, function gotNextPage (err, res) {
           if (err) {
+            console.trace(err)
             throw err
           }
           // get the values we want out of this response
@@ -389,6 +371,7 @@ function getRepoIssues (callback) {
       },
       function done (err) {
         if (err) {
+          console.trace(err)
           throw err
         }
         if (repo_index < (REPO_LIST.length - 1)) {
@@ -416,22 +399,6 @@ function getSelectedIssueValues (ghRes) {
         is_pr = 'true'
       }
       try {
-        // var issue_line =
-        //   REPO_LIST[repo_index].org + ',' +
-        //   REPO_LIST[repo_index].repo + ',' +
-        //   element.id + ',"' +
-        //   element.title.replace(/"/g, '&quot;') + '",' +
-        //   element.created_at + ',' +
-        //   element.updated_at + ',' +
-        //   element.comments + ',' +
-        //   is_pr + ',' + ',' +
-        //   element.html_url + ',' +
-        //   element.url +
-        //   '\n'
-        //
-        // // Add to list to be saved to csv
-        // csv_issues += issue_line
-        //
         var issue_line = {
           'org': REPO_LIST[repo_index].org,
           'repository': REPO_LIST[repo_index].repo,
@@ -502,6 +469,7 @@ function getRepoMilestones (callback) {
       function doThis (callback) {
         githubClient.getNextPage(ghResult, function gotNextPage (err, res) {
           if (err) {
+            console.trace(err)
             throw err
           }
           // get the values we want out of this response
@@ -516,6 +484,7 @@ function getRepoMilestones (callback) {
       },
       function done (err) {
         if (err) {
+          console.trace(err)
           throw err
         }
         if (repo_index < (REPO_LIST.length - 1)) {
@@ -538,20 +507,6 @@ function getSelectedMilestoneValues (ghRes) {
   if (ghRes) {
     ghRes.forEach(function fe_repo (element, index, array) {
       try {
-        // var milestone_line =
-        //   REPO_LIST[repo_index].org + ',' +
-        //   REPO_LIST[repo_index].repo + ',' +
-        //   '"' + element.title.replace(/"/g, '&quot;') + '",' +
-        //   element.state + ',' +
-        //   element.open_issues + ',' +
-        //   element.due_on + ',' +
-        //   '"' + element.html_url.replace(/"/g, '&quot;').replace(/,/g, '%2C') + '",' +
-        //   element.url +
-        //   '\n'
-        //
-        // // Add to list to be saved to csv
-        // csv_milestones += milestone_line
-        //
         var milestone_line = {
           'org': REPO_LIST[repo_index].org,
           'repository': REPO_LIST[repo_index].repo,
@@ -617,6 +572,7 @@ function getRepoLabels (callback) {
       function doThis (callback) {
         githubClient.getNextPage(ghResult, function gotNextPage (err, res) {
           if (err) {
+            console.trace(err)
             throw err
           }
           // get the values we want out of this response
@@ -631,6 +587,7 @@ function getRepoLabels (callback) {
       },
       function done (err) {
         if (err) {
+          console.trace(err)
           throw err
         }
         if (repo_index < (REPO_LIST.length - 1)) {
@@ -652,16 +609,6 @@ function getRepoLabels (callback) {
 function getSelectedLabelValues (ghRes) {
   if (ghRes) {
     ghRes.forEach(function fe_repo (element, index, array) {
-      // var label_line =
-      //   REPO_LIST[repo_index].org + ',' +
-      //   REPO_LIST[repo_index].repo + ',' +
-      //   '"' + element.name.replace(/"/g, '&quot;') + '",' +
-      //   element.url +
-      //   '\n'
-      //
-      // // Add to list to be saved to csv
-      // csv_labels += label_line
-      //
       var label_line = {
         'org': REPO_LIST[repo_index].org,
         'repository': REPO_LIST[repo_index].repo,
@@ -690,6 +637,7 @@ function getCommentsFromIssue (issue_id) {
 
 function fetchIssueComments (err, res) {
   if (err) {
+    console.trace(err)
     throw err
   }
   if (github.hasNextPage(res)) {
@@ -715,19 +663,6 @@ function processIssueComments (err, res) {
   }
   res.forEach(function fe_repo (element, index, array) {
     try {
-      // var comment_line =
-      //   REPO_LIST[repo_index].org + ',' +
-      //   REPO_LIST[repo_index].repo + ',' +
-      //   element.id + ',"' +
-      //   element.user.login + '",' +
-      //   element.updated_at + ',' +
-      //   element.html_url + ',' +
-      //   element.issue_url +
-      //   '\n'
-      //
-      // // Add to list to be saved to csv
-      // csv_comments += comment_line
-      //
       var comment_line = {
         'org': REPO_LIST[repo_index].org,
         'repository': REPO_LIST[repo_index].repo,
@@ -755,6 +690,7 @@ function processIssueCommentsPage (err, res) {
     if (err === 'No more pages') {
       // We are done with this repo
     } else {
+      console.trace(err)
       throw err
     }
   } else {
@@ -810,6 +746,7 @@ function getOrgMembers (callback) {
       function doThis (callback) {
         githubClient.getNextPage(ghResult, function gotNextPage (err, res) {
           if (err) {
+            console.trace(err)
             throw err
           }
           // get the values we want out of this response
@@ -824,6 +761,7 @@ function getOrgMembers (callback) {
       },
       function done (err) {
         if (err) {
+          console.trace(err)
           throw err
         }
         callback()
@@ -839,17 +777,6 @@ function getOrgMembers (callback) {
 function getSelectedMemberValues (ghRes) {
   if (ghRes) {
     ghRes.forEach(function fe_repo (element, index, array) {
-      // var member_line =
-      //   REPO_LIST[repo_index].org + ',' +
-      //   element.id + ',"' +
-      //   element.login + '",' +
-      //   element.avatar_url + ',' +
-      //   element.type +
-      //   '\n'
-      //
-      // // Add to list to be saved to csv
-      // csv_members += member_line
-      //
       var member_line = {
         'org': REPO_LIST[repo_index].org,
         'id': element.id,
@@ -873,11 +800,6 @@ function getSelectedMemberValues (ghRes) {
 // ********************************
 
 function saveAll (callback) {
-//  saveFileMembers(function done () {
-//    saveFileIssues(function done () {
-//      saveFileMilestones(function done () {
-//  saveFileLabels(function done () {
-//          saveFileComments(function done () {
   dbUpdateMembers(function done () {
     dbUpdateMilestones(function done () {
       dbUpdateIssues(function done () {
@@ -905,11 +827,6 @@ function saveAll (callback) {
       })
     })
   })
-//  })
-//        })
-//      })
-//    })
-//  })
 }
 
 function getRateLeft (callback) {
@@ -1138,6 +1055,26 @@ function updateAll (callback) {
     })
 }
 
+function updateData (callback) {
+  setToken(
+    function cb_setTokenUpdateData (status) {
+      console.info('Updating data...')
+      getRepoMilestones(function done () {
+        getRepoLabels(function done () {
+          getRepoIssues(function done () {
+            saveAll(function done () {
+              getRateLeft(function done (rateLeft) {
+                console.info('Data updated: ' + new Date().toLocaleString())
+                console.log(rateLeft)
+                callback()
+              })
+            })
+          })
+        })
+      })
+    })
+}
+
 function setup (callback) {
   console.log('Please create config.json')
   process.exit(1)
@@ -1149,9 +1086,9 @@ module.exports = {
   getOrgMembers: getOrgMembers,
   getRepoIssues: getRepoIssues,
   getRepoMilestones: getRepoMilestones,
-  saveAll: saveAll,
   getRateLeft: getRateLeft,
   checkDataFiles: checkDataFiles,
+  updateData: updateData,
   checkConfig: checkConfig,
   startServer: startServer
 }

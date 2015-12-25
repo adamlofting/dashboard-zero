@@ -1,4 +1,4 @@
-/* global angular */
+/* global angular $ */
 // Dashboard Zero
 (function () {
   angular.module('dashboardzero', ['dashboardzero-filters', 'dashboardzero-frontpage', 'dashboardzero-about', 'dashboardzero-contact', 'ngRoute'])
@@ -21,7 +21,6 @@
 
   .controller('NavController', ['$http', '$scope', '$location', function ($http, $scope, $location) {
     $scope.$location = $location
-    
   }])
 })();
 
@@ -31,8 +30,6 @@
 
   .controller('FrontPageController', ['$http', '$scope', '$window', function ($http, $scope, $window) {
     var frontpage = this
-    
-    $scope.last_updated = "foo"
 
     frontpage.milestones = {}
 
@@ -45,11 +42,11 @@
         frontpage.milestones = r.data
       })
     }
-    //
-    // // setInterval(function (scope) {
-    // //   updateData(frontpage)
-    // // }, 5000)
-    //
+
+    setInterval(function (scope) {
+      updateData(frontpage)
+    }, 2100000) // 35 minutes
+
     updateData(frontpage)
   }])
 })();
