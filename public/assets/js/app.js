@@ -19,7 +19,7 @@
       })
   }])
 
-  .controller('NavController', ['$http', '$scope', '$location', function ($http, $scope, $location) {
+  .controller('NavController', ['$http', '$scope', '$location', '$window', function ($http, $scope, $location, $window) {
     $scope.$location = $location
     
     var mainpage = this
