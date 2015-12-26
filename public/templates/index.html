@@ -7,21 +7,21 @@
 
       <div class="container-fluid">
 
-	<h2 class="sub-header">Milestones</h2>
+	<h2 class="sub-header">Issues</h2>
           <div class="table-responsive">
             <table class="table table-striped-dark">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Due on</th>
-                  <th>Open Issues</th>
+                  <th>Title</th>
+                  <th>Created on</th>
+                  <th># Comments</th>
                 </tr>
               </thead>
               <tbody>
                 <tr ng-repeat="issue in dashboardzero.issues | filter:'webmaker-core' | orderBy:'created_date'">
-                  <td><a href="{{issue.html_url}}">{{issue.title}}</a></td>
-                  <td>{{issue.due_on | date:'yyyy-MM-dd HH:mm:ss Z' }}</td>
-                  <td>{{issue.open_issues}}</td>
+                  <td><a href="{{issue.html_url}}" title="{{issue.title}}">{{issue.title | limitTo:50}}</a></td>
+                  <td>{{issue.created_date | date:'yyyy-MM-dd HH:mm:ss Z' }}</td>
+                  <td>{{issue.comments_count}}</td>
                 </tr>
               </tbody>
             </table>
