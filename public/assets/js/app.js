@@ -38,8 +38,8 @@
         frontpage.stats = r.data
         $('#last_updated').text(new Date(Number(frontpage.stats[0].last_updated)).toLocaleString())
       })
-      $http.get('/api/all/issues').then(function (r) {
-        frontpage.issues = r.data
+      $http.get('/api/all/issues/unanswered').then(function (r) {
+        frontpage.issues_unanswered = r.data
       })
     }
 
