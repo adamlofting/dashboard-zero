@@ -6,18 +6,21 @@ body {
 h1, h2, h3, h4, h5, h6 {
   color: #FFF;
 }
+.zero-count {
+  color:red;	
+}
 line {
-        stroke: black;
-        stroke-width: 1;
-        shape-rendering: crispEdges;
+  stroke: black;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
 }
 
 .plotline {
-        stroke-width: 1.4;
-        fill: none;
+  stroke-width: 1.4;
+  fill: none;
 }
 
 text {
-        font-family: Sans-serif;
-        font-size: 12px;
+  font-family: Sans-serif;
+  font-size: 12px;
 }
