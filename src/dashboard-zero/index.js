@@ -1010,7 +1010,7 @@ function checkDataFiles (callback) {
       dbFetchAll(sql, function cb_db_fetch_stats (err, rows) {
         if (err) {
           if (err.message === 'SQLITE_ERROR: no such table: stats') {
-            dbCreateTables(function done(){
+            dbCreateTables(function done() {
               updateAll(function done () {
                 console.info('All files rebuilt')
                 callback()
