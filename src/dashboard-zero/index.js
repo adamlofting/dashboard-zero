@@ -817,7 +817,7 @@ function saveAll (callback) {
               // console.info('Done m2: ' + total_milestones + ', ' + json_milestones.length)
               // console.info('Done c: ' + total_comments + ', ' + json_comments.length)
               // console.info('Done l: ' + total_labels + ', ' + json_labels.length)
-              // callback()
+              callback()
             })
           })
         })
