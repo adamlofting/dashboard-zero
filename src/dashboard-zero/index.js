@@ -272,12 +272,12 @@ function dbUpdateMembers (callback) {
 function dbUpdateMilestones (callback) {
   console.info('Saving milestones to database...')
   try {
-    dbDashZero.run('CREATE TABLE IF NOT EXISTS milestones (org TEXT, repository TEXT, title TEXT, state TEXT, open_issues INTEGER, due_on TEXT, html_url TEXT, url TEXT, PRIMARY KEY(url))')
+    dbDashZero.run('CREATE TABLE IF NOT EXISTS milestones (org TEXT, repository TEXT, id INTEGER title TEXT, state TEXT, open_issues INTEGER, due_on TEXT, html_url TEXT, url TEXT, PRIMARY KEY(id))')
 
-    var stmt = dbDashZero.prepare('REPLACE INTO milestones (org,repository,title,state,open_issues,due_on,html_url,url) VALUES (?,?,?,?,?,?,?,?)')
+    var stmt = dbDashZero.prepare('REPLACE INTO milestones (org,repository,id,title,state,open_issues,due_on,html_url,url) VALUES (?,?,?,?,?,?,?,?)')
     json_milestones.forEach(function fe_db_milestones (element, index, array) {
       var e = element
-      stmt.run(e.org, e.repository, e.title, e.state, e.open_issues, e.due_on, e.html_url, e.url)
+      stmt.run(e.org, e.repository, e.id, e.title, e.state, e.open_issues, e.due_on, e.html_url, e.url)
     })
     stmt.finalize(callback)
   } catch (e) {
@@ -522,6 +522,7 @@ function getSelectedMilestoneValues (ghRes) {
         var milestone_line = {
           'org': REPO_LIST[repo_index].org,
           'repository': REPO_LIST[repo_index].repo,
+          'id': element.id,
           'title': element.title.replace(/"/g, '&quot;'),
           'state': element.state,
           'open_issues': element.open_issues,
