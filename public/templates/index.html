@@ -12,13 +12,13 @@
             <table class="table table-striped-dark">
               <thead>
                 <tr>
-                  <th>Title</th>
+                  <th>Title {{dashboardzero.issues_unanswered.length}}</th>
                   <th>Created on</th>
                   <th># Comments</th>
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="issue in dashboardzero.issues | filter:'webmaker-core' | orderBy:'created_date'">
+                <tr ng-repeat="issue in dashboardzero.issues_unanswered | filter:'webmaker-core' | orderBy:'created_date'">
                   <td><a href="{{issue.html_url}}" title="{{issue.title}}">{{issue.title | limitTo:50}}</a></td>
                   <td>{{issue.created_date | date:'yyyy-MM-dd HH:mm:ss Z' }}</td>
                   <td>{{issue.comments_count}}</td>
