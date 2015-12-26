@@ -255,14 +255,15 @@ function dbUpdateIssues (callback) {
 function dbUpdateMembers (callback) {
   console.info('Saving members to database...')
   try {
-    dbDashZero.run('CREATE TABLE IF NOT EXISTS members (org TEXT, id INTEGER, login TEXT, avatar_url TEXT, type TEXT, PRIMARY KEY(id))')
-
-    var stmt = dbDashZero.prepare('REPLACE INTO members (org,id,login,avatar_url,type) VALUES (?,?,?,?,?)')
-    json_members.forEach(function fe_db_members (element, index, array) {
-      var e = element
-      stmt.run(e.org, e.id, e.login, e.avatar_url, e.type)
+    dbDashZero.run('CREATE TABLE IF NOT EXISTS members (org TEXT, id INTEGER, login TEXT, avatar_url TEXT, type TEXT, PRIMARY KEY(id))', function done () {
+      var stmt = dbDashZero.prepare('REPLACE INTO members (org,id,login,avatar_url,type) VALUES (?,?,?,?,?)', function done () {
+        json_members.forEach(function fe_db_members (element, index, array) {
+          var e = element
+          stmt.run(e.org, e.id, e.login, e.avatar_url, e.type)
+        })
+        stmt.finalize(callback)
+      })
     })
-    stmt.finalize(callback)
   } catch (e) {
     console.trace(e)
     throw e
