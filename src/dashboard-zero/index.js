@@ -129,6 +129,20 @@ function startServer () {
       }
     })
   })
+  app.get('/api/all/issues/unanswered', function (req, res) {
+    var sql = 'SELECT * FROM issues WHERE comment_count = 0'
+    dbFetchAll(sql, function cb_db_fetch_issues_unanswered (err, rows) {
+      if (err) {
+        console.trace(err)
+        throw err
+      }
+      if (req.query.export) {
+        res.send('Export not supported...yet')
+      } else {
+        res.send(rows)
+      }
+    })
+  })
   app.get('/api/all/labels', function (req, res) {
     var sql = 'SELECT * FROM labels'
     dbFetchAll(sql, function cb_db_fetch_labels (err, rows) {
