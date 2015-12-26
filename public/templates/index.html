@@ -4,15 +4,19 @@
         <p class="lead">An engineering dashboard for tracking the numbers we want to keep at zero
         </p>
       </div>
-      
+
       <div class="container-fluid">
-      	
-	<h2 class="sub-header">Issues</h2>
+
+      	<div class="jumbotron">
+  				<h1 class="text-center">{{dashboardzero.issues_unanswered.length}}</h1>
+				</div>
+
+				<h2 class="sub-header">Issues</h2>
           <div class="table-responsive">
             <table class="table table-striped-dark">
               <thead>
                 <tr>
-                  <th>Title {{dashboardzero.issues_unanswered.length}}</th>
+                  <th>Title</th>
                   <th>Created on</th>
                   <th># Comments</th>
                 </tr>
