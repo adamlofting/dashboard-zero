@@ -1,0 +1,30 @@
+    <div class="container" ng-controller="FrontPageController as dashboardzero">
+      <div class="starter-template">
+        <h1>Dashboard Zero</h1>
+        <p class="lead">An engineering dashboard for tracking the numbers we want to keep at zero
+        </p>
+      </div>
+
+      <div class="container-fluid">
+
+	<h2 class="sub-header">Milestones</h2>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Due on</th>
+                  <th>Open Issues</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="milestone in dashboardzero.milestones | filter:'webmaker-core' | orderBy:'due_on'">
+                  <td><a href="{{milestone.html_url}}">{{milestone.title}}</a></td>
+                  <td>{{milestone.due_on | date:'yyyy-MM-dd HH:mm:ss Z' }}</td>
+                  <td>{{milestone.open_issues}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div><!-- /.container -->
