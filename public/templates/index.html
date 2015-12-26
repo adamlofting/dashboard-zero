@@ -18,7 +18,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="issues in dashboardzero.issues | filter:'webmaker-core' | orderBy:'created_date'">
+                <tr ng-repeat="issue in dashboardzero.issues | filter:'webmaker-core' | orderBy:'created_date'">
                   <td><a href="{{issue.html_url}}">{{issue.title}}</a></td>
                   <td>{{issue.due_on | date:'yyyy-MM-dd HH:mm:ss Z' }}</td>
                   <td>{{issue.open_issues}}</td>
