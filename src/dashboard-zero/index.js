@@ -267,7 +267,7 @@ function dbUpdateMembers (callback) {
 function dbUpdateMilestones (callback) {
   console.info('Saving milestones to database...')
   try {
-    var stmt = dbDashZero.prepare('REPLACE INTO milestones (org,repository,id,title,state,open_issues,due_on,html_url,url) VALUES (?,?,?,?,?,?,?,?)')
+    var stmt = dbDashZero.prepare('REPLACE INTO milestones (org,repository,id,title,state,open_issues,due_on,html_url,url) VALUES (?,?,?,?,?,?,?,?,?)')
     json_milestones.forEach(function fe_db_milestones (element, index, array) {
       var e = element
       stmt.run(e.org, e.repository, e.id, e.title, e.state, e.open_issues, e.due_on, e.html_url, e.url)
