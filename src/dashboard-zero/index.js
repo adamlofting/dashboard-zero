@@ -130,7 +130,7 @@ function startServer () {
     })
   })
   app.get('/api/all/issues/unanswered', function (req, res) {
-    var sql = 'SELECT * FROM issues WHERE comment_count = 0'
+    var sql = 'SELECT * FROM issues WHERE comments_count = 0'
     dbFetchAll(sql, function cb_db_fetch_issues_unanswered (err, rows) {
       if (err) {
         console.trace(err)
