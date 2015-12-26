@@ -221,8 +221,6 @@ function dbFetchAll (sql, callback) {
 function dbUpdateComments (callback) {
   console.info('Saving issue comments to database...')
   try {
-    dbDashZero.run('CREATE TABLE IF NOT EXISTS comments (org TEXT, repository TEXT, id INTEGER, creator TEXT, updated_date TEXT, html_url TEXT, issue_url TEXT, PRIMARY KEY(id))')
-
     var stmt = dbDashZero.prepare('REPLACE INTO comments   (org,repository,id,creator,updated_date,html_url,issue_url) VALUES (?,?,?,?,?,?,?)')
     json_comments.forEach(function fe_db_comments (element, index, array) {
       var e = element
@@ -238,8 +236,6 @@ function dbUpdateComments (callback) {
 function dbUpdateIssues (callback) {
   console.info('Saving issues to database...')
   try {
-    dbDashZero.run('CREATE TABLE IF NOT EXISTS issues (org TEXT, repository TEXT, title TEXT, created_date TEXT, comments_count INTEGER, is_pullrequest TEXT, html_url TEXT, url TEXT, PRIMARY KEY(url))')
-
     var stmt = dbDashZero.prepare('REPLACE INTO issues   (org,repository,title,created_date,comments_count,is_pullrequest,html_url,url) VALUES (?,?,?,?,?,?,?,?)')
     json_issues.forEach(function fe_db_issues (element, index, array) {
       var e = element
@@ -255,14 +251,12 @@ function dbUpdateIssues (callback) {
 function dbUpdateMembers (callback) {
   console.info('Saving members to database...')
   try {
-    dbDashZero.run('CREATE TABLE IF NOT EXISTS members (org TEXT, id INTEGER, login TEXT, avatar_url TEXT, type TEXT, PRIMARY KEY(id))', function done () {
-      var stmt = dbDashZero.prepare('REPLACE INTO members (org,id,login,avatar_url,type) VALUES (?,?,?,?,?)', function done () {
-        json_members.forEach(function fe_db_members (element, index, array) {
-          var e = element
-          stmt.run(e.org, e.id, e.login, e.avatar_url, e.type)
-        })
-        stmt.finalize(callback)
+    var stmt = dbDashZero.prepare('REPLACE INTO members (org,id,login,avatar_url,type) VALUES (?,?,?,?,?)', function done () {
+      json_members.forEach(function fe_db_members (element, index, array) {
+        var e = element
+        stmt.run(e.org, e.id, e.login, e.avatar_url, e.type)
       })
+      stmt.finalize(callback)
     })
   } catch (e) {
     console.trace(e)
@@ -273,8 +267,6 @@ function dbUpdateMembers (callback) {
 function dbUpdateMilestones (callback) {
   console.info('Saving milestones to database...')
   try {
-    dbDashZero.run('CREATE TABLE IF NOT EXISTS milestones (org TEXT, repository TEXT, id INTEGER title TEXT, state TEXT, open_issues INTEGER, due_on TEXT, html_url TEXT, url TEXT, PRIMARY KEY(id))')
-
     var stmt = dbDashZero.prepare('REPLACE INTO milestones (org,repository,id,title,state,open_issues,due_on,html_url,url) VALUES (?,?,?,?,?,?,?,?)')
     json_milestones.forEach(function fe_db_milestones (element, index, array) {
       var e = element
@@ -290,8 +282,6 @@ function dbUpdateMilestones (callback) {
 function dbUpdateLabels (callback) {
   console.info('Saving labels to database...')
   try {
-    dbDashZero.run('CREATE TABLE IF NOT EXISTS labels (org TEXT, repository TEXT, name TEXT, url TEXT, PRIMARY KEY(url))')
-
     var stmt = dbDashZero.prepare('REPLACE INTO labels (org,repository,name,url) VALUES (?,?,?,?)')
     json_labels.forEach(function fe_db_labels (element, index, array) {
       var e = element
@@ -326,6 +316,20 @@ function dbUpdateStats (callback) {
     console.trace(e)
     throw e
   }
+}
+
+function dbCreateTables (callback) {
+  dbDashZero.run('CREATE TABLE IF NOT EXISTS comments (org TEXT, repository TEXT, id INTEGER, creator TEXT, updated_date TEXT, html_url TEXT, issue_url TEXT, PRIMARY KEY(id))', function done (callback) {
+    dbDashZero.run('CREATE TABLE IF NOT EXISTS issues (org TEXT, repository TEXT, title TEXT, created_date TEXT, comments_count INTEGER, is_pullrequest TEXT, html_url TEXT, url TEXT, PRIMARY KEY(url))' function done (callback) {
+      dbDashZero.run('CREATE TABLE IF NOT EXISTS members (org TEXT, id INTEGER, login TEXT, avatar_url TEXT, type TEXT, PRIMARY KEY(id))', function done (callback) {   
+        dbDashZero.run('CREATE TABLE IF NOT EXISTS milestones (org TEXT, repository TEXT, id INTEGER title TEXT, state TEXT, open_issues INTEGER, due_on TEXT, html_url TEXT, url TEXT, PRIMARY KEY(id))' function done(callback) {
+          dbDashZero.run('CREATE TABLE IF NOT EXISTS labels (org TEXT, repository TEXT, name TEXT, url TEXT, PRIMARY KEY(url))', function done(callback) {
+            callback()
+          })
+        })
+      })
+    })
+  })
 }
 
 // ********************************
@@ -1006,9 +1010,11 @@ function checkDataFiles (callback) {
       dbFetchAll(sql, function cb_db_fetch_stats (err, rows) {
         if (err) {
           if (err.message === 'SQLITE_ERROR: no such table: stats') {
-            updateAll(function done () {
-              console.info('All files rebuilt')
-              callback()
+            dbCreateTables(function done(){
+              updateAll(function done () {
+                console.info('All files rebuilt')
+                callback()
+              })
             })
           } else {
             console.error(err.message)
