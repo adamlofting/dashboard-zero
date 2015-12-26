@@ -1,0 +1,26 @@
+body {
+	padding-top: 60px;
+  color: #CFD2DA;
+  background-color: #252830;
+}
+h1, h2, h3, h4, h5, h6 {
+  color: #FFF;
+}
+.zero-count {
+  color:red;	
+}
+line {
+  stroke: black;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.plotline {
+  stroke-width: 1.4;
+  fill: none;
+}
+
+text {
+  font-family: Sans-serif;
+  font-size: 12px;
+}
