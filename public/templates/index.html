@@ -1,0 +1,33 @@
+    <div class="container" ng-controller="FrontPageController as dashboardzero">
+      <div class="starter-template">
+        <h1>Dashboard Zero</h1>
+        <p class="lead">An engineering dashboard for tracking the numbers we want to keep at zero
+        </p>
+      </div>
+
+      <div class="container-fluid">
+
+      	<h1 class="text-center zero-count">{{dashboardzero.issues_unanswered.length}}</h1>
+      	<h2 class="text-center">Unanswered Issues</h2>
+
+				<h2 class="sub-header">Issues</h2>
+          <div class="table-responsive">
+            <table class="table table-striped-dark">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Created on</th>
+                  <th># Comments</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="issue in dashboardzero.issues_unanswered | filter:'webmaker-core' | orderBy:'created_date'">
+                  <td><a href="{{issue.html_url}}" title="{{issue.title}}">{{issue.title | limitTo:50}}</a></td>
+                  <td>{{issue.created_date | date:'yyyy-MM-dd HH:mm:ss Z' }}</td>
+                  <td>{{issue.comments_count}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div><!-- /.container -->
