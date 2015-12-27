@@ -178,10 +178,10 @@ function dbUpdateComments (callback) {
 function dbUpdateIssues (callback) {
   console.info('Saving issues to database...')
   try {
-    var stmt = dbDashZero.prepare('REPLACE INTO issues   (org,repository,title,created_date,comments_count,is_pullrequest,milestone_id,html_url,url) VALUES (?,?,?,?,?,?,?,?,?)')
+    var stmt = dbDashZero.prepare('REPLACE INTO issues   (org,repository,title,created_date,comments_count,is_pullrequest,milestone_id,labels,html_url,url) VALUES (?,?,?,?,?,?,?,?,?,?)')
     gh.json_issues.forEach(function fe_db_issues (element, index, array) {
       var e = element
-      stmt.run(e.org, e.repository, e.title, e.created_at, e.comments, e.is_pullrequest, e.milestone_id, e.html_url, e.url)
+      stmt.run(e.org, e.repository, e.title, e.created_at, e.comments, e.is_pullrequest, e.milestone_id, e.labels, e.html_url, e.url)
     })
     stmt.finalize(callback)
   } catch (e) {
@@ -263,7 +263,7 @@ function dbUpdateStats (callback) {
 function dbCreateTables (callback) {
   try {
     dbDashZero.run('CREATE TABLE IF NOT EXISTS comments (org TEXT, repository TEXT, id INTEGER, creator TEXT, updated_date TEXT, html_url TEXT, issue_url TEXT, PRIMARY KEY(id))')
-    dbDashZero.run('CREATE TABLE IF NOT EXISTS issues (org TEXT, repository TEXT, title TEXT, created_date TEXT, comments_count INTEGER, is_pullrequest TEXT, milestone_id TEXT, html_url TEXT, url TEXT, PRIMARY KEY(url))')
+    dbDashZero.run('CREATE TABLE IF NOT EXISTS issues (org TEXT, repository TEXT, title TEXT, created_date TEXT, comments_count INTEGER, is_pullrequest TEXT, milestone_id TEXT, labels TEXT, html_url TEXT, url TEXT, PRIMARY KEY(url))')
     dbDashZero.run('CREATE TABLE IF NOT EXISTS members (org TEXT, id INTEGER, login TEXT, avatar_url TEXT, type TEXT, PRIMARY KEY(id))')
     dbDashZero.run('CREATE TABLE IF NOT EXISTS milestones (org TEXT, repository TEXT, id INTEGER, title TEXT, state TEXT, open_issues INTEGER, due_on TEXT, html_url TEXT, url TEXT, PRIMARY KEY(id))')
     dbDashZero.run('CREATE TABLE IF NOT EXISTS labels (org TEXT, repository TEXT, name TEXT, url TEXT, PRIMARY KEY(url))')

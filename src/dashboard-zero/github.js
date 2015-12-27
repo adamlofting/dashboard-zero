@@ -151,6 +151,14 @@ function getSelectedIssueValues (ghRes) {
       if (element.milestone) {
         is_pr = element.milestone.id
       }
+      var labels = 'none'
+      if (element.labels.length > 0) {
+        var arrLabels = []
+        element.labels.forEach(function fe_repo (element, index, array) {
+          arrLabels.push(element.name)
+        })
+        labels = arrLabels.join('|')
+      }
       try {
         var issue_line = {
           'org': REPO_LIST[repo_index].org,
@@ -162,6 +170,7 @@ function getSelectedIssueValues (ghRes) {
           'comments': element.comments,
           'is_pullrequest': is_pr,
           'milestone_id': milestone_id,
+          'labels': labels,
           'html_url': element.html_url.replace(/"/g, '&quot;').replace(/,/g, '%2C'),
           'url': element.url
         }
