@@ -147,6 +147,10 @@ function getSelectedIssueValues (ghRes) {
       if (element.pull_request) {
         is_pr = 'true'
       }
+      var milestone_id = 'none'
+      if (element.milestone) {
+        is_pr = element.milestone.id
+      }
       try {
         var issue_line = {
           'org': REPO_LIST[repo_index].org,
@@ -157,6 +161,7 @@ function getSelectedIssueValues (ghRes) {
           'updated_at': element.updated_at,
           'comments': element.comments,
           'is_pullrequest': is_pr,
+          'milestone_id': milestone_id,
           'html_url': element.html_url.replace(/"/g, '&quot;').replace(/,/g, '%2C'),
           'url': element.url
         }
@@ -287,7 +292,7 @@ function getSelectedMilestoneValues (ghRes) {
 // ********************************
 
 /**
- * Get a list of the members linked to an org
+ * Get a list of the labels linked to a repository
  * @param  {String}   org      github org name
  * @param  {Function} callback
  * @return {Object}
