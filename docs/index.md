@@ -14,3 +14,7 @@ npm start
 ````
 npm run rebuild
 ````
+
+### Credits
+
+https://github.com/mikedeboer/node-github
