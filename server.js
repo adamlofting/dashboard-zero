@@ -7,14 +7,12 @@ var dz = require('./src/dashboard-zero/index.js')
 POST()
 
 function POST () {
-  dz.checkConfig(function done () {
-    dz.init(function done () {
-      dz.checkDataFiles(function done () {
-        dz.updateData(function done () {
-          setInterval(dz.updateData, 1800000, function done () { // 30 minutes
-          })
-          dz.startServer()
+  dz.init(function done () {
+    dz.checkDataFiles(function done () {
+      dz.updateData(function done () {
+        setInterval(dz.updateData, 1800000, function done () { // 30 minutes
         })
+        dz.startServer()
       })
     })
   })
