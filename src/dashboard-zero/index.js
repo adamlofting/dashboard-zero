@@ -13,6 +13,13 @@ var SERVER_PORT
 function init (callback) {
   fs.readFile('config.json', function (err, data) {
     if (err) {
+      if (err.message === "ENOENT, open 'config.json'") {
+        console.error("'config.json' not found, launching setup wizard...")
+        setup(function cb_setup_done () {
+          console.info('Setup complete')
+          callback()
+        })
+      }
       logger.error(err.message)
     }
     try {
@@ -143,118 +150,86 @@ function startServer () {
 // ****************************
 
 function dbFetchAll (sql, callback) {
-  try {
-    dbDashZero.all(sql, callback)
-  } catch (err) {
-    logger.error(err.message)
-  }
+  dbDashZero.all(sql, callback)
 }
 
 function dbUpdateComments (callback) {
   console.info('Saving issue comments to database...')
-  try {
-    var stmt = dbDashZero.prepare('REPLACE INTO comments   (org,repository,id,creator,updated_date,html_url,issue_url) VALUES (?,?,?,?,?,?,?)')
-    gh.json_comments.forEach(function fe_db_comments (element, index, array) {
-      var e = element
-      stmt.run(e.org, e.repository, e.id, e.creator, e.updated_date, e.html_url, e.issue_url)
-    })
-    stmt.finalize(callback)
-  } catch (err) {
-    logger.error(err.message)
-  }
+  var stmt = dbDashZero.prepare('REPLACE INTO comments   (org,repository,id,creator,updated_date,html_url,issue_url) VALUES (?,?,?,?,?,?,?)')
+  gh.json_comments.forEach(function fe_db_comments (element, index, array) {
+    var e = element
+    stmt.run(e.org, e.repository, e.id, e.creator, e.updated_date, e.html_url, e.issue_url)
+  })
+  stmt.finalize(callback)
 }
 
 function dbUpdateIssues (callback) {
   console.info('Saving issues to database...')
-  try {
-    var stmt = dbDashZero.prepare('REPLACE INTO issues   (org,repository,title,created_date,comments_count,is_pullrequest,milestone_id,labels,html_url,url) VALUES (?,?,?,?,?,?,?,?,?,?)')
-    gh.json_issues.forEach(function fe_db_issues (element, index, array) {
-      var e = element
-      stmt.run(e.org, e.repository, e.title, e.created_at, e.comments, e.is_pullrequest, e.milestone_id, e.labels, e.html_url, e.url)
-    })
-    stmt.finalize(callback)
-  } catch (err) {
-    logger.error(err.message)
-  }
+  var stmt = dbDashZero.prepare('REPLACE INTO issues   (org,repository,title,created_date,comments_count,is_pullrequest,milestone_id,labels,html_url,url) VALUES (?,?,?,?,?,?,?,?,?,?)')
+  gh.json_issues.forEach(function fe_db_issues (element, index, array) {
+    var e = element
+    stmt.run(e.org, e.repository, e.title, e.created_at, e.comments, e.is_pullrequest, e.milestone_id, e.labels, e.html_url, e.url)
+  })
+  stmt.finalize(callback)
 }
 
 function dbUpdateMembers (callback) {
   console.info('Saving members to database...')
-  try {
-    var stmt = dbDashZero.prepare('REPLACE INTO members (org,id,login,avatar_url,type) VALUES (?,?,?,?,?)', function done () {
-      gh.json_members.forEach(function fe_db_members (element, index, array) {
-        var e = element
-        stmt.run(e.org, e.id, e.login, e.avatar_url, e.type)
-      })
-      stmt.finalize(callback)
+  var stmt = dbDashZero.prepare('REPLACE INTO members (org,id,login,avatar_url,type) VALUES (?,?,?,?,?)', function done () {
+    gh.json_members.forEach(function fe_db_members (element, index, array) {
+      var e = element
+      stmt.run(e.org, e.id, e.login, e.avatar_url, e.type)
     })
-  } catch (err) {
-    logger.error(err.message)
-  }
+    stmt.finalize(callback)
+  })
 }
 
 function dbUpdateMilestones (callback) {
   console.info('Saving milestones to database...')
-  try {
-    var stmt = dbDashZero.prepare('REPLACE INTO milestones (org,repository,id,title,state,open_issues,due_on,html_url,url) VALUES (?,?,?,?,?,?,?,?,?)')
-    gh.json_milestones.forEach(function fe_db_milestones (element, index, array) {
-      var e = element
-      stmt.run(e.org, e.repository, e.id, e.title, e.state, e.open_issues, e.due_on, e.html_url, e.url)
-    })
-    stmt.finalize(callback)
-  } catch (err) {
-    logger.error(err.message)
-  }
+  var stmt = dbDashZero.prepare('REPLACE INTO milestones (org,repository,id,title,state,open_issues,due_on,html_url,url) VALUES (?,?,?,?,?,?,?,?,?)')
+  gh.json_milestones.forEach(function fe_db_milestones (element, index, array) {
+    var e = element
+    stmt.run(e.org, e.repository, e.id, e.title, e.state, e.open_issues, e.due_on, e.html_url, e.url)
+  })
+  stmt.finalize(callback)
 }
 
 function dbUpdateLabels (callback) {
   console.info('Saving labels to database...')
-  try {
-    var stmt = dbDashZero.prepare('REPLACE INTO labels (org,repository,name,url) VALUES (?,?,?,?)')
-    gh.json_labels.forEach(function fe_db_labels (element, index, array) {
-      var e = element
-      stmt.run(e.org, e.repository, e.name, e.url)
-    })
-    stmt.finalize(callback)
-  } catch (err) {
-    logger.error(err.message)
-  }
+  var stmt = dbDashZero.prepare('REPLACE INTO labels (org,repository,name,url) VALUES (?,?,?,?)')
+  gh.json_labels.forEach(function fe_db_labels (element, index, array) {
+    var e = element
+    stmt.run(e.org, e.repository, e.name, e.url)
+  })
+  stmt.finalize(callback)
 }
 
 function dbUpdateStats (callback) {
   console.info('Saving stats to database...')
-  try {
-    dbDashZero.run('DROP TABLE IF EXISTS stats', function done () {
-      dbDashZero.run('CREATE TABLE IF NOT EXISTS stats (last_updated TEXT, total_repositories INTEGER, total_members INTEGER, total_issues INTEGER, total_comments INTEGER, total_milestones INTEGER, total_labels INTEGER)', function done () {
-        var stmt = dbDashZero.prepare('INSERT INTO stats (last_updated,total_repositories,total_members,total_issues,total_comments,total_milestones,total_labels) VALUES (?,?,?,?,?,?,?)')
-        stmt.run(
-          gh.json_stats.last_updated,
-          gh.json_stats.total_repositories,
-          gh.json_stats.total_members,
-          gh.json_stats.total_issues,
-          gh.json_stats.total_comments,
-          gh.json_stats.total_milestones,
-          gh.json_stats.total_labels
-        )
-        stmt.finalize(callback)
-      })
+  dbDashZero.run('DROP TABLE IF EXISTS stats', function done () {
+    dbDashZero.run('CREATE TABLE IF NOT EXISTS stats (last_updated TEXT, total_repositories INTEGER, total_members INTEGER, total_issues INTEGER, total_comments INTEGER, total_milestones INTEGER, total_labels INTEGER)', function done () {
+      var stmt = dbDashZero.prepare('INSERT INTO stats (last_updated,total_repositories,total_members,total_issues,total_comments,total_milestones,total_labels) VALUES (?,?,?,?,?,?,?)')
+      stmt.run(
+        gh.json_stats.last_updated,
+        gh.json_stats.total_repositories,
+        gh.json_stats.total_members,
+        gh.json_stats.total_issues,
+        gh.json_stats.total_comments,
+        gh.json_stats.total_milestones,
+        gh.json_stats.total_labels
+      )
+      stmt.finalize(callback)
     })
-  } catch (err) {
-    logger.error(err.message)
-  }
+  })
 }
 
 function dbCreateTables (callback) {
-  try {
-    dbDashZero.run('CREATE TABLE IF NOT EXISTS comments (org TEXT, repository TEXT, id INTEGER, creator TEXT, updated_date TEXT, html_url TEXT, issue_url TEXT, PRIMARY KEY(id))')
-    dbDashZero.run('CREATE TABLE IF NOT EXISTS issues (org TEXT, repository TEXT, title TEXT, created_date TEXT, comments_count INTEGER, is_pullrequest TEXT, milestone_id TEXT, labels TEXT, html_url TEXT, url TEXT, PRIMARY KEY(url))')
-    dbDashZero.run('CREATE TABLE IF NOT EXISTS members (org TEXT, id INTEGER, login TEXT, avatar_url TEXT, type TEXT, PRIMARY KEY(id))')
-    dbDashZero.run('CREATE TABLE IF NOT EXISTS milestones (org TEXT, repository TEXT, id INTEGER, title TEXT, state TEXT, open_issues INTEGER, due_on TEXT, html_url TEXT, url TEXT, PRIMARY KEY(id))')
-    dbDashZero.run('CREATE TABLE IF NOT EXISTS labels (org TEXT, repository TEXT, name TEXT, url TEXT, PRIMARY KEY(url))')
-    callback()
-  } catch (err) {
-    logger.error(err.message)
-  }
+  dbDashZero.run('CREATE TABLE IF NOT EXISTS comments (org TEXT, repository TEXT, id INTEGER, creator TEXT, updated_date TEXT, html_url TEXT, issue_url TEXT, PRIMARY KEY(id))')
+  dbDashZero.run('CREATE TABLE IF NOT EXISTS issues (org TEXT, repository TEXT, title TEXT, created_date TEXT, comments_count INTEGER, is_pullrequest TEXT, milestone_id TEXT, labels TEXT, html_url TEXT, url TEXT, PRIMARY KEY(url))')
+  dbDashZero.run('CREATE TABLE IF NOT EXISTS members (org TEXT, id INTEGER, login TEXT, avatar_url TEXT, type TEXT, PRIMARY KEY(id))')
+  dbDashZero.run('CREATE TABLE IF NOT EXISTS milestones (org TEXT, repository TEXT, id INTEGER, title TEXT, state TEXT, open_issues INTEGER, due_on TEXT, html_url TEXT, url TEXT, PRIMARY KEY(id))')
+  dbDashZero.run('CREATE TABLE IF NOT EXISTS labels (org TEXT, repository TEXT, name TEXT, url TEXT, PRIMARY KEY(url))')
+  callback()
 }
 
 // ********************************
@@ -402,78 +377,56 @@ function saveAll (callback) {
 // ***************
 
 function checkDataFiles (callback) {
-  try {
-    var args = process.argv
-    if (args[2] === 'rebuild') {
-      updateAll(function done () {
-        console.info('All files rebuilt')
-        callback()
-      })
-    } else if (args[2] === 'getRate') {
-      gh.setToken(
-        function cb_setToken (status) {
-          gh.getRateLeft(function done (rateLeft) {
-            console.info(rateLeft)
-            callback()
-          })
-        })
-    } else if (args[2] === 'updateLabels') {
-      gh.setToken(
-        function cb_setToken (status) {
-          gh.getRepoLabels(function done () {
-            dbUpdateLabels(function done () {
-              gh.getRateLeft(function done (rateLeft) {
-                console.info(rateLeft)
-                // console.info(json_labels)
-                callback()
-              })
-            })
-          })
-        })
-    } else {
-      var sql = 'SELECT * FROM stats'
-      dbFetchAll(sql, function cb_db_fetch_stats (err, rows) {
-        if (err) {
-          if (err.message === 'SQLITE_ERROR: no such table: stats') {
-            dbCreateTables(function done () {
-              updateAll(function done () {
-                console.info('All files rebuilt')
-                callback()
-              })
-            })
-          } else {
-            logger.error(err.message)
-          }
-        } else {
+  var args = process.argv
+  if (args[2] === 'rebuild') {
+    updateAll(function done () {
+      console.info('All files rebuilt')
+      callback()
+    })
+  } else if (args[2] === 'getRate') {
+    gh.setToken(
+      function cb_setToken (status) {
+        gh.getRateLeft(function done (rateLeft) {
+          console.info(rateLeft)
           callback()
-        }
+        })
       })
-    }
-  } catch (err) {
-    logger.error(err.message)
+  } else if (args[2] === 'updateLabels') {
+    gh.setToken(
+      function cb_setToken (status) {
+        gh.getRepoLabels(function done () {
+          dbUpdateLabels(function done () {
+            gh.getRateLeft(function done (rateLeft) {
+              console.info(rateLeft)
+              // console.info(json_labels)
+              callback()
+            })
+          })
+        })
+      })
+  } else {
+    var sql = 'SELECT * FROM stats'
+    dbFetchAll(sql, function cb_db_fetch_stats (err, rows) {
+      if (err) {
+        if (err.message === 'SQLITE_ERROR: no such table: stats') {
+          dbCreateTables(function done () {
+            updateAll(function done () {
+              console.info('All files rebuilt')
+              callback()
+            })
+          })
+        } else {
+          logger.error(err.message)
+        }
+      } else {
+        callback()
+      }
+    })
   }
 }
 
 function checkConfig (callback) {
-  var stats = []
-  try {
-    stats.push(fs.statSync('config.json'))
-    stats.forEach(function fe_repo (element, index, array) {
-    })
-    callback()
-  } catch (e) {
-    if (e.code === 'ENOENT') {
-      console.error(e.path + ' not found.')
-      console.info('Launching setup wizard...')
-      setup(function done () {
-        console.info('Setup complete')
-        callback()
-      })
-    } else {
-      console.error(e)
-      throw e
-    }
-  }
+
 }
 
 function updateAll (callback) {
@@ -528,7 +481,7 @@ function updateData (callback) {
 
 function setup (callback) {
   console.error('Please create config.json')
-  process.exit(1)
+  process.exit()
 }
 
 module.exports = {
