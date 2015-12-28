@@ -1,6 +1,7 @@
 var async = require('async')
 var GitHubApi = require('github')
 
+var logger
 var github
 var REPO_LIST
 var CONFIG
@@ -23,7 +24,7 @@ var json_labels = []
 // Index of the repo currently being processed
 var repo_index = 0
 
-function init (config, callback) {
+function init (config, logger, callback) {
   github = new GitHubApi({
     // required
     version: '3.0.0',
@@ -37,6 +38,7 @@ function init (config, callback) {
     }
   })
   CONFIG = config
+  logger = logger
   REPO_LIST = config['repo_list']
   total_repositories = REPO_LIST.length
   callback()
@@ -149,7 +151,7 @@ function getSelectedIssueValues (ghRes) {
       }
       var milestone_id = 'none'
       if (element.milestone) {
-        is_pr = element.milestone.id
+        milestone_id = element.milestone.id
       }
       var labels = 'none'
       if (element.labels.length > 0) {
@@ -409,7 +411,7 @@ function fetchIssueComments (err, res) {
     throw err
   }
   if (github.hasNextPage(res)) {
-    github.getNextPage(res, function cb_1 (err, res) {
+    github.getNextPage(res, function cb_fetch_issue_comments (err, res) {
       processIssueCommentsPage(null, processIssueComments(err, res))
     })
   } else {
@@ -421,6 +423,9 @@ function processIssueComments (err, res) {
   if (err) {
     if (err.message === 'No next page found') {
       return 'Done with this repo'
+    } else if (err.message === '504: Gateway Timeout') {
+      logger.error(err.message)
+      return 'Timed out getting comments'
     } else {
       // Why does this error?
       console.error('=' + err.message + '=')

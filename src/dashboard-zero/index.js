@@ -3,7 +3,7 @@ var express = require('express')
 var app = express()
 var gh = require('./github.js')
 var sqlite3 = require('sqlite3').verbose()
-
+var logger = require('./logger.js')
 // Database setup
 var dbDashZero = new sqlite3.Database('data/dash_zero.db')
 
@@ -13,17 +13,15 @@ var SERVER_PORT
 function init (callback) {
   fs.readFile('config.json', function (err, data) {
     if (err) {
-      console.trace(err)
-      throw err
+      logger.error(err.message)
     }
     try {
       CONFIG = JSON.parse(data)
-    } catch (e) {
-      console.trace(e)
-      throw e
+    } catch (err) {
+      logger.error(err.message)
     } finally {
       SERVER_PORT = CONFIG['server_port'] || 3000
-      gh.init(CONFIG, callback)
+      gh.init(CONFIG, logger, callback)
     }
   })
 }
@@ -47,8 +45,7 @@ function startServer () {
     var sql = 'SELECT * FROM comments'
     dbFetchAll(sql, function cb_db_fetch_comments (err, rows) {
       if (err) {
-        console.trace(err)
-        throw err
+        logger.error(err.message)
       }
       if (req.query.export) {
         res.send('Export not supported...yet')
@@ -61,8 +58,7 @@ function startServer () {
     var sql = 'SELECT * FROM issues'
     dbFetchAll(sql, function cb_db_fetch_issues (err, rows) {
       if (err) {
-        console.trace(err)
-        throw err
+        logger.error(err.message)
       }
       if (req.query.export) {
         res.send('Export not supported...yet')
@@ -71,12 +67,11 @@ function startServer () {
       }
     })
   })
-  app.get('/api/all/issues/unanswered', function (req, res) {
-    var sql = 'SELECT * FROM issues WHERE comments_count = 0'
-    dbFetchAll(sql, function cb_db_fetch_issues_unanswered (err, rows) {
+  app.get('/api/all/issues/untouched', function (req, res) {
+    var sql = 'SELECT * FROM issues WHERE comments_count = 0 AND labels = "none" and milestone_id = "none"'
+    dbFetchAll(sql, function cb_db_fetch_issues_untouched (err, rows) {
       if (err) {
-        console.trace(err)
-        throw err
+        logger.error(err.message)
       }
       if (req.query.export) {
         res.send('Export not supported...yet')
@@ -89,8 +84,7 @@ function startServer () {
     var sql = 'SELECT * FROM labels'
     dbFetchAll(sql, function cb_db_fetch_labels (err, rows) {
       if (err) {
-        console.trace(err)
-        throw err
+        logger.error(err.message)
       }
       if (req.query.export) {
         res.send('Export not supported...yet')
@@ -103,8 +97,7 @@ function startServer () {
     var sql = 'SELECT * FROM members'
     dbFetchAll(sql, function cb_db_fetch_members (err, rows) {
       if (err) {
-        console.trace(err)
-        throw err
+        logger.error(err.message)
       }
       if (req.query.export) {
         res.send('Export not supported...yet')
@@ -117,8 +110,7 @@ function startServer () {
     var sql = 'SELECT * FROM milestones'
     dbFetchAll(sql, function cb_db_fetch_milestones (err, rows) {
       if (err) {
-        console.trace(err)
-        throw err
+        logger.error(err.message)
       }
       if (req.query.export) {
         res.send('Export not supported...yet')
@@ -131,8 +123,7 @@ function startServer () {
     var sql = 'SELECT * FROM stats'
     dbFetchAll(sql, function cb_db_fetch_stats (err, rows) {
       if (err) {
-        console.trace(err)
-        throw err
+        logger.error(err.message)
       }
       if (req.query.export) {
         res.send('Export not supported...yet')
@@ -154,9 +145,8 @@ function startServer () {
 function dbFetchAll (sql, callback) {
   try {
     dbDashZero.all(sql, callback)
-  } catch (e) {
-    console.trace(e)
-    throw e
+  } catch (err) {
+    logger.error(err.message)
   }
 }
 
@@ -169,9 +159,8 @@ function dbUpdateComments (callback) {
       stmt.run(e.org, e.repository, e.id, e.creator, e.updated_date, e.html_url, e.issue_url)
     })
     stmt.finalize(callback)
-  } catch (e) {
-    console.trace(e)
-    throw e
+  } catch (err) {
+    logger.error(err.message)
   }
 }
 
@@ -184,9 +173,8 @@ function dbUpdateIssues (callback) {
       stmt.run(e.org, e.repository, e.title, e.created_at, e.comments, e.is_pullrequest, e.milestone_id, e.labels, e.html_url, e.url)
     })
     stmt.finalize(callback)
-  } catch (e) {
-    console.trace(e)
-    throw e
+  } catch (err) {
+    logger.error(err.message)
   }
 }
 
@@ -200,9 +188,8 @@ function dbUpdateMembers (callback) {
       })
       stmt.finalize(callback)
     })
-  } catch (e) {
-    console.trace(e)
-    throw e
+  } catch (err) {
+    logger.error(err.message)
   }
 }
 
@@ -215,9 +202,8 @@ function dbUpdateMilestones (callback) {
       stmt.run(e.org, e.repository, e.id, e.title, e.state, e.open_issues, e.due_on, e.html_url, e.url)
     })
     stmt.finalize(callback)
-  } catch (e) {
-    console.trace(e)
-    throw e
+  } catch (err) {
+    logger.error(err.message)
   }
 }
 
@@ -230,9 +216,8 @@ function dbUpdateLabels (callback) {
       stmt.run(e.org, e.repository, e.name, e.url)
     })
     stmt.finalize(callback)
-  } catch (e) {
-    console.trace(e)
-    throw e
+  } catch (err) {
+    logger.error(err.message)
   }
 }
 
@@ -254,9 +239,8 @@ function dbUpdateStats (callback) {
         stmt.finalize(callback)
       })
     })
-  } catch (e) {
-    console.trace(e)
-    throw e
+  } catch (err) {
+    logger.error(err.message)
   }
 }
 
@@ -268,9 +252,8 @@ function dbCreateTables (callback) {
     dbDashZero.run('CREATE TABLE IF NOT EXISTS milestones (org TEXT, repository TEXT, id INTEGER, title TEXT, state TEXT, open_issues INTEGER, due_on TEXT, html_url TEXT, url TEXT, PRIMARY KEY(id))')
     dbDashZero.run('CREATE TABLE IF NOT EXISTS labels (org TEXT, repository TEXT, name TEXT, url TEXT, PRIMARY KEY(url))')
     callback()
-  } catch (e) {
-    console.trace(e)
-    throw e
+  } catch (err) {
+    logger.error(err.message)
   }
 }
 
@@ -459,18 +442,15 @@ function checkDataFiles (callback) {
               })
             })
           } else {
-            console.error(err.message)
-            console.trace(err)
-            throw err
+            logger.error(err.message)
           }
         } else {
           callback()
         }
       })
     }
-  } catch (e) {
-    console.trace(e)
-    throw e
+  } catch (err) {
+    logger.error(err.message)
   }
 }
 
@@ -522,8 +502,7 @@ function updateData (callback) {
       var sql = 'SELECT last_updated FROM stats'
       dbFetchAll(sql, function cb_db_fetch_stats (err, rows) {
         if (err) {
-          console.trace(err)
-          throw err
+          logger.error(err.message)
         }
         if (new Date() - new Date(Number(rows[0].last_updated)) > 1700000) {
           console.info('Updating data...')

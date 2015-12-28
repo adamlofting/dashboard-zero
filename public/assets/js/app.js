@@ -38,8 +38,14 @@
         frontpage.stats = r.data
         $('#last_updated').text(new Date(Number(frontpage.stats[0].last_updated)).toLocaleString())
       })
-      $http.get('/api/all/issues/unanswered').then(function (r) {
-        frontpage.issues_unanswered = r.data
+      $http.get('/api/all/issues/untouched').then(function (r) {
+        frontpage.issues_untouched = r.data
+        frontpage.issues_untouched = frontpage.issues_untouched.map(function (d) {
+          d.values = d.values.sort(function (a, b) {
+            return new Date(b.created_date) - new Date(a.created_date)
+          })
+          return d
+        })
       })
     }
 
