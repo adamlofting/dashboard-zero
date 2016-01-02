@@ -26,6 +26,7 @@ function init (callback) {
     try {
       CONFIG = JSON.parse(data)
     } catch (err) {
+      console.error(err.message)
       logger.error(err.message)
     } finally {
       SERVER_PORT = CONFIG['server_port'] || 3000
@@ -53,6 +54,7 @@ function startServer () {
     var sql = 'SELECT * FROM comments'
     dbFetchAll(sql, function cb_db_fetch_comments (err, rows) {
       if (err) {
+        console.error(err.message)
         logger.error(err.message)
       }
       if (req.query.export) {
@@ -66,6 +68,7 @@ function startServer () {
     var sql = 'SELECT * FROM issues'
     dbFetchAll(sql, function cb_db_fetch_issues (err, rows) {
       if (err) {
+        console.error(err.message)
         logger.error(err.message)
       }
       if (req.query.export) {
@@ -79,6 +82,7 @@ function startServer () {
     var sql = 'SELECT * FROM issues WHERE comments_count = 0 AND labels = "none" and milestone_id = "none"'
     dbFetchAll(sql, function cb_db_fetch_issues_untouched (err, rows) {
       if (err) {
+        console.error(err.message)
         logger.error(err.message)
       }
       if (req.query.export) {
@@ -92,6 +96,7 @@ function startServer () {
     var sql = 'SELECT * FROM labels'
     dbFetchAll(sql, function cb_db_fetch_labels (err, rows) {
       if (err) {
+        console.error(err.message)
         logger.error(err.message)
       }
       if (req.query.export) {
@@ -105,6 +110,7 @@ function startServer () {
     var sql = 'SELECT * FROM members'
     dbFetchAll(sql, function cb_db_fetch_members (err, rows) {
       if (err) {
+        console.error(err.message)
         logger.error(err.message)
       }
       if (req.query.export) {
@@ -118,6 +124,7 @@ function startServer () {
     var sql = 'SELECT * FROM milestones'
     dbFetchAll(sql, function cb_db_fetch_milestones (err, rows) {
       if (err) {
+        console.error(err.message)
         logger.error(err.message)
       }
       if (req.query.export) {
@@ -131,6 +138,7 @@ function startServer () {
     var sql = 'SELECT * FROM stats'
     dbFetchAll(sql, function cb_db_fetch_stats (err, rows) {
       if (err) {
+        console.error(err.message)
         logger.error(err.message)
       }
       if (req.query.export) {
@@ -252,126 +260,13 @@ function saveAll (callback) {
               total_milestones: gh.total_milestones,
               total_labels: gh.total_labels
             }
-            dbUpdateStats(function done () {
-              // console.info('Done m: ' + total_members + ', ' + json_members.length)
-              // console.info('Done i: ' + total_issues + ', ' + json_issues.length)
-              // console.info('Done m2: ' + total_milestones + ', ' + json_milestones.length)
-              // console.info('Done c: ' + total_comments + ', ' + json_comments.length)
-              // console.info('Done l: ' + total_labels + ', ' + json_labels.length)
-              callback()
-            })
+            dbUpdateStats(callback)
           })
         })
       })
     })
   })
 }
-
-// /**
-// * Export members from memory to csv
-// */
-// function saveFileMembers (callback) {
-//   console.info('All Members processed')
-//   var repo_header = 'org,id,login,avatar_url,type'
-//   updateFile(repo_header, csv_members, 'data/members.csv', function cb_update_file (err, res) {
-//     if (err) {
-//       console.error('Error updating file: ' + err)
-//       process.exit(1)
-//     }
-//     callback()
-//   })
-// }
-
-// /**
-// * Exports issues from memory to csv
-// */
-// function saveFileIssues (callback) {
-//   console.info('All Issues processed')
-//   var repo_header = 'org,repository,id,title,created_date,updated_date,comments_count,is_pullrequest,html_url,url'
-//   updateFile(repo_header, csv_issues, 'data/issues.csv', function cb_update_file (err, res) {
-//     if (err) {
-//       console.error('Error updating file: ' + err)
-//       process.exit(1)
-//     }
-//     fs.writeFile('data/issues.json', JSON.stringify(json_issues), function (err) {
-//       if (err) callback(err)
-//       // console.info('It\'s saved!')
-//       callback(null)
-//     })
-//   })
-// }
-
-// /**
-// * Export milestones from memory to csv
-// */
-// function saveFileMilestones (callback) {
-//   console.info('All Milestones processed')
-//   var repo_header = 'org,repository,title,state,open_issues,due_on,html_url,url'
-//   updateFile(repo_header, csv_milestones, 'data/milestones.csv', function cb_update_file (err, res) {
-//     if (err) {
-//       console.error('Error updating file: ' + err)
-//       process.exit(1)
-//     }
-//     fs.writeFile('data/milestones.json', JSON.stringify(json_milestones), function (err) {
-//       if (err) callback(err)
-//       // console.info('It\'s saved!')
-//       callback(null)
-//     })
-//   })
-// }
-
-// /**
-// * Exports issue labels from memory to csv
-// */
-// function saveFileLabels (callback) {
-//   console.info('All Labels processed')
-//   var repo_header = 'org,repository,name,url'
-//   updateFile(repo_header, csv_labels, 'data/labels.csv', function cb_update_file (err, res) {
-//     if (err) {
-//       console.error('Error updating file: ' + err)
-//       process.exit(1)
-//     }
-//     callback()
-//   })
-// }
-
-// /**
-// * Export issue comments from memory to csv
-// */
-// function saveFileComments (callback) {
-//   console.info('All Comments processed')
-//   var repo_header = 'org,repository,id,creator,updated_date,html_url,issue_url'
-//   updateFile(repo_header, csv_comments, 'data/comments.csv', function cb_update_file (err, res) {
-//     if (err) {
-//       console.error('Error updating file: ' + err)
-//       process.exit(1)
-//     }
-//     callback()
-//   })
-// }
-
-// /**
-// * Exports stats from memory to json
-// */
-// function saveFileStats (callback) {
-//   console.info('Saving stats')
-//   fs.writeFile('data/stats.json', json_stats, function (err) {
-//     if (err) callback(err)
-//     // console.info('It\'s saved!')
-//     callback(null)
-//   })
-// }
-
-// // ***********************************
-// // save the file
-// // ***********************
-// function updateFile (header, contents, file_name, callback) {
-//   fs.writeFile(file_name, header + '\n' + contents, function (err) {
-//     if (err) callback(err)
-//     // console.info('It\'s saved!')
-//     callback(null)
-//   })
-// }
 
 // ****************
 // MISC
@@ -399,7 +294,6 @@ function checkDataFiles (callback) {
           dbUpdateLabels(function done () {
             gh.getRateLeft(function done (rateLeft) {
               console.info(rateLeft)
-              // console.info(json_labels)
               callback()
             })
           })
@@ -417,6 +311,7 @@ function checkDataFiles (callback) {
             })
           })
         } else {
+          console.error(err.message)
           logger.error(err.message)
         }
       } else {
@@ -424,10 +319,6 @@ function checkDataFiles (callback) {
       }
     })
   }
-}
-
-function checkConfig (callback) {
-
 }
 
 function updateAll (callback) {
@@ -457,6 +348,7 @@ function updateData (callback) {
       var sql = 'SELECT last_updated FROM stats'
       dbFetchAll(sql, function cb_db_fetch_stats (err, rows) {
         if (err) {
+          console.error(err.message)
           logger.error(err.message)
         }
         if (new Date() - new Date(Number(rows[0].last_updated)) > 1700000) {
@@ -477,6 +369,7 @@ function updateData (callback) {
             })
           })
         } else {
+          console.log('Data not stale yet')
           timerId = setTimeout(updateData, 1800000, function done () { // 30 minutes
           })
           callback()
@@ -494,7 +387,6 @@ module.exports = {
   init: init,
   checkDataFiles: checkDataFiles,
   updateData: updateData,
-  checkConfig: checkConfig,
   startServer: startServer,
   timerId: timerId
 }
