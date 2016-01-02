@@ -9,6 +9,7 @@ var dbDashZero = new sqlite3.Database('data/dash_zero.db')
 
 var CONFIG = []
 var SERVER_PORT
+var timerId
 
 function init (callback) {
   fs.readFile('config.json', function (err, data) {
@@ -450,6 +451,7 @@ function updateAll (callback) {
 }
 
 function updateData (callback) {
+  clearTimeout(timerId)
   gh.setToken(
     function cb_setTokenUpdateData (status) {
       var sql = 'SELECT last_updated FROM stats'
@@ -466,6 +468,8 @@ function updateData (callback) {
                   gh.getRateLeft(function done (rateLeft) {
                     console.info('Data updated: ' + new Date().toLocaleString())
                     console.info(rateLeft)
+                    timerId = setTimeout(updateData, 1800000, function done () { // 30 minutes
+                    })
                     callback()
                   })
                 })
@@ -473,6 +477,8 @@ function updateData (callback) {
             })
           })
         } else {
+          timerId = setTimeout(updateData, 1800000, function done () { // 30 minutes
+          })
           callback()
         }
       })
@@ -489,5 +495,6 @@ module.exports = {
   checkDataFiles: checkDataFiles,
   updateData: updateData,
   checkConfig: checkConfig,
-  startServer: startServer
+  startServer: startServer,
+  timerId: timerId
 }
