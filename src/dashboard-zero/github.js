@@ -389,7 +389,7 @@ function getCommentsFromIssue (issue_id) {
   // console.info('Fetching issue comments for ' + REPO_LIST[repo_index].repo)
 
   github.issues.getComments({'user': REPO_LIST[repo_index].org, 'repo': REPO_LIST[repo_index].repo, 'number': issue_id, 'per_page': 100}, function cb_get_comments_from_issue (err, res) {
-    fetchIssueComments(null, processIssueComments(err, res))
+    fetchIssueComments(err, processIssueComments(err, res))
   })
 }
 
