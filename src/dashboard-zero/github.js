@@ -209,8 +209,7 @@ function getRepoMilestones (callback) {
   // To see the data from github: curl -i https://api.github.com/orgs/mozilla/repos?per_page=1
   github.issues.getAllMilestones(msg, function gotFromOrg (err, res) {
     if (err) {
-      console.trace()
-      logger.error(err.message)
+      throw err
     }
     // this has loaded the first page of results
     // get the values we want out of this response
@@ -326,7 +325,7 @@ function getRepoLabels (callback) {
       function doThis (callback) {
         githubClient.getNextPage(ghResult, function gotNextPage (err, res) {
           if (err) {
-            logger.error(err.message)
+            throw err
           }
           // get the values we want out of this response
           getSelectedMilestoneValues(res)
@@ -411,8 +410,7 @@ function processIssueComments (err, res) {
       throw err
     } else {
       // Why does this error?
-      console.trace()
-      logger.error(err.message)
+      throw err
     }
   }
   res.forEach(function fe_repo (element, index, array) {
