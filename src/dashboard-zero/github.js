@@ -53,14 +53,14 @@ function setToken (callback) {
 
     github.misc.rateLimit({}, function cb_rateLimit (err, res) {
       if (err) {
-        console.trace()
-        logger.error(err.message)
+        throw err
       }
       // console.info('GitHub Login: Success')
       callback()
     })
   } else {
-    logger.error('GutHub Login: No Token')
+    logger.error('GetHub Login: No Token')
+    process.exit(1)
   }
 }
 
@@ -88,8 +88,7 @@ function getRepoIssues (callback) {
   // To see the data from github: curl -i https://api.github.com/orgs/mozilla/repos?per_page=1
   github.issues.repoIssues(msg, function gotFromOrg (err, res) {
     if (err) {
-      console.trace()
-      logger.error(err.message)
+      throw err
     }
     // this has loaded the first page of results
     // get the values we want out of this response
@@ -107,7 +106,7 @@ function getRepoIssues (callback) {
       function doThis (callback) {
         githubClient.getNextPage(ghResult, function gotNextPage (err, res) {
           if (err) {
-            logger.error(err.message)
+            throw err
           }
           // get the values we want out of this response
           getSelectedIssueValues(res)
@@ -121,7 +120,7 @@ function getRepoIssues (callback) {
       },
       function done (err) {
         if (err) {
-          logger.error(err.message)
+          throw err
         }
         if (repo_index < (REPO_LIST.length - 1)) {
           repo_index++
@@ -229,7 +228,7 @@ function getRepoMilestones (callback) {
       function doThis (callback) {
         githubClient.getNextPage(ghResult, function gotNextPage (err, res) {
           if (err) {
-            logger.error(err.message)
+            throw err
           }
           // get the values we want out of this response
           getSelectedMilestoneValues(res)
@@ -243,8 +242,7 @@ function getRepoMilestones (callback) {
       },
       function done (err) {
         if (err) {
-          console.trace()
-          logger.error(err.message)
+          throw err
         }
         if (repo_index < (REPO_LIST.length - 1)) {
           repo_index++
@@ -310,8 +308,7 @@ function getRepoLabels (callback) {
   // To see the data from github: curl -i https://api.github.com/orgs/mozilla/repos?per_page=1
   github.issues.getLabels(msg, function gotFromOrg (err, res) {
     if (err) {
-      console.trace()
-      logger.error(err.message)
+      throw err
     }
     // this has loaded the first page of results
     // get the values we want out of this response
@@ -343,8 +340,7 @@ function getRepoLabels (callback) {
       },
       function done (err) {
         if (err) {
-          console.trace()
-          logger.error(err.message)
+          throw err
         }
         if (repo_index < (REPO_LIST.length - 1)) {
           repo_index++
@@ -395,8 +391,7 @@ function getCommentsFromIssue (issue_id) {
 
 function fetchIssueComments (err, res) {
   if (err) {
-    console.trace()
-    logger.error(err.message)
+    throw err
   }
   if (github.hasNextPage(res)) {
     github.getNextPage(res, function cb_fetch_issue_comments (err, res) {
@@ -413,8 +408,7 @@ function processIssueComments (err, res) {
       console.log('Done with this repo')
       return 'Done with this repo'
     } else if (err.message === '504: Gateway Timeout') {
-      console.trace()
-      logger.error(err.message)
+      throw err
     } else {
       // Why does this error?
       console.trace()
@@ -446,8 +440,7 @@ function processIssueCommentsPage (err, res) {
       // We are done with this repo
       return
     } else {
-      console.trace()
-      logger.error(err.message)
+      throw err
     }
   } else {
     if (github.hasNextPage(res)) {
@@ -483,8 +476,7 @@ function getOrgMembers (callback) {
   // To see the data from github: curl -i https://api.github.com/orgs/mozilla/repos?per_page=1
   github.orgs.getMembers(msg, function gotFromOrg (err, res) {
     if (err) {
-      console.trace()
-      logger.error(err.message)
+      throw err
     }
     // this has loaded the first page of results
     // get the values we want out of this response
@@ -502,8 +494,7 @@ function getOrgMembers (callback) {
       function doThis (callback) {
         githubClient.getNextPage(ghResult, function gotNextPage (err, res) {
           if (err) {
-            console.trace()
-            logger.error(err.message)
+            throw err
           }
           // get the values we want out of this response
           getSelectedMemberValues(res)
@@ -517,8 +508,7 @@ function getOrgMembers (callback) {
       },
       function done (err) {
         if (err) {
-          console.trace()
-          logger.error(err.message)
+          throw err
         }
         callback()
       })
@@ -554,8 +544,7 @@ function getSelectedMemberValues (ghRes) {
 function getRateLeft (callback) {
   github.misc.rateLimit({}, function cb_rateLimit (err, res) {
     if (err) {
-      console.trace()
-      logger.error(err.message)
+      throw err
     }
     callback(res.rate.remaining + ' calls remaining, resets at ' + new Date(res.rate.reset * 1000))
   })
