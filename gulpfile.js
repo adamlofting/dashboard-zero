@@ -53,7 +53,6 @@ gulp.task('coveralls', function (cb) {
   .pipe(coveralls())
 })
 
-// gulp.task('dev', ['isCircle', 'standard', 'test', 'coveralls'])
-gulp.task('dev', ['isCircle', 'standard', 'test'])
+gulp.task('dev', ['isCircle', 'standard', 'test', 'coveralls'])
 
 gulp.task('default', ['main'])
