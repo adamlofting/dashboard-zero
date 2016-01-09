@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="dashboardzero">
+<html lang="en" data-ng-app="dashboardzero">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -39,11 +39,11 @@
           </button>
           <a class="navbar-brand" href="#">Dashboard Zero</a>
         </div>
-        <div id="navbar" class="collapse navbar-collapse" ng-controller="NavController">
+        <div id="navbar" class="collapse navbar-collapse" data-ng-controller="NavController">
           <ul class="nav navbar-nav">
-            <li ng-class="{active: $location.path() == ''}"><a href="#">Home</a></li>
-            <li ng-class="{active: $location.path() == '/about'}"><a href="#about">About</a></li>
-            <li ng-class="{active: $location.path() == '/contact'}"><a href="#contact">Contact</a></li>
+            <li data-ng-class="{active: $location.path() == ''}"><a href="#">Home</a></li>
+            <li data-ng-class="{active: $location.path() == '/about'}"><a href="#about">About</a></li>
+            <li data-ng-class="{active: $location.path() == '/contact'}"><a href="#contact">Contact</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li class="navbar-text navbar-right">last updated: <span id="last_updated"></span></li>
@@ -51,7 +51,7 @@
         </div><!--/.nav-collapse -->
       </div>
     </nav>
-    <div ng-view ng-cloak></div>
+    <div data-ng-view data-ng-cloak></div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>

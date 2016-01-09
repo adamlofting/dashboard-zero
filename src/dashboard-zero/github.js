@@ -53,15 +53,15 @@ function setToken (callback) {
 
     github.misc.rateLimit({}, function cb_rateLimit (err, res) {
       if (err) {
-        console.trace(err)
+        console.trace()
         throw err
       }
       // console.info('GitHub Login: Success')
       callback()
     })
   } else {
-    console.error('GutHub Login: No Token')
-    callback()
+    logger.error('GetHub Login: No Token')
+    process.exit(1)
   }
 }
 
@@ -89,7 +89,8 @@ function getRepoIssues (callback) {
   // To see the data from github: curl -i https://api.github.com/orgs/mozilla/repos?per_page=1
   github.issues.repoIssues(msg, function gotFromOrg (err, res) {
     if (err) {
-      console.trace(err)
+      console.trace()
+      throw err
     }
     // this has loaded the first page of results
     // get the values we want out of this response
@@ -107,7 +108,7 @@ function getRepoIssues (callback) {
       function doThis (callback) {
         githubClient.getNextPage(ghResult, function gotNextPage (err, res) {
           if (err) {
-            console.trace(err)
+            console.trace()
             throw err
           }
           // get the values we want out of this response
@@ -122,7 +123,7 @@ function getRepoIssues (callback) {
       },
       function done (err) {
         if (err) {
-          console.trace(err)
+          console.trace()
           throw err
         }
         if (repo_index < (REPO_LIST.length - 1)) {
@@ -161,33 +162,28 @@ function getSelectedIssueValues (ghRes) {
         })
         labels = arrLabels.join('|')
       }
-      try {
-        var issue_line = {
-          'org': REPO_LIST[repo_index].org,
-          'repository': REPO_LIST[repo_index].repo,
-          'id': element.id,
-          'title': element.title.replace(/"/g, '&quot;'),
-          'created_at': element.created_at,
-          'updated_at': element.updated_at,
-          'comments': element.comments,
-          'is_pullrequest': is_pr,
-          'milestone_id': milestone_id,
-          'labels': labels,
-          'html_url': element.html_url.replace(/"/g, '&quot;').replace(/,/g, '%2C'),
-          'url': element.url
-        }
-
-        // Add to list to be saved to csv
-        json_issues.push(issue_line)
-
-        // Process comments
-        getCommentsFromIssue(element.number)
-
-        total_issues++
-      } catch (e) {
-        console.trace(e)
-        throw e
+      var issue_line = {
+        'org': REPO_LIST[repo_index].org,
+        'repository': REPO_LIST[repo_index].repo,
+        'id': element.id,
+        'title': element.title.replace(/"/g, '&quot;'),
+        'created_at': element.created_at,
+        'updated_at': element.updated_at,
+        'comments': element.comments,
+        'is_pullrequest': is_pr,
+        'milestone_id': milestone_id,
+        'labels': labels,
+        'html_url': element.html_url.replace(/"/g, '&quot;').replace(/,/g, '%2C'),
+        'url': element.url
       }
+
+      // Add to list to be saved to csv
+      json_issues.push(issue_line)
+
+      // Process comments
+      getCommentsFromIssue(element.number)
+
+      total_issues++
     })
   }
   return ghRes
@@ -217,7 +213,8 @@ function getRepoMilestones (callback) {
   // To see the data from github: curl -i https://api.github.com/orgs/mozilla/repos?per_page=1
   github.issues.getAllMilestones(msg, function gotFromOrg (err, res) {
     if (err) {
-      console.throw(err)
+      console.trace()
+      throw err
     }
     // this has loaded the first page of results
     // get the values we want out of this response
@@ -235,7 +232,7 @@ function getRepoMilestones (callback) {
       function doThis (callback) {
         githubClient.getNextPage(ghResult, function gotNextPage (err, res) {
           if (err) {
-            console.trace(err)
+            console.trace()
             throw err
           }
           // get the values we want out of this response
@@ -250,7 +247,7 @@ function getRepoMilestones (callback) {
       },
       function done (err) {
         if (err) {
-          console.trace(err)
+          console.trace()
           throw err
         }
         if (repo_index < (REPO_LIST.length - 1)) {
@@ -272,27 +269,22 @@ function getRepoMilestones (callback) {
 function getSelectedMilestoneValues (ghRes) {
   if (ghRes) {
     ghRes.forEach(function fe_repo (element, index, array) {
-      try {
-        var milestone_line = {
-          'org': REPO_LIST[repo_index].org,
-          'repository': REPO_LIST[repo_index].repo,
-          'id': element.id,
-          'title': element.title.replace(/"/g, '&quot;'),
-          'state': element.state,
-          'open_issues': element.open_issues,
-          'due_on': element.due_on,
-          'html_url': element.html_url.replace(/"/g, '&quot;').replace(/,/g, '%2C'),
-          'url': element.url
-        }
-
-        // Add to list to be saved to csv
-        json_milestones.push(milestone_line)
-
-        total_milestones++
-      } catch (e) {
-        console.trace(e)
-        throw e
+      var milestone_line = {
+        'org': REPO_LIST[repo_index].org,
+        'repository': REPO_LIST[repo_index].repo,
+        'id': element.id,
+        'title': element.title.replace(/"/g, '&quot;'),
+        'state': element.state,
+        'open_issues': element.open_issues,
+        'due_on': element.due_on,
+        'html_url': element.html_url.replace(/"/g, '&quot;').replace(/,/g, '%2C'),
+        'url': element.url
       }
+
+      // Add to list to be saved to csv
+      json_milestones.push(milestone_line)
+
+      total_milestones++
     })
   }
   return ghRes
@@ -322,7 +314,8 @@ function getRepoLabels (callback) {
   // To see the data from github: curl -i https://api.github.com/orgs/mozilla/repos?per_page=1
   github.issues.getLabels(msg, function gotFromOrg (err, res) {
     if (err) {
-      console.throw(err)
+      console.trace()
+      throw err
     }
     // this has loaded the first page of results
     // get the values we want out of this response
@@ -340,7 +333,7 @@ function getRepoLabels (callback) {
       function doThis (callback) {
         githubClient.getNextPage(ghResult, function gotNextPage (err, res) {
           if (err) {
-            console.trace(err)
+            console.trace()
             throw err
           }
           // get the values we want out of this response
@@ -355,7 +348,7 @@ function getRepoLabels (callback) {
       },
       function done (err) {
         if (err) {
-          console.trace(err)
+          console.trace()
           throw err
         }
         if (repo_index < (REPO_LIST.length - 1)) {
@@ -400,14 +393,14 @@ function getSelectedLabelValues (ghRes) {
 function getCommentsFromIssue (issue_id) {
   // console.info('Fetching issue comments for ' + REPO_LIST[repo_index].repo)
 
-  github.issues.getComments({'user': REPO_LIST[repo_index].org, 'repo': REPO_LIST[repo_index].repo, 'number': issue_id, 'per_page': 100}, function cb_1 (err, res) {
-    fetchIssueComments(null, processIssueComments(err, res))
+  github.issues.getComments({'user': REPO_LIST[repo_index].org, 'repo': REPO_LIST[repo_index].repo, 'number': issue_id, 'per_page': 100}, function cb_get_comments_from_issue (err, res) {
+    fetchIssueComments(err, processIssueComments(err, res))
   })
 }
 
 function fetchIssueComments (err, res) {
   if (err) {
-    console.trace(err)
+    console.trace()
     throw err
   }
   if (github.hasNextPage(res)) {
@@ -422,37 +415,32 @@ function fetchIssueComments (err, res) {
 function processIssueComments (err, res) {
   if (err) {
     if (err.message === 'No next page found') {
+      console.log('Done with this repo')
       return 'Done with this repo'
     } else if (err.message === '504: Gateway Timeout') {
-      logger.error(err.message)
-      return 'Timed out getting comments'
+      console.trace()
+      throw err
     } else {
       // Why does this error?
-      console.error('=' + err.message + '=')
-      console.trace(err)
+      console.trace()
       throw err
     }
   }
   res.forEach(function fe_repo (element, index, array) {
-    try {
-      var comment_line = {
-        'org': REPO_LIST[repo_index].org,
-        'repository': REPO_LIST[repo_index].repo,
-        'id': element.id,
-        'creator': element.user.login.replace(/"/g, '&quot;'),
-        'updated_date': element.updated_at,
-        'html_url': element.html_url.replace(/"/g, '&quot;').replace(/,/g, '%2C'),
-        'issue_url': element.issue_url.replace(/"/g, '&quot;').replace(/,/g, '%2C')
-      }
-
-      // Add to list to be saved to csv
-      json_comments.push(comment_line)
-
-      total_comments++
-    } catch (e) {
-      console.dir(element)
-      throw e
+    var comment_line = {
+      'org': REPO_LIST[repo_index].org,
+      'repository': REPO_LIST[repo_index].repo,
+      'id': element.id,
+      'creator': element.user.login.replace(/"/g, '&quot;'),
+      'updated_date': element.updated_at,
+      'html_url': element.html_url.replace(/"/g, '&quot;').replace(/,/g, '%2C'),
+      'issue_url': element.issue_url.replace(/"/g, '&quot;').replace(/,/g, '%2C')
     }
+
+    // Add to list to be saved to csv
+    json_comments.push(comment_line)
+
+    total_comments++
   })
   return res
 }
@@ -461,8 +449,9 @@ function processIssueCommentsPage (err, res) {
   if (err) {
     if (err === 'No more pages') {
       // We are done with this repo
+      return
     } else {
-      console.trace(err)
+      console.trace()
       throw err
     }
   } else {
@@ -488,7 +477,6 @@ function processIssueCommentsPage (err, res) {
  */
 function getOrgMembers (callback) {
   var githubClient = github
-  // console.info('Fetching members for ' + REPO_LIST[repo_index].repo)
 
   // The options msg we send to the client http://mikedeboer.github.io/node-github/#repos.prototype.getFromOrg
   var msg = {
@@ -500,8 +488,8 @@ function getOrgMembers (callback) {
   // To see the data from github: curl -i https://api.github.com/orgs/mozilla/repos?per_page=1
   github.orgs.getMembers(msg, function gotFromOrg (err, res) {
     if (err) {
-      console.error(REPO_LIST[repo_index].org)
-      console.trace(err)
+      console.trace()
+      throw err
     }
     // this has loaded the first page of results
     // get the values we want out of this response
@@ -519,7 +507,7 @@ function getOrgMembers (callback) {
       function doThis (callback) {
         githubClient.getNextPage(ghResult, function gotNextPage (err, res) {
           if (err) {
-            console.trace(err)
+            console.trace()
             throw err
           }
           // get the values we want out of this response
@@ -534,7 +522,7 @@ function getOrgMembers (callback) {
       },
       function done (err) {
         if (err) {
-          console.trace(err)
+          console.trace()
           throw err
         }
         callback()
@@ -571,7 +559,7 @@ function getSelectedMemberValues (ghRes) {
 function getRateLeft (callback) {
   github.misc.rateLimit({}, function cb_rateLimit (err, res) {
     if (err) {
-      console.error('Error getting rate: ' + err)
+      console.trace()
       throw err
     }
     callback(res.rate.remaining + ' calls remaining, resets at ' + new Date(res.rate.reset * 1000))
