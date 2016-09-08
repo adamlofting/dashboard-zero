@@ -1,0 +1,33 @@
+    <div class="container" data-ng-controller="FrontPageController as dashboardzero">
+      <div class="starter-template">
+        <h1>Dashboard Zero</h1>
+        <p class="lead">An engineering dashboard for tracking the numbers we want to keep at zero
+        </p>
+      </div>
+
+      <div class="container-fluid">
+
+      	<h1 class="text-center zero-count">{{dashboardzero.issues_untouched.length}}</h1>
+      	<h2 class="text-center">Untouched Issues</h2>
+
+				<h2 class="sub-header">Issues</h2>
+          <div class="table-responsive">
+            <table class="table table-striped-dark">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Created on</th>
+                  <th>Repository</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-ng-repeat="issue in dashboardzero.issues_untouched">
+                  <td><a href="{{issue.html_url}}" title="{{issue.title}}">{{issue.title | limitTo:100}}</a></td>
+                  <td>{{issue.created_date | date:'yyyy-MM-dd HH:mm:ss Z' }}</td>
+                  <td>{{issue.repository}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div><!-- /.container -->

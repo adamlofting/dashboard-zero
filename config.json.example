@@ -1,0 +1,14 @@
+{
+  "token": "<github api token>",
+  "server_port": "<server port>",
+  "repo_list": [{
+    "org": "org1",
+    "repo": "repo1"
+  }, {
+    "org": "org1",
+    "repo": "repo2"
+  }, {
+    "org": "org2",
+    "repo": "repo3"
+  }]
+}
